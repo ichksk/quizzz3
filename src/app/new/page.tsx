@@ -37,7 +37,6 @@ export default function CreateQuizPage() {
 
       let imageUrl = null;
       // 画像ファイルがある場合、アップロードを実施
-      console.log(quizData.image)
       if (quizData.image && quizData.image instanceof File) {
         const file = quizData.image;
         const storageRef = ref(storage, `images/${file.name}`);
