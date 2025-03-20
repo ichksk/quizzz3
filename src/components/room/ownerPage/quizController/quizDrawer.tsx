@@ -22,7 +22,7 @@ export const QuizDrawer = () => {
     //focusedQuizがnullでないなら(編集なら)updateQuizを呼び出す
 
     setLoading(true)
-    let imageUrl = null;
+    let imageUrl = formData.imagePreview;
     if (formData.image && formData.image instanceof File) {
       const file = formData.image;
       const storageRef = ref(storage, `images/${file.name}`);

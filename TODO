@@ -6,8 +6,10 @@ roomCode
 participantsの変更を検知する -> Done
 roomの変更を検知する(OwnerPageとParticipantPageの両方で) -> Done
 quizDrawerを実装する -> Done
+quizzesの変更を検知する -> Done
 
-quizzesの変更を検知する
+quizに既存の画像がある状態で編集し、画像をそのままにすると画像が消えるバグを修正する -> Done
+
 quizAnswerを実装する
     1. quizAnswersの型を作る
     2. quizAnswersのserver actionsを作る
