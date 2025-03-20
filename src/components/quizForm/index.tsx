@@ -1,8 +1,8 @@
 // CreateQuizForm.tsx
 "use client"
 
-import { FormEvent, FormEventHandler, useEffect } from 'react';
-import { useSetAtom } from 'jotai';
+import { FormEvent, useEffect } from 'react';
+import { useAtom } from 'jotai';
 import { emptyQuizForm, quizFormAtom } from '@/lib/atoms';
 import { TimeLimitField } from './timeLimitField';
 import { ImageField } from './imageField';
@@ -16,7 +16,7 @@ interface QuizFormProps {
   initialData?: QuizSubmitForm | null;
   showBackButton?: boolean;
   isEdit?: boolean;
-  onSubmit: FormEventHandler
+  onSubmit: (formData: QuizSubmitForm) => Promise<void>;
 }
 
 export const QuizForm = ({
@@ -25,7 +25,7 @@ export const QuizForm = ({
   isEdit = false,
   onSubmit,
 }: QuizFormProps) => {
-  const setQuizForm = useSetAtom(quizFormAtom);
+  const [quizForm, setQuizForm] = useAtom(quizFormAtom);
 
   useEffect(() => {
     if (initialData) {
@@ -37,7 +37,7 @@ export const QuizForm = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(e);
+    onSubmit(quizForm);
   };
 
   return (

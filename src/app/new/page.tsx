@@ -2,20 +2,20 @@
 
 import { getCookie, setCookie } from "@/server/cookies";
 import { QuizForm } from "@/components/quizForm";
-import { loadingAtom, quizFormAtom } from "@/lib/atoms";
-import { useAtomValue, useSetAtom } from "jotai";
+import { loadingAtom } from "@/lib/atoms";
+import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { createRoom, createQuiz } from "@/server/actions"; // サーバーアクションをインポート
 import { getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot } from "firebase/storage";
 import { storage } from "@/lib/firebase";
+import { QuizSubmitForm } from "@/types/schemas";
 
 export default function CreateQuizPage() {
-  const quizData = useAtomValue(quizFormAtom);
   const setLoading = useSetAtom(loadingAtom);
   const router = useRouter();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (quizData: QuizSubmitForm) => {
     setLoading(true);
     try {
       // ユーザー名の取得

@@ -3,6 +3,7 @@
 import { adminDB } from "@/lib/firebase-admin";
 import { getCookie, setCookie } from "./cookies";
 import { Participant, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
+import { get } from "http";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -98,6 +99,56 @@ export async function createQuiz({
   }
 }
 
+export const updateQuiz = async (
+  quizId: string,
+  {
+    question,
+    image,
+    choices,
+    correctChoiceIndex,
+    timeLimit,
+  }: {
+    question: string;
+    image: string | null;
+    choices: string[];
+    correctChoiceIndex: number;
+    timeLimit: number;
+  }
+): Promise<{ success: boolean; quiz?: QuizForOwner; error?: string }> => {
+  try {
+    const roomCode = await getCookie("roomCode");
+    if (!roomCode) {
+      return { success: false, error: "Room code not found in cookies." };
+    }
+    const quizRef = adminDB
+      .collection('rooms')
+      .doc(roomCode)
+      .collection("quizzes")
+      .doc(quizId);
+
+    // ドキュメントの更新を実行
+    await quizRef.update({
+      question,
+      image,
+      choices,
+      correctChoiceIndex,
+      timeLimit,
+    });
+
+    // 更新後のドキュメントを取得
+    const updatedDoc = await quizRef.get();
+    if (!updatedDoc.exists) {
+      return { success: false, error: `Quiz with id ${quizId} not found.` };
+    }
+
+    // Firestore のドキュメントデータと id を組み合わせて返す
+    const quiz = { id: updatedDoc.id, ...updatedDoc.data() } as QuizForOwner;
+    return { success: true, quiz };
+  } catch (error) {
+    console.error("Quiz update error:", error);
+    return { success: false, error: "Failed to update quiz." };
+  }
+};
 
 export async function joinRoom(
   roomCode: string,
