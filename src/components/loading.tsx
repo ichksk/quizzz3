@@ -23,7 +23,11 @@ export const GlobalLoading = () => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[100] transition-opacity duration-300">
-      <Loading />
+      <div
+        className="flex justify-center my-8"
+      >
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+      </div>
     </div>
   )
 }
