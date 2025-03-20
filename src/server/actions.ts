@@ -1,6 +1,7 @@
 "use server";
 
 import { adminDB } from "@/lib/firebase-admin";
+import admin from "firebase-admin"
 import { Room, Quiz, Participant, RoomStatus, QuizStatus } from "@/types/models";
 
 /**
@@ -61,38 +62,83 @@ export async function createRoom(username: string): Promise<Room> {
   return newRoom;
 }
 
-/**
- * 2. createQuiz関数
- *    roomドキュメントの中にサブドキュメントとして存在するquizzesに、quizを追加する
- *
- * @param roomCode 参加するルームのコード
- * @param quizData Quiz データ（id, createdAt, updatedAt はここで付与するため省略）
- */
-export async function createQuiz(
-  roomCode: string,
-  quizData: Omit<Quiz, "id" | "roomCode" | "createdAt" | "updatedAt">
-): Promise<Quiz> {
-  const roomRef = adminDB.collection("rooms").doc(roomCode);
-  const roomSnap = await roomRef.get();
+export async function createQuiz({
+  roomCode,
+  question,
+  choices,
+  timeLimit,
+  order
+}: {
+  roomCode: string;
+  question: string;
+  choices: { text: string; isCorrect: boolean }[];
+  timeLimit?: number;
+  order: number;
+}) {
+  try {
+    // 1. Firestore の書き込み用のタイムスタンプを取得
+    const serverTimestamp = admin.firestore.FieldValue.serverTimestamp();
 
-  if (!roomSnap.exists) {
-    throw new Error("指定されたRoomが存在しません。");
+    // 2. quiz ドキュメントを作成
+    const quizRef = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("quizzes")
+      .add({
+        roomCode,
+        question,
+        timeLimit: timeLimit ?? 0,
+        order,
+        status: QuizStatus.DRAFT,
+        createdAt: serverTimestamp,
+        updatedAt: serverTimestamp,
+      });
+
+    // 3. quizChoices をクイズのサブコレクションに一括作成
+    const quizChoicesPromises = choices.map((choice, index) => {
+      return adminDB
+        .collection("rooms")
+        .doc(roomCode)
+        .collection("quizzes")
+        .doc(quizRef.id)
+        .collection("quizChoices")
+        .add({
+          text: choice.text,
+          isCorrect: choice.isCorrect,
+          order: index,
+          createdAt: serverTimestamp,
+          updatedAt: serverTimestamp,
+        });
+    });
+
+    await Promise.all(quizChoicesPromises);
+
+    // quizChoices も改めて取得
+    const quizChoicesSnapshot = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("quizzes")
+      .doc(quizRef.id)
+      .collection("quizChoices")
+      .get();
+
+    const quizChoicesData = quizChoicesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // フロントに返すデータを整形
+    const quiz = {
+      id: quizRef.id,
+    };
+
+    return { success: true, quiz };
+  } catch (error) {
+    console.error("クイズ作成エラー:", error);
+    return { success: false, error: "クイズの作成に失敗しました" };
   }
-
-  // 新しい quiz 用のドキュメントリファレンス
-  const quizRef = roomRef.collection("quizzes").doc();
-  const newQuiz: Quiz = {
-    ...quizData,
-    id: quizRef.id,
-    roomCode: roomCode,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    status: QuizStatus.WAITING
-  };
-
-  await quizRef.set(newQuiz);
-  return newQuiz;
 }
+
 
 /**
  * 3. joinRoom関数

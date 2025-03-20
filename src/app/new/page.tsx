@@ -40,14 +40,17 @@ export default function CreateQuizPage() {
       // ルームコードをクッキーに保存
       await setCookie("roomCode", room.roomCode);
 
-      // // 2. クイズを作成
-      // const quiz = await createQuiz(room.roomCode, {
-      //   question: quizData.question,
-      //   image: quizData.image,
-      //   order: 0,
-
-      //   timeLimit: quizData.timeLimit
-      // });
+      // 2. クイズを作成
+      await createQuiz({
+        roomCode: room.roomCode,
+        question: quizData.question,
+        choices: quizData.choices.map((choice, index) => ({
+          text: choice,
+          isCorrect: index === quizData.correctChoiceIndex,
+        })),
+        timeLimit: quizData.timeLimit,
+        order: 0,
+      });
 
       toast.success('クイズを作成しました');
       router.push('/room');
