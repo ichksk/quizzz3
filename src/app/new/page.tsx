@@ -6,7 +6,7 @@ import { loadingAtom, quizFormAtom } from "@/lib/atoms";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { createRoom, createQuiz, joinRoom } from "@/server/actions"; // サーバーアクションをインポート
+import { createRoom, createQuiz } from "@/server/actions"; // サーバーアクションをインポート
 import { getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 
@@ -68,16 +68,12 @@ export default function CreateQuizPage() {
       await createQuiz({
         roomCode: room.roomCode,
         question: quizData.question,
-        choices: quizData.choices.map((choice, index) => ({
-          text: choice,
-          isCorrect: index === quizData.correctChoiceIndex,
-        })),
+        choices: quizData.choices,
+        correctChoiceIndex: quizData.correctChoiceIndex,
         timeLimit: quizData.timeLimit,
         order: 0,
         image: imageUrl ?? null,
       });
-
-      await joinRoom(room.roomCode, username, true);
 
       toast.success("クイズを作成しました");
       router.push("/room");

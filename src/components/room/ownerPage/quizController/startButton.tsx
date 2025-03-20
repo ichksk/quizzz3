@@ -1,7 +1,7 @@
 "use client";
 
 import { updateRoom } from "@/server/actions";
-import { RoomStatus } from "@/types/models";
+import { RoomStatus } from "@/types/schemas";
 import { Rocket } from "lucide-react"
 
 

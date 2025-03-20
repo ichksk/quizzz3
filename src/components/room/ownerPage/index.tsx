@@ -1,5 +1,5 @@
 import { getParticipant, getRoomData } from "@/server/actions"
-import { LeaveRoomButton } from "../leaveRoomButton"
+import { LeaveRoomButton } from "@/components/leaveRoomButton"
 import { Header } from "./header"
 import { notFound } from "next/navigation"
 import { ParticipantsList } from "./participantsList"

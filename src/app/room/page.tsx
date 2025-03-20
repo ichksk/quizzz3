@@ -1,5 +1,5 @@
-import { OwnerPage } from "@/components/ownerPage";
-import { ParticipantPage } from "@/components/participantPage";
+import { OwnerPage } from "@/components/room/ownerPage";
+import { ParticipantPage } from "@/components/room/participantPage";
 import { getParticipant, getRoomData } from "@/server/actions";
 import { notFound } from "next/navigation";
 
@@ -12,9 +12,5 @@ export default async function RoomPage() {
     notFound()
   }
 
-  return (
-    <div>
-      {participant.isOwner ? <OwnerPage /> : <ParticipantPage />}
-    </div>
-  )
+  return participant.isOwner ? <OwnerPage /> : <ParticipantPage />
 }

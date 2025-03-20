@@ -1,4 +1,4 @@
-import { RoomStatus } from "@/types/models"
+import { RoomStatus } from "@/types/schemas"
 
 export const RoomStatusBadge = ({ status }: { status: RoomStatus }) => {
   const getStatusInfo = () => {

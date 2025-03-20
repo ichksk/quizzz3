@@ -1,10 +1,8 @@
 "use server";
 
 import { adminDB } from "@/lib/firebase-admin";
-import admin from "firebase-admin"
-import { Room, Participant, RoomStatus, QuizStatus } from "@/types/models";
 import { getCookie, setCookie } from "./cookies";
-import { Participant as ParticipantResponse, QuizChoiceForOwner, QuizChoiceForParticipant, QuizForOwner, QuizForParticipant, RoomForOwner, RoomForParticipant } from "@/types/schemas";
+import { Participant, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -15,7 +13,7 @@ function generateRandomCode(length = 6): string {
   return code;
 }
 
-export async function createRoom(username: string): Promise<Room> {
+export async function createRoom(username: string): Promise<RoomDocument> {
   // 重複を避けるため、存在チェックを繰り返す簡易実装
   let roomCode = generateRandomCode();
   let docRef = adminDB.collection("rooms").doc(roomCode);
@@ -27,12 +25,10 @@ export async function createRoom(username: string): Promise<Room> {
     docSnap = await docRef.get();
   }
 
-  const newRoom: Room = {
+  const newRoom: RoomDocument = {
     roomCode: roomCode,
     currentOrder: 0,
     status: RoomStatus.WAITING,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   };
 
   // Roomドキュメントを作成
@@ -47,12 +43,12 @@ export async function createRoom(username: string): Promise<Room> {
     score: 0,
     username,
     isOwner: true, // オーナーであることを示すフラグなどを追加
-    createdAt: new Date(),
-    updatedAt: new Date(),
   };
 
   await participantRef.set(newOwner);
-
+  await setCookie("participantId", newOwner.id);
+  await setCookie("roomCode", roomCode);
+  await setCookie("username", username);
   return newRoom;
 }
 
@@ -61,21 +57,21 @@ export async function createQuiz({
   image,
   question,
   choices,
+  correctChoiceIndex,
   timeLimit,
-  order
+  order,
 }: {
   roomCode: string;
   image: string | null;
   question: string;
-  choices: { text: string; isCorrect: boolean }[];
+  choices: string[];
+  correctChoiceIndex: number;
   timeLimit?: number;
   order: number;
 }) {
   try {
-    // 1. Firestore の書き込み用のタイムスタンプを取得
-    const serverTimestamp = admin.firestore.FieldValue.serverTimestamp();
 
-    // 2. quiz ドキュメントを作成
+    // 1. quiz ドキュメントを作成
     const quizRef = await adminDB
       .collection("rooms")
       .doc(roomCode)
@@ -87,28 +83,9 @@ export async function createQuiz({
         order,
         image,
         status: QuizStatus.DRAFT,
-        createdAt: serverTimestamp,
-        updatedAt: serverTimestamp,
+        choices,
+        correctChoiceIndex,
       });
-
-    // 3. quizChoices をクイズのサブコレクションに一括作成
-    const quizChoicesPromises = choices.map((choice, index) => {
-      return adminDB
-        .collection("rooms")
-        .doc(roomCode)
-        .collection("quizzes")
-        .doc(quizRef.id)
-        .collection("quizChoices")
-        .add({
-          text: choice.text,
-          isCorrect: choice.isCorrect,
-          order: index,
-          createdAt: serverTimestamp,
-          updatedAt: serverTimestamp,
-        });
-    });
-
-    await Promise.all(quizChoicesPromises);
 
     const quiz = {
       id: quizRef.id,
@@ -134,7 +111,7 @@ export async function joinRoom(
     throw new Error("指定されたRoomは存在しません。");
   }
 
-  const room = roomSnap.data() as Room;
+  const room = roomSnap.data() as RoomDocument;
   if (room.status !== RoomStatus.WAITING) {
     throw new Error("このRoomは現在参加できる状態ではありません。");
   }
@@ -143,8 +120,6 @@ export async function joinRoom(
   const participantRef = roomRef.collection("participants").doc();
   const newParticipant: Participant = {
     id: participantRef.id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
     username,
     roomCode,
     isOwner,
@@ -200,7 +175,7 @@ export async function leaveRoom() {
 
 
 export async function getParticipant(): Promise<{
-  participant: ParticipantResponse | null;
+  participant: Participant | null;
   error: string | null;
 }> {
   const roomCode = await getCookie("roomCode");
@@ -242,7 +217,7 @@ export async function getParticipant(): Promise<{
     }
 
     // 5. 返却用の Participant 型に整形
-    const participant: ParticipantResponse = {
+    const participant: Participant = {
       id: participantDoc.id,
       roomCode: data.roomCode ?? "",
       username: data.username ?? "",
@@ -309,44 +284,14 @@ export async function getRoomData(): Promise<{
     for (const quizDoc of quizzesSnap.docs) {
       const quizData = quizDoc.data();
       const quizId = quizDoc.id;
-
       const question = quizData.question ?? "";
       const image = quizData.image ?? null;
       const order = quizData.order ?? 0;
       const quizStatus = quizData.status ?? "";
       const timeLimit = quizData.timeLimit ?? 0;
+      const choices = quizData.choices ?? [];
+      const correctChoiceIndex = quizData.correctChoiceIndex ?? 0;
 
-      // quizChoices を取得
-      const choicesSnap = await quizDoc.ref.collection("quizChoices").get();
-
-      const choicesForOwner: QuizChoiceForOwner[] = [];
-      const choicesForParticipant: QuizChoiceForParticipant[] = [];
-
-      choicesSnap.forEach((choiceDoc) => {
-        const choiceData = choiceDoc.data();
-        const choiceId = choiceDoc.id;
-
-        const text = choiceData.text ?? "";
-        const choiceOrder = choiceData.order ?? 0;
-        const isCorrect = choiceData.isCorrect ?? false;
-
-        // オーナーが見る選択肢
-        choicesForOwner.push({
-          id: choiceId,
-          text,
-          order: choiceOrder,
-          isCorrect,
-        });
-
-        // 参加者が見る選択肢（isCorrect は返さない）
-        choicesForParticipant.push({
-          id: choiceId,
-          text,
-          order: choiceOrder,
-        });
-      });
-
-      // クイズをオーナー向け / 参加者向けに追加
       quizzesForOwner.push({
         id: quizId,
         roomCode,
@@ -355,7 +300,8 @@ export async function getRoomData(): Promise<{
         order,
         status: quizStatus,
         timeLimit,
-        choices: choicesForOwner,
+        choices: choices,
+        correctChoiceIndex
       });
 
       quizzesForParticipant.push({
@@ -366,7 +312,7 @@ export async function getRoomData(): Promise<{
         order,
         status: quizStatus,
         timeLimit,
-        choices: choicesForParticipant,
+        choices: choices,
       });
     }
 
@@ -418,11 +364,7 @@ export async function getRoomData(): Promise<{
 }
 
 
-interface UpdateRoom {
-  newStatus: RoomStatus,
-}
-
-export async function updateRoom({ newStatus }: UpdateRoom): Promise<{ success: boolean; error?: string }> {
+export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Promise<{ success: boolean; error?: string }> {
   const { room } = await getRoomData()
   if (!room) {
     return { success: false, error: "Roomが見つかりません" };
@@ -439,7 +381,6 @@ export async function updateRoom({ newStatus }: UpdateRoom): Promise<{ success: 
 
     await roomRef.update({
       status: newStatus,
-      updatedAt: new Date(),
     });
 
     return { success: true };
