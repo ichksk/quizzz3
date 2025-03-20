@@ -1,5 +1,7 @@
 import CustomNotFound from "@/components/CustomNotFound";
 import { LeaveRoomButton } from "@/components/leaveRoomButton";
+import { OwnerPage } from "@/components/ownerPage";
+import { ParticipantPage } from "@/components/participantPage";
 import { getParticipant, getRoomData } from "@/server/actions";
 
 export default async function RoomPage() {
@@ -16,27 +18,7 @@ export default async function RoomPage() {
 
   return (
     <div>
-      <h1>Room: {roomData.room?.roomCode}</h1>
-      <p>Participant: {participant?.username || "Not found"}</p>
       {participant.isOwner ? <OwnerPage /> : <ParticipantPage />}
-      <LeaveRoomButton />
-    </div>
-  )
-}
-
-
-const OwnerPage = () => {
-  return (
-    <div>
-      <h1>Owner</h1>
-    </div>
-  )
-}
-
-const ParticipantPage = () => {
-  return (
-    <div>
-      <h1>Participant</h1>
     </div>
   )
 }
