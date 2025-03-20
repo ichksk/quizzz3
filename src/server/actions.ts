@@ -54,23 +54,30 @@ export async function createRoom(username: string): Promise<RoomDocument> {
 }
 
 export async function createQuiz({
-  roomCode,
   image,
   question,
   choices,
   correctChoiceIndex,
   timeLimit,
-  order,
 }: {
-  roomCode: string;
   image: string | null;
   question: string;
   choices: string[];
   correctChoiceIndex: number;
-  timeLimit?: number;
-  order: number;
+  timeLimit: number;
 }) {
   try {
+    const roomCode = await getCookie("roomCode");
+    if (!roomCode) {
+      return { success: false, error: "Room code not found in cookies." };
+    }
+
+    // Get the current number of quizzes to determine order
+    const quizzesSnapshot = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("quizzes")
+      .get();
 
     // 1. quiz ドキュメントを作成
     const quizRef = await adminDB
@@ -81,7 +88,7 @@ export async function createQuiz({
         roomCode,
         question,
         timeLimit: timeLimit ?? 0,
-        order,
+        order: quizzesSnapshot.size,
         image,
         status: QuizStatus.DRAFT,
         choices,

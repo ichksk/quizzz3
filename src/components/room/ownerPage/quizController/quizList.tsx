@@ -32,7 +32,7 @@ export const QuizList = ({ room }: { room: RoomForOwner }) => {
         </button>
       </div>
       <div className="space-y-2">
-        {room.quizzes.map((quiz) => (
+        {room.quizzes.sort((a, b) => (a.order - b.order)).map((quiz) => (
           <div
             key={quiz.id}
             className="flex items-center gap-4 p-3 border border-gray-300 rounded-lg"

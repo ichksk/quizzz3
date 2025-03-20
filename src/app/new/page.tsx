@@ -1,6 +1,6 @@
 "use client";
 
-import { getCookie, setCookie } from "@/server/cookies";
+import { getCookie } from "@/server/cookies";
 import { QuizForm } from "@/components/quizForm";
 import { loadingAtom } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
@@ -61,17 +61,14 @@ export default function CreateQuizPage() {
       }
 
       // 1. ルーム作成
-      const room = await createRoom(username);
-      await setCookie("roomCode", room.roomCode);
+      await createRoom(username);
 
       // 2. クイズ作成（downloadURL を image プロパティとして渡す）
       await createQuiz({
-        roomCode: room.roomCode,
         question: quizData.question,
         choices: quizData.choices,
         correctChoiceIndex: quizData.correctChoiceIndex,
         timeLimit: quizData.timeLimit,
-        order: 0,
         image: imageUrl ?? null,
       });
 
