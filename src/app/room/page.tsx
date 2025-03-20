@@ -12,9 +12,5 @@ export default async function RoomPage() {
     notFound()
   }
 
-  return (
-    <div>
-      {participant.isOwner ? <OwnerPage /> : <ParticipantPage />}
-    </div>
-  )
+  return participant.isOwner ? <OwnerPage /> : <ParticipantPage />
 }

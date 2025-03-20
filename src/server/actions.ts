@@ -52,7 +52,9 @@ export async function createRoom(username: string): Promise<Room> {
   };
 
   await participantRef.set(newOwner);
-
+  await setCookie("participantId", newOwner.id);
+  await setCookie("roomCode", roomCode);
+  await setCookie("username", username);
   return newRoom;
 }
 
@@ -127,6 +129,7 @@ export async function joinRoom(
   username: Participant["username"],
   isOwner = false,
 ): Promise<Participant> {
+  console.log("JOIN JOIN!!!")
   const roomRef = adminDB.collection("rooms").doc(roomCode);
   const roomSnap = await roomRef.get();
 
