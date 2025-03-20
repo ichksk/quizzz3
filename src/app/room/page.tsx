@@ -29,36 +29,37 @@ export default function RoomPage() {
     fetchRoomData();
   }, []);
 
-  useEffect(() => {
-    let unsubscribeQuiz: () => void;
+  // useEffect(() => {
+  //   let unsubscribeQuiz: () => void;
 
-    (async () => {
-      const { room } = await getRoomData();
-      if (room) {
-        const quizColRef = collection(db, `rooms/${room.roomCode}/quizzes`);
-        unsubscribeQuiz = onSnapshot(
-          quizColRef,
-          (snapshot) => {
-            const data: QuizForOwner[] = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })) as QuizForOwner[];
+  //   (async () => {
+  //     const { room } = await getRoomData();
+  //     if (room) {
+  //       const quizColRef = collection(db, `rooms/${room.roomCode}/quizzes`);
+  //       unsubscribeQuiz = onSnapshot(
+  //         quizColRef,
+  //         (snapshot) => {
+  //           const data: QuizForOwner[] = snapshot.docs.map((doc) => ({
+  //             id: doc.id,
+  //             ...doc.data(),
+  //           })) as QuizForOwner[];
 
-            if (room) {
-              setRoom({
-                ...room,
-                quizzes: data,
-              });
-            }
-          }
-        );
-      }
-    })()
+  //           if (room) {
+  //             setRoom({
+  //               ...room,
+  //               quizzes: data,
+  //             });
+  //           }
+  //         }
+  //       );
+  //     }
+  //   })()
 
-    return () => {
-      if (unsubscribeQuiz) unsubscribeQuiz();
-    };
-  }, []);
+  //   return () => {
+  //     if (unsubscribeQuiz) unsubscribeQuiz();
+  //   };
+  // }, []);
+  // ↑これのせいでroomが更新されなくなる
 
   useEffect(() => {
     let unsubscribeRoom: () => void;
