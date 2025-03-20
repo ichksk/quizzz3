@@ -32,6 +32,18 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
           {currentQuiz.question}
         </h2>
+
+        {/* Display quiz image if available */}
+        {currentQuiz.image && (
+          <div className="mb-6 flex justify-center">
+            <img
+              src={currentQuiz.image}
+              alt=""
+              className="max-w-full h-auto max-h-64 rounded-lg mx-auto"
+            />
+          </div>
+        )}
+
         {/* 選択肢 - より大きく表示 */}
         <div className="flex flex-col gap-4">
           {currentQuiz.choices.map((choice, index) => (
@@ -39,21 +51,22 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
               key={index}
               disabled={selectedOption !== null}
               className={`
-                p-8 text-lg font-medium rounded-xl border-2 border-gray-200
-                transition-all duration-300
-                ${selectedOption === null
+          p-8 text-lg font-medium rounded-xl border-2 border-gray-200
+          transition-all duration-300
+          ${selectedOption === null
                   ? 'hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100'
                   : selectedOption === index
                     ? 'bg-blue-100 border-blue-500'
                     : 'opacity-0 min-h-0 min-w-0 overflow-hidden'
                 }
-              `}
+        `}
               onClick={() => handleOptionSelect(index)}
             >
               {choice}
             </button>
           ))}
         </div>
+
 
         {/* ローディング表示 */}
         {isSubmitted && (

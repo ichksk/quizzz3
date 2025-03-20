@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 // Firestore 用の import（Firebase の設定済みインスタンス db を使用）
 import { onSnapshot, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // db のパスはご利用環境に合わせて変更
+import CustomNotFound from "./not-found";
 
 export default function RoomPage() {
-  const [room, setRoom] = useState<RoomForOwner | RoomForParticipant | null>(null);
-  const [participant, setParticipant] = useState<Participant | null>(null);
+  const [room, setRoom] = useState<RoomForOwner | RoomForParticipant | null>();
+  const [participant, setParticipant] = useState<Participant | null>();
 
   useEffect(() => {
     // Firestore の購読解除用
@@ -56,7 +57,8 @@ export default function RoomPage() {
     };
   }, []);
 
-  if (!participant || !room) return null;
+  if (participant === undefined || room === undefined) return null;
+  if (!room || !participant) return <CustomNotFound />;
 
   return participant.isOwner ? (
     <OwnerPage room={room as RoomForOwner} participant={participant} />
