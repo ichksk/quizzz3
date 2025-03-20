@@ -2,7 +2,7 @@
 
 import { adminDB } from "@/lib/firebase-admin";
 import { getCookie, setCookie } from "./cookies";
-import { Participant, Participant as ParticipantResponse, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
+import { Participant, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -175,7 +175,7 @@ export async function leaveRoom() {
 
 
 export async function getParticipant(): Promise<{
-  participant: ParticipantResponse | null;
+  participant: Participant | null;
   error: string | null;
 }> {
   const roomCode = await getCookie("roomCode");
@@ -217,7 +217,7 @@ export async function getParticipant(): Promise<{
     }
 
     // 5. 返却用の Participant 型に整形
-    const participant: ParticipantResponse = {
+    const participant: Participant = {
       id: participantDoc.id,
       roomCode: data.roomCode ?? "",
       username: data.username ?? "",
