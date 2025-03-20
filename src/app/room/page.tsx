@@ -1,7 +1,6 @@
 import CustomNotFound from "@/components/CustomNotFound";
 import { LeaveRoomButton } from "@/components/leaveRoomButton";
 import { getParticipant, getRoomData } from "@/server/actions";
-import { getCookie } from "@/server/cookies";
 
 export default async function RoomPage() {
   const { participant } = await getParticipant()
