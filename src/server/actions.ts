@@ -4,7 +4,7 @@ import { adminDB } from "@/lib/firebase-admin";
 import admin from "firebase-admin"
 import { Room, Participant, RoomStatus, QuizStatus } from "@/types/models";
 import { getCookie, setCookie } from "./cookies";
-import { ParticipantResponse } from "@/types/schemas";
+import { Participant as ParticipantResponse, QuizChoiceForOwner, QuizChoiceForParticipant, QuizForOwner, QuizForParticipant, RoomForOwner, RoomForParticipant } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -254,5 +254,159 @@ export async function getParticipant(): Promise<{
       participant: null,
       error: "Could not get participant."
     };
+  }
+}
+
+
+export async function getRoomData() {
+  try {
+    // 1. Cookie から roomCode, participantId を取得
+    const roomCode = await getCookie("roomCode")
+    const participantId = await getCookie("participantId")
+
+    if (!roomCode || !participantId) {
+      return { error: "Room code or participant ID is missing in cookies." };
+    }
+
+    // 2. 対象の参加者ドキュメントを取得
+    const participantRef = adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .doc(participantId);
+
+    const participantSnap = await participantRef.get();
+    if (!participantSnap.exists) {
+      return { error: "Participant not found." };
+    }
+
+    const participantData = participantSnap.data() as Participant;
+
+    // 3. 対象の部屋ドキュメントを取得
+    const roomRef = adminDB.collection("rooms").doc(roomCode);
+    const roomSnap = await roomRef.get();
+    if (!roomSnap.exists) {
+      return { error: "Room not found." };
+    }
+
+    const roomData = roomSnap.data();
+
+    const status = (roomData?.status as RoomStatus) ?? RoomStatus.WAITING;
+    const currentOrder = roomData?.currentOrder ?? 0;
+
+    // 4. クイズ一覧を取得し、オーナー向け / 参加者向けに整形
+    const quizzesSnap = await roomRef.collection("quizzes").get();
+
+    const quizzesForOwner: QuizForOwner[] = [];
+    const quizzesForParticipant: QuizForParticipant[] = [];
+
+    for (const quizDoc of quizzesSnap.docs) {
+      const quizData = quizDoc.data();
+      const quizId = quizDoc.id;
+
+      const question = quizData.question ?? "";
+      const image = quizData.image ?? null;
+      const order = quizData.order ?? 0;
+      const quizStatus = quizData.status ?? "";
+      const timeLimit = quizData.timeLimit ?? 0;
+
+      // quizChoices を取得
+      const choicesSnap = await quizDoc.ref.collection("quizChoices").get();
+
+      const choicesForOwner: QuizChoiceForOwner[] = [];
+      const choicesForParticipant: QuizChoiceForParticipant[] = [];
+
+      choicesSnap.forEach((choiceDoc) => {
+        const choiceData = choiceDoc.data();
+        const choiceId = choiceDoc.id;
+
+        const text = choiceData.text ?? "";
+        const choiceOrder = choiceData.order ?? 0;
+        const isCorrect = choiceData.isCorrect ?? false;
+
+        // オーナーが見る選択肢
+        choicesForOwner.push({
+          id: choiceId,
+          text,
+          order: choiceOrder,
+          isCorrect,
+        });
+
+        // 参加者が見る選択肢（isCorrect は返さない）
+        choicesForParticipant.push({
+          id: choiceId,
+          text,
+          order: choiceOrder,
+        });
+      });
+
+      // クイズをオーナー向け / 参加者向けに追加
+      quizzesForOwner.push({
+        id: quizId,
+        roomCode,
+        question,
+        image,
+        order,
+        status: quizStatus,
+        timeLimit,
+        choices: choicesForOwner,
+      });
+
+      quizzesForParticipant.push({
+        id: quizId,
+        roomCode,
+        question,
+        image,
+        order,
+        status: quizStatus,
+        timeLimit,
+        choices: choicesForParticipant,
+      });
+    }
+
+    // 5. オーナーの場合は RoomForOwner を返す
+    if (participantData.isOwner) {
+      // 参加者一覧を取得
+      const participantsSnap = await roomRef.collection("participants").get();
+      const participants: Participant[] = participantsSnap.docs.map((doc) => {
+        const pData = doc.data();
+        return {
+          id: doc.id,
+          roomCode: pData.roomCode ?? "",
+          username: pData.username ?? "",
+          isOwner: pData.isOwner ?? false,
+          score: pData.score ?? 0,
+        };
+      });
+
+      const roomForOwner: RoomForOwner = {
+        roomCode,
+        status,
+        currentOrder,
+        quizzes: quizzesForOwner,
+        participants,
+      };
+
+      return {
+        room: roomForOwner,
+        error: null,
+      };
+    }
+
+    // 6. オーナーではない場合は RoomForParticipant を返す
+    const roomForParticipant: RoomForParticipant = {
+      roomCode,
+      status,
+      currentOrder,
+      quizzes: quizzesForParticipant,
+    };
+
+    return {
+      room: roomForParticipant,
+      error: null,
+    };
+  } catch (error) {
+    console.error("getRoomData error:", error);
+    return { error: "Failed to get room data." };
   }
 }
