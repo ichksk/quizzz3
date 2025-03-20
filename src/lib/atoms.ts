@@ -7,7 +7,7 @@ import { JoinQuizForm } from "@/types/JoinQuizForm";
 
 export const emptyQuizForm: QuizForm = {
   question: "",
-  image: "",
+  image: null,
   choices: ["", ""],
   correctChoiceIndex: 0,
   timeLimit: Infinity,

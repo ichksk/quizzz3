@@ -58,12 +58,14 @@ export async function createRoom(username: string): Promise<Room> {
 
 export async function createQuiz({
   roomCode,
+  image,
   question,
   choices,
   timeLimit,
   order
 }: {
   roomCode: string;
+  image: string | null;
   question: string;
   choices: { text: string; isCorrect: boolean }[];
   timeLimit?: number;
@@ -83,6 +85,7 @@ export async function createQuiz({
         question,
         timeLimit: timeLimit ?? 0,
         order,
+        image,
         status: QuizStatus.DRAFT,
         createdAt: serverTimestamp,
         updatedAt: serverTimestamp,

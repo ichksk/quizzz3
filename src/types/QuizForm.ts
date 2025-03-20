@@ -1,6 +1,6 @@
 export interface QuizForm {
   question: string,
-  image: string | null,
+  image: File | null,
   choices: string[],
   correctChoiceIndex: number,
   timeLimit: number

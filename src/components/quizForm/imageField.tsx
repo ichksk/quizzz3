@@ -1,12 +1,12 @@
+// imageField.tsx
 import { quizFormAtom } from "@/lib/atoms";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { X } from "lucide-react";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 export const ImageField = () => {
-  const [quizForm, setQuizForm] = useAtom(quizFormAtom);
-
-  // ファイル入力を操作するためのref
+  const setQuizForm = useSetAtom(quizFormAtom);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -14,10 +14,12 @@ export const ImageField = () => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const result = reader.result as string;
+        const previewUrl = reader.result as string;
+        setImagePreview(previewUrl);
+        // ファイルオブジェクトとプレビューURLの両方を保存する
         setQuizForm((prev) => ({
           ...prev,
-          image: result,
+          image: file, // 後ほどアップロードするためのファイルオブジェクト
         }));
       };
       reader.readAsDataURL(file);
@@ -28,8 +30,8 @@ export const ImageField = () => {
     setQuizForm((prev) => ({
       ...prev,
       image: null,
+      imagePreview: null,
     }));
-    // input[type="file"] の value をクリアして、再度同じファイルを選んだときにも onChange を発火させる
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -44,7 +46,7 @@ export const ImageField = () => {
         <input
           type="file"
           id="image"
-          ref={fileInputRef} // refを付与
+          ref={fileInputRef}
           accept="image/*"
           className="hidden"
           onChange={handleImageChange}
@@ -67,13 +69,12 @@ export const ImageField = () => {
             />
           </svg>
           <span className="text-sm text-gray-600 mt-2">
-            クリックして画像をアップロード
+            クリックして画像を選択
           </span>
           <span className="text-xs text-gray-400">PNG, JPG, GIF (最大 2MB)</span>
         </label>
       </div>
-      {/* 画像プレビュー */}
-      {quizForm.image && (
+      {imagePreview && (
         <div className="mt-4 relative">
           <button
             onClick={handleDeleteImage}
@@ -84,7 +85,7 @@ export const ImageField = () => {
             <X className="w-4 h-4" />
           </button>
           <img
-            src={quizForm.image}
+            src={imagePreview}
             alt="アップロードした画像のプレビュー"
             className="max-w-full h-auto max-h-64 rounded-lg mx-auto"
           />

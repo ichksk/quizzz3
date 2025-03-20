@@ -8,12 +8,9 @@ export default async function RoomPage() {
 
   const roomData = await getRoomData()
 
-  console.log(participant)
   if (!participant || !roomData.room) {
     notFound()
   }
-
-  console.log(roomData)
 
   return (
     <div>
