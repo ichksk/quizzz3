@@ -6,9 +6,9 @@ import { notFound } from "next/navigation";
 export default async function RoomPage() {
   const { participant } = await getParticipant()
 
-  const roomData = await getRoomData()
+  const { room } = await getRoomData()
 
-  if (!participant || !roomData.room) {
+  if (!participant || !room) {
     notFound()
   }
 
