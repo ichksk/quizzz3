@@ -10,19 +10,6 @@ import toast from "react-hot-toast";
 import { joinRoom } from "@/backend/joinRoom";
 
 export default function CreateQuizPage() {
-  const router = useRouter()
-  const setLoading = useSetAtom(loadingAtom)
-  const quizForm = useAtomValue(quizFormAtom)
-
-  const quizData = {
-    question: quizForm.question,
-    choices: quizForm.choices.map((text, index) => ({
-      text,
-      isCorrect: index === quizForm.correctChoiceIndex,
-      order: index
-    })),
-    timeLimit: quizForm.timeLimit
-  }
 
   const handleSubmit = async () => {
     // "use server";
