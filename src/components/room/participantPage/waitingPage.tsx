@@ -1,8 +1,9 @@
 import { Loading } from '@/components/loading';
 
 import { LeaveRoomButton } from '@/components/leaveRoomButton';
+import { RoomForParticipant } from '@/types/schemas';
 
-export async function WaitingPage({ room }: { room: any }) {
+export function WaitingPage({ room }: { room: RoomForParticipant }) {
   return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center p-8 font-[family-name:var(--font-geist-sans)]">
       {/* メインコンテンツ */}

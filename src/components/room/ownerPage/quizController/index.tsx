@@ -1,20 +1,11 @@
-// import { useRecoilValue } from "recoil"
 
-// import { roomState } from "@/states/useRoom"
-
-// import { CurrentQuiz } from "./currentQuiz"
-// import { QuizDrawer } from "./quizDrawer"
-// import { QuizList } from "./quizList"
 import { RoomForOwner } from "@/types/schemas"
 import { StartButton } from "./startButton"
 import { QuizList } from "./quizList"
 import { QuizDrawer } from "./quizDrawer"
+import { CurrentQuiz } from "./currentQuiz"
 
 export const QuizController = ({ room }: { room: RoomForOwner }) => {
-  // const room = useRecoilValue(roomState)
-
-  if (!room) return null
-
   return (
     <>
       <QuizDrawer />
@@ -25,9 +16,9 @@ export const QuizController = ({ room }: { room: RoomForOwner }) => {
         </div>
         <div className="p-6">
           <div className="space-y-6">
-            {/* {room.status === "IN_PROGRESS" && (
-              <CurrentQuiz />
-            )} */}
+            {room.status === "IN_PROGRESS" && (
+              <CurrentQuiz room={room} />
+            )}
             <QuizList room={room} />
           </div>
         </div>

@@ -4,7 +4,7 @@ import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
 import { Participant, RoomForOwner } from "@/types/schemas"
 
-export const OwnerPage = async ({ room, participant }: { room: RoomForOwner, participant: Participant }) => {
+export const OwnerPage = ({ room, participant }: { room: RoomForOwner, participant: Participant }) => {
 
   return (
     <div className="flex flex-col container mx-auto py-8 space-y-6">

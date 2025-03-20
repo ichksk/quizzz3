@@ -1,17 +1,32 @@
+"use client";
+
 import { OwnerPage } from "@/components/room/ownerPage";
 import { ParticipantPage } from "@/components/room/participantPage";
 import { getParticipant, getRoomData } from "@/server/actions";
-import { RoomForOwner, RoomForParticipant } from "@/types/schemas";
+import { Participant, RoomForOwner, RoomForParticipant } from "@/types/schemas";
 import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default async function RoomPage() {
-  const { participant } = await getParticipant()
+export default function RoomPage() {
+  const [room, setRoom] = useState<RoomForOwner | RoomForParticipant | null>(null)
+  const [participant, setParticipant] = useState<Participant | null>(null)
 
-  const { room } = await getRoomData()
+  useEffect(() => {
+    const fetchRoomData = async () => {
+      const { room } = await getRoomData()
+      const { participant } = await getParticipant()
+      if (!room || !participant) {
+        notFound()
+      } else {
+        setRoom(room)
+        setParticipant(participant)
+      }
+    }
 
-  if (!participant || !room) {
-    notFound()
-  }
+    fetchRoomData()
+  }, [])
+
+  if (!participant || !room) return null
 
   return participant.isOwner ? (
     <OwnerPage

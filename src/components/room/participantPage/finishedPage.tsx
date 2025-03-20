@@ -1,6 +1,6 @@
 import { Trophy, Medal, Target } from 'lucide-react';
 
-export async function FinishedPage() {
+export function FinishedPage() {
   // ダミーデータ
   const results = [
     { id: 1, name: "Player 1", score: 800, correctAnswers: 8, answeredTime: 45 },
