@@ -3,6 +3,12 @@ particinpantId
 username
 roomCode
 
+participantsの変更を検知する -> Done
+roomの変更を検知する(OwnerPageとParticipantPageの両方で) -> Done
+quizDrawerを実装する -> Done
 
-roomStatusの変更を検知する(OwnerPageとParticipantPageの両方で)
-quizDrawerを実装する
+quizzesの変更を検知する
+quizAnswerを実装する
+    1. quizAnswersの型を作る
+    2. quizAnswersのserver actionsを作る
+    3. quizAnswersの変更を検知する
