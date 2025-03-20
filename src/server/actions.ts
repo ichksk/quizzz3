@@ -4,10 +4,8 @@ import { adminDB } from "@/lib/firebase-admin";
 import admin from "firebase-admin"
 import { Room, Participant, RoomStatus, QuizStatus } from "@/types/models";
 import { getCookie, setCookie } from "./cookies";
+import { ParticipantResponse } from "@/types/schemas";
 
-/**
- * ランダムな6桁の英数字の文字列を生成する関数
- */
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
@@ -17,11 +15,6 @@ function generateRandomCode(length = 6): string {
   return code;
 }
 
-/**
- * 1. createRoom関数
- *    - ランダムな6桁の英数字のroomCodeを生成して、それをIDとしてRoomを作成する
- *    - usernameをオーナーとしてparticipantsサブコレクションに追加
- */
 export async function createRoom(username: string): Promise<Room> {
   // 重複を避けるため、存在チェックを繰り返す簡易実装
   let roomCode = generateRandomCode();
@@ -114,21 +107,6 @@ export async function createQuiz({
 
     await Promise.all(quizChoicesPromises);
 
-    // quizChoices も改めて取得
-    const quizChoicesSnapshot = await adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("quizzes")
-      .doc(quizRef.id)
-      .collection("quizChoices")
-      .get();
-
-    const quizChoicesData = quizChoicesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    // フロントに返すデータを整形
     const quiz = {
       id: quizRef.id,
     };
@@ -141,14 +119,6 @@ export async function createQuiz({
 }
 
 
-/**
- * 3. joinRoom関数
- *    roomCode を指定して、ドキュメントが存在し、かつ status が WAITING であれば参加する。
- *    room ドキュメント内のサブドキュメント participants に追加する。
- *
- * @param roomCode 入室したいルームのコード
- * @param username 参加者データ（id, createdAt, updatedAt は付与するため省略）
- */
 export async function joinRoom(
   roomCode: string,
   username: Participant["username"],
@@ -187,13 +157,13 @@ export async function joinRoom(
   return newParticipant;
 }
 
-/**
- * 部屋から離脱するサーバーアクション
- *
- * @param {string} roomCode - 部屋のコード
- * @param {string} participantId - 参加者のID
- */
-export async function leaveRoom({ roomCode, participantId }: { roomCode: string; participantId: string }) {
+export async function leaveRoom() {
+  const roomCode = await getCookie("roomCode");
+  const participantId = await getCookie("participantId");
+
+  if (!roomCode || !participantId) {
+    throw new Error("ルーム情報が取得できませんでした");
+  }
   try {
     // 1. 対象の participant ドキュメントを削除
     await adminDB
@@ -225,13 +195,64 @@ export async function leaveRoom({ roomCode, participantId }: { roomCode: string;
   }
 }
 
-export async function leaveRoomFromCookie() {
+
+export async function getParticipant(): Promise<{
+  participant: ParticipantResponse | null;
+  error: string | null;
+}> {
   const roomCode = await getCookie("roomCode");
   const participantId = await getCookie("participantId");
 
   if (!roomCode || !participantId) {
-    throw new Error("ルーム情報が取得できませんでした");
+    return {
+      participant: null,
+      error: "Room code or participant ID not found."
+    };
   }
 
-  return leaveRoom({ roomCode, participantId });
+  try {
+    // 1. Firestore のドキュメント参照を取得
+    const participantRef = adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .doc(participantId);
+
+    // 2. ドキュメントの取得
+    const participantDoc = await participantRef.get();
+
+    // 3. ドキュメントが存在しない場合
+    if (!participantDoc.exists) {
+      return {
+        participant: null,
+        error: "Participant does not exist."
+      };
+    }
+
+    // 4. Firestore から取得した DocumentData を任意の型に変換
+    const data = participantDoc.data();
+    if (!data) {
+      return {
+        participant: null,
+        error: "No data found for the participant."
+      };
+    }
+
+    // 5. 返却用の Participant 型に整形
+    const participant: ParticipantResponse = {
+      id: participantDoc.id,
+      roomCode: data.roomCode ?? "",
+      username: data.username ?? "",
+      isOwner: data.isOwner ?? false,
+      score: data.score ?? 0,
+    };
+
+    return { participant, error: null };
+  } catch (error) {
+    console.error("getParticipant error:", error);
+    return {
+      participant: null,
+      error: "Could not get participant."
+    };
+  }
 }

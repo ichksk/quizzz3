@@ -1,18 +1,15 @@
 "use client";
 
-import { leaveRoomFromCookie } from "@/server/actions";
+import { leaveRoom } from "@/server/actions";
 import { useRouter } from "next/navigation";
 
 export const LeaveRoomButton = () => {
   const router = useRouter()
-  const handleLeaveRoom = async () => {
-    return await leaveRoomFromCookie()
-  }
 
   return (
     <button
       onClick={() => {
-        handleLeaveRoom()
+        leaveRoom()
           .then(() => {
             router.push("/")
           })
