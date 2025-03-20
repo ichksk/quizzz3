@@ -23,7 +23,7 @@ export const QuizDrawer = () => {
 
     setLoading(true)
     let imageUrl = null;
-    if (formData.image && formData instanceof File) {
+    if (formData.image && formData.image instanceof File) {
       const file = formData.image;
       const storageRef = ref(storage, `images/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -50,7 +50,7 @@ export const QuizDrawer = () => {
       const result = await createQuiz({
         question: formData.question,
         timeLimit: formData.timeLimit,
-        image: null,
+        image: imageUrl,
         choices: formData.choices,
         correctChoiceIndex: formData.correctChoiceIndex,
       })
