@@ -416,3 +416,35 @@ export async function getRoomData(): Promise<{
     return { error: "Failed to get room data." };
   }
 }
+
+
+interface UpdateRoom {
+  newStatus: RoomStatus,
+}
+
+export async function updateRoom({ newStatus }: UpdateRoom): Promise<{ success: boolean; error?: string }> {
+  const { room } = await getRoomData()
+  if (!room) {
+    return { success: false, error: "Roomが見つかりません" };
+  }
+
+  try {
+    const roomRef = adminDB.collection("rooms").doc(room.roomCode);
+    const roomSnap = await roomRef.get();
+
+
+    if (!roomSnap.exists) {
+      return { success: false, error: "指定されたRoomが存在しません" };
+    }
+
+    await roomRef.update({
+      status: newStatus,
+      updatedAt: new Date(),
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("RoomStatus更新エラー:", error);
+    return { success: false, error: "RoomStatusの更新に失敗しました" };
+  }
+}

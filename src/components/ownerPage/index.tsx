@@ -3,6 +3,8 @@ import { LeaveRoomButton } from "../leaveRoomButton"
 import { Header } from "./header"
 import { notFound } from "next/navigation"
 import { ParticipantsList } from "./participantsList"
+import { QuizController } from "./quizController"
+import { RoomForOwner } from "@/types/schemas"
 
 export const OwnerPage = async () => {
   const { room } = await getRoomData()
@@ -17,7 +19,7 @@ export const OwnerPage = async () => {
       <Header />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ParticipantsList roomCode={room.roomCode} currentUserId={participant.id} />
-        {/* <QuizController /> */}
+        <QuizController room={room as RoomForOwner} />
       </div>
       <LeaveRoomButton />
     </div>
