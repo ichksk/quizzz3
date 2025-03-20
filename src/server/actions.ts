@@ -258,7 +258,10 @@ export async function getParticipant(): Promise<{
 }
 
 
-export async function getRoomData() {
+export async function getRoomData(): Promise<{
+  room?: RoomForOwner | RoomForParticipant | null;
+  error: string | null;
+}> {
   try {
     // 1. Cookie から roomCode, participantId を取得
     const roomCode = await getCookie("roomCode")

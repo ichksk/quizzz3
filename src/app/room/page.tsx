@@ -1,8 +1,7 @@
-import CustomNotFound from "@/components/CustomNotFound";
-import { LeaveRoomButton } from "@/components/leaveRoomButton";
 import { OwnerPage } from "@/components/ownerPage";
 import { ParticipantPage } from "@/components/participantPage";
 import { getParticipant, getRoomData } from "@/server/actions";
+import { notFound } from "next/navigation";
 
 export default async function RoomPage() {
   const { participant } = await getParticipant()
@@ -11,7 +10,7 @@ export default async function RoomPage() {
 
   console.log(participant)
   if (!participant || !roomData.room) {
-    return <CustomNotFound />
+    notFound()
   }
 
   console.log(roomData)
