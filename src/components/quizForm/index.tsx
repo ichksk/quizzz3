@@ -10,10 +10,10 @@ import { ChoicesField } from './choicesField';
 import { BackButton } from '../backButton';
 import { QuestionField } from './questionField';
 import { SubmitButton } from './submitButton';
-import { QuizForm as QuizFormType } from '@/types/QuizForm';
+import { QuizSubmitForm } from '@/types/schemas';
 
 interface QuizFormProps {
-  initialData?: QuizFormType | null;
+  initialData?: QuizSubmitForm | null;
   showBackButton?: boolean;
   isEdit?: boolean;
   onSubmit: FormEventHandler

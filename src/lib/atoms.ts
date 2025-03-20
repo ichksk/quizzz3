@@ -2,18 +2,18 @@ import { atom } from "jotai";
 
 export const loadingAtom = atom(false);  // ローディング状態
 
-import { QuizForm } from "@/types/QuizForm"
 import { JoinQuizForm } from "@/types/JoinQuizForm";
-import { QuizForOwner } from "@/types/schemas";
+import { QuizForOwner, QuizSubmitForm } from "@/types/schemas";
 
-export const emptyQuizForm: QuizForm = {
+export const emptyQuizForm: QuizSubmitForm = {
   question: "",
   image: null,
+  imagePreview: null,
   choices: ["", ""],
   correctChoiceIndex: 0,
   timeLimit: Infinity,
 }
-export const quizFormAtom = atom<QuizForm>(emptyQuizForm)
+export const quizFormAtom = atom<QuizSubmitForm>(emptyQuizForm)
 
 export const emptyJoinQuizForm: JoinQuizForm = {
   roomCode: "",

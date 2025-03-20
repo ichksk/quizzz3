@@ -45,6 +45,15 @@ export interface RoomForOwner extends RoomForParticipant {
   participants: Participant[];
 }
 
+export interface QuizSubmitForm {
+  question: string,
+  image: File | null,
+  imagePreview: string | null,
+  choices: string[],
+  correctChoiceIndex: number,
+  timeLimit: number
+}
+
 export interface QuizForParticipant {
   id: string;
   roomCode: string;

@@ -7,6 +7,8 @@
 // import { QuizList } from "./quizList"
 import { RoomForOwner } from "@/types/schemas"
 import { StartButton } from "./startButton"
+import { QuizList } from "./quizList"
+import { QuizDrawer } from "./quizDrawer"
 
 export const QuizController = ({ room }: { room: RoomForOwner }) => {
   // const room = useRecoilValue(roomState)
@@ -15,7 +17,7 @@ export const QuizController = ({ room }: { room: RoomForOwner }) => {
 
   return (
     <>
-      {/* <QuizDrawer/> */}
+      <QuizDrawer />
       <div className="bg-white border border-gray-300 rounded-lg shadow-sm lg:col-span-2">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
           <h2 className="text-lg font-semibold">クイズ</h2>
@@ -25,8 +27,8 @@ export const QuizController = ({ room }: { room: RoomForOwner }) => {
           <div className="space-y-6">
             {/* {room.status === "IN_PROGRESS" && (
               <CurrentQuiz />
-            )}
-            <QuizList /> */}
+            )} */}
+            <QuizList room={room} />
           </div>
         </div>
       </div>

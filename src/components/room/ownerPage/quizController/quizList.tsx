@@ -1,3 +1,5 @@
+"use client";
+
 import { QuizForOwner, QuizStatus, RoomForOwner } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
 import { useSetAtom } from "jotai"
@@ -33,7 +35,7 @@ export const QuizList = ({ room }: { room: RoomForOwner }) => {
         {room.quizzes.map((quiz) => (
           <div
             key={quiz.id}
-            className="flex items-center gap-4 p-3 border rounded-lg"
+            className="flex items-center gap-4 p-3 border border-gray-300 rounded-lg"
           >
             <div className="flex-1 min-w-0">
               <span className="text-sm text-gray-500">問題 {quiz.order}</span>

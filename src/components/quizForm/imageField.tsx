@@ -1,12 +1,11 @@
 // imageField.tsx
 import { quizFormAtom } from "@/lib/atoms";
-import { useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { X } from "lucide-react";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef } from "react";
 
 export const ImageField = () => {
-  const setQuizForm = useSetAtom(quizFormAtom);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [quizForm, setQuizForm] = useAtom(quizFormAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -15,11 +14,10 @@ export const ImageField = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const previewUrl = reader.result as string;
-        setImagePreview(previewUrl);
-        // ファイルオブジェクトとプレビューURLの両方を保存する
         setQuizForm((prev) => ({
           ...prev,
-          image: file, // 後ほどアップロードするためのファイルオブジェクト
+          imagePreview: previewUrl,
+          image: file,
         }));
       };
       reader.readAsDataURL(file);
@@ -74,7 +72,7 @@ export const ImageField = () => {
           <span className="text-xs text-gray-400">PNG, JPG, GIF (最大 2MB)</span>
         </label>
       </div>
-      {imagePreview && (
+      {quizForm.imagePreview && (
         <div className="mt-4 relative">
           <button
             onClick={handleDeleteImage}
@@ -85,7 +83,7 @@ export const ImageField = () => {
             <X className="w-4 h-4" />
           </button>
           <img
-            src={imagePreview}
+            src={quizForm.imagePreview}
             alt="アップロードした画像のプレビュー"
             className="max-w-full h-auto max-h-64 rounded-lg mx-auto"
           />
