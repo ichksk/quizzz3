@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from '@/backend/cookies';
+import { getCookie, setCookie } from '@/server/cookies';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 interface UsernameFieldProps {

@@ -1,7 +1,7 @@
 export interface QuizForm {
   question: string,
-  image?: string,
+  image: string | null,
   choices: string[],
-  correctChoiceIndex: number | null
+  correctChoiceIndex: number,
   timeLimit: number
 }

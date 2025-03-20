@@ -11,8 +11,8 @@ import { SubmitButton } from './submitButton';
 import { Supplements } from './supplements';
 import { UsernameField } from '../usernameField';
 import { BackButton } from '../backButton';
-import { getCookie, setCookie } from '@/backend/cookies';
-import { joinRoom } from '@/backend/joinRoom';
+import { getCookie, setCookie } from '@/server/cookies';
+import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 
 export const JoinQuizForm = () => {
   const { roomCode } = useAtomValue(joinQuizFormAtom)
@@ -22,7 +22,7 @@ export const JoinQuizForm = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const username = await getCookie("username");
+    const username = await getCookie("username") as string;
     let error = false;
     if (!roomCode) {
       toast.error("ルームコードを入力してください");
@@ -33,21 +33,27 @@ export const JoinQuizForm = () => {
       error = true;
     }
     if (error) return;
-    setLoading(true);
 
     try {
-      const { success, error, room } = await joinRoom(roomCode, username as string, false);
-      if (!success) {
-        error && toast.error(error);
-        return;
-      }
+      setLoading(true);
 
-      room && await setCookie("roomCode", room.roomCode)
+      // joinRoom サーバーアクションを呼び出し
+      const participant = await joinRoom(roomCode, username, false);
+
+      // 参加者情報をクッキーに保存することもできます（必要に応じて）
+      await setCookie("participantId", participant.id.toString());
 
       toast.success("ルームに移動します");
       router.push("/room");
-    } catch {
-      toast.error("エラーが発生しました");
+    } catch (error) {
+      console.error("ルーム参加エラー:", error);
+
+      // エラーメッセージがある場合は表示する（より詳細なエラーメッセージを提供）
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("エラーが発生しました");
+      }
     } finally {
       setLoading(false);
     }

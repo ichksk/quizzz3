@@ -1,41 +1,67 @@
 "use client";
 
-// import { initQuiz } from "@/backend/initQuiz";
-import { getCookie, setCookie } from "@/backend/cookies";
+import { getCookie, setCookie } from "@/server/cookies";
 import { QuizForm } from "@/components/quizForm";
 import { loadingAtom, quizFormAtom } from "@/lib/atoms";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { joinRoom } from "@/backend/joinRoom";
+import { createRoom, createQuiz } from "@/server/actions"; // サーバーアクションをインポート
 
 export default function CreateQuizPage() {
+  const quizData = useAtomValue(quizFormAtom);
+  const setLoading = useSetAtom(loadingAtom);
+  const router = useRouter();
 
   const handleSubmit = async () => {
-    // "use server";
-    // setLoading(true)
-    // try {
-    //   const room = await initQuiz(quizData)
-    //   await setCookie("roomCode", room.roomCode)
+    setLoading(true);
+    try {
+      // ユーザー名を取得
+      const username = await getCookie("username");
+      if (!username) {
+        toast.error("ユーザー名が設定されていません");
+        return;
+      }
 
-    //   const username = await getCookie("username")
-    //   if (username) {
-    //     const res = await joinRoom(room.roomCode, username, true)
-    //     if (res.success) {
-    //       toast.success('クイズを作成しました');
-    //       router.push(`/room`)
-    //       return
-    //     } else {
-    //       toast.error('クイズの作成に失敗しました');
-    //     }
-    //   }
-    //   toast.error('クイズの作成に失敗しました');
-    // } catch {
-    //   toast.error('クイズの作成に失敗しました');
-    // } finally {
-    //   setLoading(false)
-    // }
-  }
+      // 入力チェック
+      if (!quizData.question) {
+        toast.error("問題文を入力してください");
+        return;
+      }
+
+      if (quizData.choices.length < 2) {
+        toast.error("選択肢は最低2つ必要です");
+        return;
+      }
+
+      // 1. ルームを作成
+      const room = await createRoom(username);
+
+      // ルームコードをクッキーに保存
+      await setCookie("roomCode", room.roomCode);
+
+      // // 2. クイズを作成
+      // const quiz = await createQuiz(room.roomCode, {
+      //   question: quizData.question,
+      //   image: quizData.image,
+      //   order: 0,
+
+      //   timeLimit: quizData.timeLimit
+      // });
+
+      toast.success('クイズを作成しました');
+      router.push('/room');
+    } catch (error) {
+      console.error("クイズ作成エラー:", error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('クイズの作成に失敗しました');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-[100dvh] p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, ChangeEvent, JSX } from 'react';
 import { UsernameField } from '@/components/usernameField';
-import { getCookie } from '@/backend/cookies';
+import { getCookie } from '@/server/cookies';
 
 export default function Home(): JSX.Element {
   const router = useRouter();

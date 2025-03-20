@@ -27,7 +27,7 @@ export const ImageField = () => {
   const handleDeleteImage = () => {
     setQuizForm((prev) => ({
       ...prev,
-      image: undefined,
+      image: null,
     }));
     // input[type="file"] の value をクリアして、再度同じファイルを選んだときにも onChange を発火させる
     if (fileInputRef.current) {
