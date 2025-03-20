@@ -4,7 +4,6 @@ export const loadingAtom = atom(false);  // ローディング状態
 
 import { QuizForm } from "@/types/QuizForm"
 import { JoinQuizForm } from "@/types/JoinQuizForm";
-import { Quiz } from "@/types/models";
 import { QuizForOwner } from "@/types/schemas";
 
 export const emptyQuizForm: QuizForm = {

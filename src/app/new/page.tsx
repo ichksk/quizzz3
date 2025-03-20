@@ -68,10 +68,8 @@ export default function CreateQuizPage() {
       await createQuiz({
         roomCode: room.roomCode,
         question: quizData.question,
-        choices: quizData.choices.map((choice, index) => ({
-          text: choice,
-          isCorrect: index === quizData.correctChoiceIndex,
-        })),
+        choices: quizData.choices,
+        correctChoiceIndex: quizData.correctChoiceIndex,
         timeLimit: quizData.timeLimit,
         order: 0,
         image: imageUrl ?? null,

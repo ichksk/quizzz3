@@ -6,7 +6,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 
 // ここではアイコンコンポーネントを例としてインポート（実装に合わせて修正）
 import { Users, Crown } from "lucide-react";
-import { Participant } from "@/types/models";
+import { Participant } from "@/types/schemas";
 
 interface ParticipantsListProps {
   roomCode: string;

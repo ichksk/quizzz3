@@ -1,6 +1,5 @@
-import { QuizForOwner, RoomForOwner } from "@/types/schemas"
+import { QuizForOwner, QuizStatus, RoomForOwner } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
-import { QuizStatus } from "@/types/models"
 import { useSetAtom } from "jotai"
 import { drawerOpenAtom, focusedQuizAtom } from "@/lib/atoms"
 
