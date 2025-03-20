@@ -1,4 +1,4 @@
-import { RoomStatus } from "./models";
+import { QuizStatus, RoomStatus } from "./models";
 
 export interface Participant {
   id: string;
@@ -29,7 +29,7 @@ export interface QuizForOwner {
   question: string;
   image: string | null;
   order: number;
-  status: string;
+  status: QuizStatus;
   timeLimit: number;
   choices: QuizChoiceForOwner[];
 }
@@ -47,7 +47,7 @@ export interface QuizForParticipant {
   question: string;
   image: string | null;
   order: number;
-  status: string;
+  status: QuizStatus;
   timeLimit: number;
   choices: QuizChoiceForParticipant[];
 }
