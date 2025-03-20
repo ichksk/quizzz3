@@ -447,3 +447,40 @@ export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Prom
     return { success: false, error: "RoomStatusの更新に失敗しました" };
   }
 }
+
+export async function startQuiz(): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { room } = await getRoomData();
+    if (!room) {
+      return { success: false, error: "Room not found" };
+    }
+
+    // Update room status to IN_PROGRESS
+    const roomUpdateResult = await updateRoom({ newStatus: RoomStatus.IN_PROGRESS });
+    if (!roomUpdateResult.success) {
+      return roomUpdateResult;
+    }
+
+    // Find the first quiz
+    if ('quizzes' in room && room.quizzes.length > 0) {
+      const firstQuiz = room.quizzes.find(quiz => quiz.order === 0);
+
+      if (firstQuiz) {
+        // Update the first quiz status to DISPLAYING
+        await adminDB
+          .collection('rooms')
+          .doc(room.roomCode)
+          .collection('quizzes')
+          .doc(firstQuiz.id)
+          .update({
+            status: QuizStatus.DISPLAYING
+          });
+      }
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Start quiz error:", error);
+    return { success: false, error: "Failed to start quiz" };
+  }
+}
