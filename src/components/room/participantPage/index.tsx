@@ -1,15 +1,11 @@
 
+import { Participant, RoomForParticipant } from "@/types/schemas"
 import { FinishedPage } from "./finishedPage"
 // import PlayingPage from "./PlayingPage"
 import { WaitingPage } from "./waitingPage"
-import { getRoomData } from "@/server/actions"
 
-export async function ParticipantPage() {
-  const { room } = await getRoomData()
+export async function ParticipantPage({ room, participant }: { room: RoomForParticipant, participant: Participant }) {
 
-  if (!room) {
-    return null
-  }
 
   switch (room.status) {
     case "WAITING":
