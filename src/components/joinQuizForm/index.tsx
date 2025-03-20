@@ -11,7 +11,7 @@ import { SubmitButton } from './submitButton';
 import { Supplements } from './supplements';
 import { UsernameField } from '../usernameField';
 import { BackButton } from '../backButton';
-import { getCookie, setCookie } from '@/server/cookies';
+import { getCookie } from '@/server/cookies';
 import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 
 export const JoinQuizForm = () => {
@@ -38,10 +38,7 @@ export const JoinQuizForm = () => {
       setLoading(true);
 
       // joinRoom サーバーアクションを呼び出し
-      const participant = await joinRoom(roomCode, username, false);
-
-      // 参加者情報をクッキーに保存することもできます（必要に応じて）
-      await setCookie("participantId", participant.id.toString());
+      await joinRoom(roomCode, username, false);
 
       toast.success("ルームに移動します");
       router.push("/room");

@@ -6,7 +6,7 @@ import { loadingAtom, quizFormAtom } from "@/lib/atoms";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { createRoom, createQuiz } from "@/server/actions"; // サーバーアクションをインポート
+import { createRoom, createQuiz, joinRoom } from "@/server/actions"; // サーバーアクションをインポート
 
 export default function CreateQuizPage() {
   const quizData = useAtomValue(quizFormAtom);
@@ -51,6 +51,8 @@ export default function CreateQuizPage() {
         timeLimit: quizData.timeLimit,
         order: 0,
       });
+
+      await joinRoom(room.roomCode, username, true);
 
       toast.success('クイズを作成しました');
       router.push('/room');

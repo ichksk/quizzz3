@@ -1,9 +1,7 @@
-import { getCookie } from "@/server/cookies";
-import CustomNotFound from "@/components/CustomNotFound";
+import { LeaveRoomButton } from "@/components/leaveRoomButton";
 
 export default async function RoomPage() {
-  const roomCode = await getCookie("roomCode")
-  const username = await getCookie("username")
-
-  return <CustomNotFound />
+  return <div>
+    <LeaveRoomButton />
+  </div>
 }

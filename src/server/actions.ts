@@ -2,7 +2,8 @@
 
 import { adminDB } from "@/lib/firebase-admin";
 import admin from "firebase-admin"
-import { Room, Quiz, Participant, RoomStatus, QuizStatus } from "@/types/models";
+import { Room, Participant, RoomStatus, QuizStatus } from "@/types/models";
+import { getCookie, setCookie } from "./cookies";
 
 /**
  * ランダムな6桁の英数字の文字列を生成する関数
@@ -178,5 +179,59 @@ export async function joinRoom(
   };
 
   await participantRef.set(newParticipant);
+
+  await setCookie("participantId", newParticipant.id);
+  await setCookie("roomCode", roomCode);
+  await setCookie("username", username);
+
   return newParticipant;
+}
+
+/**
+ * 部屋から離脱するサーバーアクション
+ *
+ * @param {string} roomCode - 部屋のコード
+ * @param {string} participantId - 参加者のID
+ */
+export async function leaveRoom({ roomCode, participantId }: { roomCode: string; participantId: string }) {
+  try {
+    // 1. 対象の participant ドキュメントを削除
+    await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .doc(participantId)
+      .delete();
+
+    await setCookie("participantId", "");
+    await setCookie("roomCode", "");
+
+    // 2. まだ参加者が残っているか確認
+    const participantsSnap = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .get();
+
+    // 3. 参加者が 0 人の場合、部屋を削除
+    if (participantsSnap.empty) {
+      await adminDB.collection("rooms").doc(roomCode).delete();
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("部屋の退出エラー:", error);
+    return { success: false, error: "部屋の退出に失敗しました。" };
+  }
+}
+
+export async function leaveRoomFromCookie() {
+  const roomCode = await getCookie("roomCode");
+  const participantId = await getCookie("participantId");
+
+  if (!roomCode || !participantId) {
+    throw new Error("ルーム情報が取得できませんでした");
+  }
+
+  return leaveRoom({ roomCode, participantId });
 }
