@@ -10,7 +10,6 @@ import { RoomCodeField } from './roomCodeField';
 import { SubmitButton } from './submitButton';
 import { Supplements } from './supplements';
 import { UsernameField } from '../usernameField';
-import { BackButton } from '../backButton';
 import { getCookie } from '@/server/cookies';
 import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 
@@ -37,7 +36,6 @@ export const JoinQuizForm = () => {
     try {
       setLoading(true);
 
-      // joinRoom サーバーアクションを呼び出し
       await joinRoom(roomCode, username, false);
 
       toast.success("ルームに移動します");

@@ -167,11 +167,6 @@ export async function joinRoom(
     throw new Error("指定されたRoomは存在しません。");
   }
 
-  // const room = roomSnap.data() as Room;
-  // if (room.status !== RoomStatus.WAITING) {
-  //   throw new Error("このRoomは現在参加できる状態ではありません。");
-  // }
-
   // 新しい participant のドキュメントリファレンスを生成
   const participantRef = roomRef.collection("participants").doc();
   const newParticipant: Participant = {
