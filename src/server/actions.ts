@@ -671,3 +671,45 @@ export async function proceedQuiz(): Promise<{ success: boolean; error?: string 
     return { success: false, error: "Failed to proceed quiz" };
   }
 }
+
+export async function fetchQuizAnswerForParticipant(quizId: string): Promise<{ success: boolean; data: QuizAnswer | null }> {
+  try {
+    const participantId = await getCookie("participantId");
+    const roomCode = await getCookie("roomCode");
+
+    if (!participantId || !roomCode) {
+      return {
+        success: false,
+        data: null
+      };
+    }
+
+    const { quiz } = await getQuizById(quizId)
+    if (!quiz || quiz.status !== QuizStatus.SHOWING_ANSWER) {
+      return {
+        success: false,
+        data: null
+      };
+    }
+    const answersRef = adminDB.collection('rooms').doc(roomCode).collection('quizzes').doc(quizId).collection('answers');
+    const existingAnswer = await answersRef.doc(participantId).get();
+
+    if (existingAnswer.exists) {
+      return {
+        success: true,
+        data: existingAnswer.data() as QuizAnswer
+      }
+    } else {
+      return {
+        success: true,
+        data: null
+      }
+    }
+  } catch (error) {
+    console.error("Error getting quiz answer: ", error);
+    return {
+      success: false,
+      data: null
+    }
+  }
+}
