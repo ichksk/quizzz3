@@ -5,9 +5,10 @@ import { drawerOpenAtom, focusedQuizAtom, loadingAtom } from "@/lib/atoms"
 import { createQuiz, updateQuiz } from "@/server/actions";
 import { QuizSubmit } from "@/types/schemas";
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { Trash2 } from "lucide-react"
+import { Trash2, FilePlus, Edit } from "lucide-react"
 import toast from "react-hot-toast";
 import { Drawer } from "vaul"
+import { motion, AnimatePresence } from "framer-motion";
 
 export const QuizDrawer = () => {
   const setLoading = useSetAtom(loadingAtom)
@@ -56,49 +57,56 @@ export const QuizDrawer = () => {
       onClose={() => setDrawerOpen(false)}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="bg-white flex flex-col fixed bottom-0 left-0 right-0 h-[92dvh] rounded-t-[10px]">
-          <div className="sticky top-0 bg-white pt-4 px-4 rounded-t-[10px]">
-            <Drawer.Handle />
-          </div>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+        <Drawer.Content className="bg-white flex flex-col fixed bottom-0 left-0 right-0 h-[92dvh] rounded-t-[10px] shadow-lg">
+          <motion.div
+            className="sticky top-0 bg-gradient-to-r from-blue-50 to-purple-50 pt-6 px-4 rounded-t-[10px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Drawer.Handle className="bg-gray-300 w-10 h-1 rounded-full mx-auto mb-4" />
+
+            <motion.div
+              className="flex items-center justify-center gap-3"
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.3 }}
+            >
+              <span className="text-xl">
+                {focusedQuiz === null ? <FilePlus className="w-5 h-5 text-blue-500" /> : <Edit className="w-5 h-5 text-orange-500" />}
+              </span>
+              <Drawer.Title className="font-bold text-lg text-gray-800 mb-4">
+                {focusedQuiz === null ? "クイズを追加" : "クイズを編集"}
+              </Drawer.Title>
+            </motion.div>
+          </motion.div>
+
           <div className="flex-1 scrollbar-hide overflow-auto px-4 pb-4">
-            <Drawer.Title className="font-medium text-gray-900 mt-8">
-              {focusedQuiz === null ? "クイズを追加" : "クイズを編集"}
-            </Drawer.Title>
-            <div className="max-w-md w-full mx-auto">
-              <div className="mt-4">
-                <QuizForm
-                  initialData={{
-                    question: focusedQuiz?.question || "",
-                    timeLimit: focusedQuiz?.timeLimit || Infinity,
-                    image: null,
-                    choices: focusedQuiz?.choices || ["", ""],
-                    correctChoiceIndex: focusedQuiz?.correctChoiceIndex || 0,
-                    imagePreview: focusedQuiz?.image || null,
-                  }}
-                  onSubmit={handleSubmit}
-                  showBackButton={false}
-                  isEdit={focusedQuiz !== null}
-                />
-              </div>
-            </div>
-            {focusedQuiz && (
-              <>
-                <div className="border-t border-gray-300 my-2" />
-                <div className="flex items-center justify-center w-full">
-                  <button
-                    className="inline-flex items-center justify-center gap-2 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-                    aria-label="削除"
-                    onClick={() => {
-                      console.log(focusedQuiz.id)
+            <AnimatePresence>
+              <motion.div
+                className="max-w-md w-full mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+              >
+                <div className="mt-4">
+                  <QuizForm
+                    initialData={{
+                      question: focusedQuiz?.question || "",
+                      timeLimit: focusedQuiz?.timeLimit || Infinity,
+                      image: null,
+                      choices: focusedQuiz?.choices || ["", ""],
+                      correctChoiceIndex: focusedQuiz?.correctChoiceIndex || 0,
+                      imagePreview: focusedQuiz?.image || null,
                     }}
-                  >
-                    <Trash2 className="w-5 h-5" />
-                    <span className="text-sm font-medium">削除する</span>
-                  </button>
+                    onSubmit={handleSubmit}
+                    showBackButton={false}
+                    isEdit={focusedQuiz !== null}
+                  />
                 </div>
-              </>
-            )}
+              </motion.div>
+            </AnimatePresence>
           </div>
         </Drawer.Content>
       </Drawer.Portal>
