@@ -11,7 +11,7 @@ export const OwnerPage = ({ room, participant }: { room: RoomForOwner, participa
       <Header room={room as RoomForOwner} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ParticipantsList roomCode={room.roomCode} currentUserId={participant.id} />
-        <QuizController room={room as RoomForOwner} />
+        <QuizController room={room} />
       </div>
       <LeaveRoomButton />
     </div>
