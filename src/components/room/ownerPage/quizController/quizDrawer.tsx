@@ -25,7 +25,7 @@ export const QuizDrawer = () => {
     let imageUrl = formData.imagePreview;
     if (formData.image && formData.image instanceof File) {
       const file = formData.image;
-      const storageRef = ref(storage, `images/${file.name}`);
+      const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       await new Promise<void>((resolve, reject) => {

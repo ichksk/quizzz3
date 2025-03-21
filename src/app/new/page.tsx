@@ -39,7 +39,7 @@ export default function CreateQuizPage() {
       // 画像ファイルがある場合、アップロードを実施
       if (quizData.image && quizData.image instanceof File) {
         const file = quizData.image;
-        const storageRef = ref(storage, `images/${file.name}`);
+        const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
         await new Promise<void>((resolve, reject) => {
