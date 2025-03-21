@@ -191,7 +191,6 @@ export async function joinRoom(
 
   return newParticipant;
 }
-
 export async function leaveRoom() {
   const roomCode = await getCookie("roomCode");
   const participantId = await getCookie("participantId");
@@ -207,6 +206,27 @@ export async function leaveRoom() {
       .collection("participants")
       .doc(participantId)
       .delete();
+
+    // Get all quizzes for the room
+    const quizzesSnapshot = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("quizzes")
+      .get();
+
+    // Delete all answers from this participant for each quiz
+    const deletePromises = quizzesSnapshot.docs.map(quizDoc =>
+      adminDB
+        .collection("rooms")
+        .doc(roomCode)
+        .collection("quizzes")
+        .doc(quizDoc.id)
+        .collection("answers")
+        .doc(participantId)
+        .delete()
+    );
+
+    await Promise.all(deletePromises);
 
     await setCookie("participantId", "");
     await setCookie("roomCode", "");
