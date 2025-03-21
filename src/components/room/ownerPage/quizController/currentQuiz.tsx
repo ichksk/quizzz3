@@ -19,10 +19,23 @@ export const CurrentQuiz = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-semibold text-gray-800">出題中のクイズ</h3>
-        <button className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md" onClick={proceedQuiz}>
+    // 画面幅が狭いときに左右に余白を持たせるため、max-w-md + mx-auto を使う
+    // スマホでも余白が詰まりすぎないように p-4, sm:p-6 などを利用
+    <div className="max-w-md w-full mx-auto p-4 sm:p-6 bg-gray-50 space-y-6">
+      {/* 上段のヘッダー部分 */}
+      {/* 画面幅が狭いときは縦並び、広いときは横並びにするため flex-col sm:flex-row を使用 */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+        <div>
+          <h3 className="text-2xl font-semibold text-gray-800">出題中のクイズ</h3>
+          <p className="text-md text-gray-600">
+            第{room.currentOrder + 1}問目 / 全{quizzes.length}問
+          </p>
+        </div>
+        {/* ボタンは小画面では下に回りやすいように mt-2 を入れるなど調整 */}
+        <button
+          className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md"
+          onClick={proceedQuiz}
+        >
           <Send className="w-5 h-5 mr-2" />
           {(() => {
             switch (currentQuiz.status) {
@@ -31,35 +44,44 @@ export const CurrentQuiz = () => {
               case QuizStatus.ANSWER_CLOSED:
                 return "正解を発表";
               case QuizStatus.SHOWING_ANSWER:
-                return room.currentOrder >= quizzes.length - 1 ? "クイズ終了" : "次の問題へ";
+                return room.currentOrder >= quizzes.length - 1
+                  ? "クイズ終了"
+                  : "次の問題へ";
               default:
                 return "";
             }
           })()}
         </button>
       </div>
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <p className="text-lg text-gray-900 mb-4">{currentQuiz.question}</p>
+
+      {/* 問題表示部分 */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 shadow-sm space-y-4">
+        <div>
+          <p className="text-lg font-medium">問題:</p>
+          <p className="text-xl">{currentQuiz?.question}</p>
+        </div>
+
+        {/* 画像がある場合は余白や大きさを調整 */}
         {currentQuiz.image && (
           <img
             src={currentQuiz.image}
             alt="アップロードした画像のプレビュー"
-            className="my-4 max-w-full h-auto max-h-64 rounded-lg mx-auto object-cover"
+            className="my-4 w-full h-auto max-h-64 rounded-lg object-contain mx-auto"
           />
         )}
 
-        {/* 問題の選択肢を表示 */}
-        <div className="mt-4">
+        {/* 選択肢リスト */}
+        <div className="space-y-2">
           {currentQuiz.choices.map((choice, index) => {
             const voteCount = getVoteCount(index)
             return (
               <div key={index} className="relative p-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <p>{index + 1}. {choice}</p>
-                    <span className="text-sm text-gray-500">
-                      ({voteCount}票)
-                    </span>
+                    <p>
+                      {index + 1}. {choice}
+                    </p>
+                    <span className="text-sm text-gray-500">({voteCount}票)</span>
                   </div>
                   {index === currentQuiz.correctChoiceIndex && (
                     <span className="px-2 py-0.5 text-sm text-green-700 bg-green-100 rounded-full">
@@ -72,15 +94,16 @@ export const CurrentQuiz = () => {
           })}
         </div>
 
-        {/* 回答一覧を表示 */}
-        <div className="mt-6">
+        {/* 回答一覧 */}
+        <div>
           <h4 className="text-md font-semibold text-gray-800 mb-2">
-            回答（{participants.length - 1}人中{quizAnswers.length || 0}人が回答済み）
+            回答状況({participants.length - 1}人中{quizAnswers.length || 0}人が回答済み)
           </h4>
           <ul className="divide-y divide-gray-200">
             {quizAnswers.map((answer, idx) => (
               <li key={idx} className="py-2 text-sm text-gray-700">
-                <span className="font-medium">{answer.username} さん</span> → <span className="font-medium">{answer.choiceText}</span>
+                <span className="font-medium">{answer.username} さん</span> →{" "}
+                <span className="font-medium">{answer.choiceText}</span>
               </li>
             ))}
           </ul>
@@ -88,12 +111,4 @@ export const CurrentQuiz = () => {
       </div>
     </div>
   )
-}
-
-export interface QuizAnswer {
-  participantId: string;
-  quizId: string;
-  choiceIndex: number;
-  isCorrect: boolean;
-  score: number;
 }
