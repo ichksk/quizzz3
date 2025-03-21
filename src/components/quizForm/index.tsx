@@ -32,14 +32,6 @@ export const QuizForm = ({
 
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);
 
-  useEffect(() => {
-    if (initialData) {
-      setQuizForm(initialData);
-    } else {
-      setQuizForm(emptyQuizForm)
-    }
-  }, [initialData]);
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -58,8 +50,7 @@ export const QuizForm = ({
       return;
     }
 
-
-    let imageUrl = quizForm.imagePreview;
+    let image = quizForm.imagePreview;
     if (quizForm.image && quizForm.image instanceof File) {
       setLoading(true)
       const file = quizForm.image;
@@ -81,17 +72,22 @@ export const QuizForm = ({
           }
         );
       });
-      imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+      image = await getDownloadURL(uploadTask.snapshot.ref);
     }
 
     onSubmit({
-      question: quizForm.question,
-      timeLimit: quizForm.timeLimit,
-      image: imageUrl,
-      choices: quizForm.choices,
-      correctChoiceIndex: quizForm.correctChoiceIndex,
+      ...quizForm,
+      image,
     });
   };
+
+  useEffect(() => {
+    if (initialData) {
+      setQuizForm(initialData);
+    } else {
+      setQuizForm(emptyQuizForm)
+    }
+  }, [initialData]);
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
