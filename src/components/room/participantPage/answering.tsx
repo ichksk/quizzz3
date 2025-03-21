@@ -113,10 +113,8 @@ export const Answering = () => {
           animate="visible"
         >
           {currentQuiz.choices.map((choice, index) => (
-            <motion.button
+            (!isSubmitted || selectedOption === index) && <motion.button
               key={index}
-              variants={itemVariants}
-              whileHover={{ scale: selectedOption === null ? 1.02 : 1 }}
               whileTap={{ scale: selectedOption === null ? 0.98 : 1 }}
               disabled={selectedOption !== null}
               className={`
