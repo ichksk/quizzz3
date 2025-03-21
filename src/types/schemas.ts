@@ -68,3 +68,18 @@ export interface QuizForParticipant {
 export interface QuizForOwner extends QuizForParticipant {
   correctChoiceIndex: number;
 }
+
+// クライアントからの入力用インターフェース
+export interface QuizAnswerSubmit {
+  quizId: string;
+  choiceIndex: number;
+}
+
+// firebaseに保存するデータの型
+export interface QuizAnswer {
+  participantId: string;
+  quizId: string;
+  choiceIndex: number;
+  isCorrect: boolean;
+  score: number;
+}

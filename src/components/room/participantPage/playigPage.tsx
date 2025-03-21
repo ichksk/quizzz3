@@ -1,7 +1,9 @@
 import { LeaveRoomButton } from "@/components/leaveRoomButton";
+import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
 import { RoomForParticipant } from "@/types/schemas"
 import { Loader2, Timer } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
   const currentQuiz = room.quizzes[room.currentOrder]
@@ -9,22 +11,35 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(currentQuiz.timeLimit);
 
-  const handleOptionSelect = (choiceId: number) => {
-    // if(currentQuiz && participant){
-    //   submitQuizAnswer(currentQuiz.id, {
-    //     choiceId: choiceId,
-    //     participantId: participant.id,
-    //     answerTime: null,
-    //   })
-    //   .then(() => {
-    //     setSelectedOption(choiceId);
-    //     setIsSubmitted(true);
-    //   })
-    //   .catch((e) => {
-    //     toast.error(e.message)
-    //   })
-    // }
+  const handleOptionSelect = async (choiceIndex: number) => {
+    if (currentQuiz) {
+      try {
+        const res = await submitQuizAnswer({
+          quizId: currentQuiz.id,
+          choiceIndex,
+        });
+        if (res.success) {
+          setSelectedOption(choiceIndex);
+          setIsSubmitted(true);
+        } else {
+          toast.error(res.error ?? "");
+        }
+      } catch {
+        toast.error("エラーが発生しました。もう一度お試しください。");
+      }
+    }
   };
+
+  useEffect(() => {
+    getQuizAnswer(currentQuiz.id).then((res) => {
+      if (res.success) {
+        if (res.data) {
+          setSelectedOption(res.data.choiceIndex);
+          setIsSubmitted(true);
+        }
+      }
+    });
+  }, [room.currentOrder]);
 
   return (
     <div className="min-h-[100dvh] bg-gray-100 p-4 md:p-8">
@@ -33,7 +48,6 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
           {currentQuiz.question}
         </h2>
 
-        {/* Display quiz image if available */}
         {currentQuiz.image && (
           <div className="mb-6 flex justify-center">
             <img
@@ -51,15 +65,15 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
               key={index}
               disabled={selectedOption !== null}
               className={`
-          p-8 text-lg font-medium rounded-xl border-2 border-gray-200
-          transition-all duration-300
-          ${selectedOption === null
+                p-8 text-lg font-medium rounded-xl border-2 border-gray-200
+                transition-all duration-300
+                ${selectedOption === null
                   ? 'hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100'
                   : selectedOption === index
                     ? 'bg-blue-100 border-blue-500'
                     : 'opacity-0 min-h-0 min-w-0 overflow-hidden'
                 }
-        `}
+              `}
               onClick={() => handleOptionSelect(index)}
             >
               {choice}

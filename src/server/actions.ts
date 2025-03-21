@@ -2,7 +2,7 @@
 
 import { adminDB } from "@/lib/firebase-admin";
 import { getCookie, setCookie } from "./cookies";
-import { Participant, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
+import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -482,4 +482,113 @@ export async function startQuiz(): Promise<{ success: boolean; error?: string }>
     console.error("Start quiz error:", error);
     return { success: false, error: "Failed to start quiz" };
   }
+}
+
+export const getQuizData = async (quizId: string): Promise<{ quiz: QuizForOwner | null; error: string | null }> => {
+  try {
+    const { room } = await getRoomData();
+    if (!room) {
+      return { quiz: null, error: "Room not found" };
+    }
+
+    const quizData = await adminDB.collection("rooms").doc(room.roomCode).collection("quizzes").doc(quizId).get()
+
+    if (!quizData.exists) {
+      return { quiz: null, error: "Quiz not found" };
+    }
+
+    const quiz = {
+      id: quizData.id,
+      ...quizData.data(),
+    } as QuizForOwner;
+
+    return {
+      quiz, error: null
+    };
+  } catch (error) {
+    console.error("Get quiz data error:", error);
+    return { quiz: null, error: "Failed to get quiz data" };
+  }
+}
+
+export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit): Promise<{ success: boolean; error?: string }> {
+  // Get participant and room info from cookies
+  const participantId = await getCookie("participantId")
+  const roomCode = await getCookie("roomCode");
+  if (!participantId || !roomCode) {
+    return { success: false, error: "Participant ID or room code not found in cookies." };
+  }
+
+  // Check if participant has already answered this quiz
+  const answersRef = adminDB.collection('rooms').doc(roomCode).collection('quizzes').doc(quizId).collection('answers');
+  const existingAnswer = await answersRef.doc(participantId).get();
+
+  if (existingAnswer.exists) {
+    return { success: false, error: "You have already submitted an answer for this quiz." };
+  }
+
+  try {
+    const { quiz } = await getQuizData(quizId)
+    if (!quiz) {
+      return { success: false, error: "Quiz not found." };
+    }
+
+    const isCorrect = quiz.correctChoiceIndex === choiceIndex;
+    const score = isCorrect ? 100 : 0;
+
+    const answer: QuizAnswer = {
+      participantId,
+      quizId: quizId,
+      choiceIndex,
+      isCorrect,
+      score,
+    };
+
+    // Save answer using participant ID as the document ID instead of auto-generated ID
+    await answersRef.doc(participantId).set({
+      ...answer,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error submitting quiz answer: ", error);
+    return { success: false, error: "Failed to submit quiz answer." };
+  }
+}
+
+export async function getQuizAnswer(quizId: string) {
+  try {
+    const participantId = await getCookie("participantId");
+    const roomCode = await getCookie("roomCode");
+
+    if (!participantId || !roomCode) {
+      return {
+        success: false,
+        data: null
+      };
+    }
+
+
+    const answersRef = adminDB.collection('rooms').doc(roomCode).collection('quizzes').doc(quizId).collection('answers');
+    const existingAnswer = await answersRef.doc(participantId).get();
+
+    if (existingAnswer.exists) {
+      return {
+        success: true,
+        data: existingAnswer.data() as QuizAnswer
+      }
+    } else {
+      return {
+        success: true,
+        data: null
+      }
+    }
+  } catch (error) {
+    console.error("Error getting quiz answer: ", error);
+    return {
+      success: false,
+      data: null
+    }
+  }
+
 }
