@@ -24,7 +24,7 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
 
   return (
     <motion.div
-      className="flex items-center gap-3"
+      className="flex flex-wrap items-center gap-2 sm:gap-3"
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
     >
@@ -44,17 +44,17 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
         <span className="text-sm text-gray-500 font-medium">ルームコード:</span>
       </div>
 
-      <motion.p
-        className="text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent"
+      <motion.span
+        className="text-lg text-blue-500 font-bold bg-clip-text mr-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         {room.roomCode}
-      </motion.p>
+      </motion.span>
 
       <motion.div
-        className="flex items-center"
+        className="flex items-center ml-auto sm:ml-0"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

@@ -57,7 +57,7 @@ export const QuizDrawer = () => {
       onClose={() => setDrawerOpen(false)}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content className="bg-white flex flex-col fixed bottom-0 left-0 right-0 h-[92dvh] rounded-t-[10px] shadow-lg">
           <motion.div
             className="sticky top-0 bg-gradient-to-r from-blue-50 to-purple-50 pt-6 px-4 rounded-t-[10px]"
@@ -65,21 +65,10 @@ export const QuizDrawer = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <Drawer.Handle className="bg-gray-300 w-10 h-1 rounded-full mx-auto mb-4" />
-
-            <motion.div
-              className="flex items-center justify-center gap-3"
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
-            >
-              <span className="text-xl">
-                {focusedQuiz === null ? <FilePlus className="w-5 h-5 text-blue-500" /> : <Edit className="w-5 h-5 text-orange-500" />}
-              </span>
-              <Drawer.Title className="font-bold text-lg text-gray-800 mb-4">
-                {focusedQuiz === null ? "クイズを追加" : "クイズを編集"}
-              </Drawer.Title>
-            </motion.div>
+            <Drawer.Handle className="bg-gray-300 w-10 h-1 rounded-full mx-auto mt-2 mb-4" />
+            <Drawer.Title className="font-bold text-lg text-gray-800 mb-4">
+              {focusedQuiz === null ? "クイズを追加" : "クイズを編集"}
+            </Drawer.Title>
           </motion.div>
 
           <div className="flex-1 scrollbar-hide overflow-auto px-4 pb-4">
