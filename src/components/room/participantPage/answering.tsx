@@ -116,7 +116,7 @@ export const Answering = () => {
                 relative p-8 text-lg font-medium rounded-xl border-2 overflow-hidden
                 transition-all duration-300
                 ${selectedOption === null
-                  ? 'hover:bg-blue-50 hover:border-blue-400 hover:shadow-md active:bg-blue-100 border-gray-200'
+                  ? 'hover:border-blue-400 hover:shadow-md active:bg-blue-100 border-gray-200'
                   : selectedOption === index
                     ? 'bg-blue-100 border-blue-500 shadow-md'
                     : 'opacity-0 h-0 min-h-0 min-w-0 p-0 m-0 border-none'
@@ -124,11 +124,15 @@ export const Answering = () => {
               `}
               onClick={() => handleOptionSelect(index)}
             >
-              {/* Background gradient that shows on hover */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-r ${generateHighlightColor(index)} opacity-0 hover:opacity-10 transition-opacity`}
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 0.1 }}
+              <div
+                className={`absolute inset-0 bg-gradient-to-r ${generateHighlightColor(index)} opacity-0 group-hover:opacity-10 transition-opacity duration-200`}
+                style={{
+                  opacity: selectedOption === index ? 0.1 : 0
+                }}
+              />
+
+              <div
+                className={`absolute inset-0 bg-gradient-to-r ${generateHighlightColor(index)} opacity-0 hover:opacity-10 transition-opacity duration-200`}
               />
               {choice}
             </motion.button>
