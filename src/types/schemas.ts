@@ -14,6 +14,12 @@ export enum RoomStatus {
 }
 
 
+export interface JoinQuizForm {
+  roomCode: string;
+}
+
+
+
 export interface Participant {
   id: string;
   roomCode: string;
