@@ -112,27 +112,6 @@ export const ShowingAnswer = () => {
                 transition: { duration: 0.5, delay: 0.3 }
               }}
             >
-              {/* Result badge that slides in */}
-              {revealAnswer && (
-                <motion.div
-                  className={`absolute -right-12 -top-12 w-24 h-24 rounded-full flex items-center justify-center ${answer.isCorrect ? 'bg-green-100' : 'bg-red-100'}`}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 15,
-                    delay: 0.5
-                  }}
-                >
-                  {answer.isCorrect ? (
-                    <CheckCircle className="w-8 h-8 text-green-600" />
-                  ) : (
-                    <XCircle className="w-8 h-8 text-red-600" />
-                  )}
-                </motion.div>
-              )}
-
               <motion.p
                 className="text-lg"
                 initial={{ opacity: 0 }}
@@ -164,7 +143,7 @@ export const ShowingAnswer = () => {
                     className={`text-2xl font-bold text-center py-2 rounded-lg ${answer.isCorrect ? "text-green-600 bg-green-50" : "text-red-600 bg-red-50"}`}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 1 }}
+                    transition={{ delay: 0.3 }}
                   >
                     {answer.isCorrect ? (
                       <motion.span
