@@ -3,6 +3,7 @@
 import { Share } from "lucide-react"
 
 import { Room } from "@/types/schemas"
+import toast from "react-hot-toast";
 
 
 export const RoomCodeField = ({ room }: { room: Room }) => {
@@ -12,8 +13,8 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
       await navigator.share({
         url: shareUrl,
       });
-    } catch (error) {
-      alert('URLのコピーに失敗しました' + error);
+    } catch {
+      toast.error('URLのコピーに失敗しました。\nChromeなどのブラウザでお試しください。');
     }
   };
 
