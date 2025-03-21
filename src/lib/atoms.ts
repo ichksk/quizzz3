@@ -27,6 +27,7 @@ export const focusedQuizAtom = atom<QuizForOwner | null>(null);
 
 
 export const roomAtom = atom<RoomForParticipant | null>(null); //RoomStatus、CurrentOrderの変更をリアルタイムで検知
+export const meAtom = atom<Participant | null>(null); //Participantの入退室の変更をリアルタイムで検知
 export const participantsAtom = atom<Participant[]>([]); //Participantsの入退室の変更をリアルタイムで検知
 export const quizzesAtom = atom<QuizForParticipant[] | QuizForOwner[]>([]); //Quizの追加/編集/削除の変更をリアルタイムで検知
 export const quizAnswersAtom = atom<QuizAnswer[]>([]); //Quizの回答の変更をリアルタイムで検知

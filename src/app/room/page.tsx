@@ -3,18 +3,23 @@
 import { OwnerPage } from "@/components/room/ownerPage";
 import { ParticipantPage } from "@/components/room/participantPage";
 import { getParticipant, getRoomData } from "@/server/actions";
-import { Participant, QuizForOwner, RoomForOwner, RoomForParticipant } from "@/types/schemas";
+import { RoomForOwner, RoomForParticipant } from "@/types/schemas";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import { onSnapshot, doc, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CustomNotFound from "./not-found";
+import { useAtom } from "jotai";
+import { meAtom, roomAtom } from "@/lib/atoms";
+import { Loading } from "@/components/loading";
 
 export default function RoomPage() {
-  const [room, setRoom] = useState<RoomForOwner | RoomForParticipant | null>();
-  const [participant, setParticipant] = useState<Participant | null>();
+  const [loading, setLoading] = useState(true);
+  const [room, setRoom] = useAtom(roomAtom);
+  const [participant, setParticipant] = useAtom(meAtom);
 
   useEffect(() => {
+    setLoading(true);
     const fetchRoomData = async () => {
       const { room } = await getRoomData();
       const { participant } = await getParticipant();
@@ -24,6 +29,7 @@ export default function RoomPage() {
 
       setRoom(room);
       setParticipant(participant);
+      setLoading(false);
     }
     fetchRoomData();
   }, []);
@@ -89,7 +95,7 @@ export default function RoomPage() {
 
 
 
-  if (participant === undefined || room === undefined) return null;
+  if (loading) return <Loading fullScreen />;
   if (!room || !participant) return <CustomNotFound />;
 
   return participant.isOwner ? (

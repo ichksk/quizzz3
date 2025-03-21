@@ -2,8 +2,8 @@
 
 import { QuizForOwner, QuizStatus, RoomForOwner } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
-import { useSetAtom } from "jotai"
-import { drawerOpenAtom, focusedQuizAtom } from "@/lib/atoms"
+import { useAtomValue, useSetAtom } from "jotai"
+import { drawerOpenAtom, focusedQuizAtom, quizzesAtom } from "@/lib/atoms"
 
 export const QuizList = ({ room }: { room: RoomForOwner }) => {
   const setDrawerOpen = useSetAtom(drawerOpenAtom)
