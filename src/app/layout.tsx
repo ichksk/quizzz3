@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "quizzz3",
-  description: "Developed by @ichksk",
+  title: "クイズ大会メーカー",
+  description: "クイズ大会メーカーは、誰でも簡単にクイズ大会を作成・運営できるオンラインツールです。イベントや授業をもっと楽しく。"
 };
 
 export default function RootLayout({
