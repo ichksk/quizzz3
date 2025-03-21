@@ -14,6 +14,7 @@ import { getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot } from 'f
 import { storage } from '@/lib/firebase';
 import toast from 'react-hot-toast';
 import { getCookie } from '@/server/cookies';
+import imageCompression from 'browser-image-compression';
 
 interface QuizFormProps {
   initialData?: QuizSubmitForm | null;
@@ -28,8 +29,7 @@ export const QuizForm = ({
   isEdit = false,
   onSubmit,
 }: QuizFormProps) => {
-  const setLoading = useSetAtom(loadingAtom)
-
+  const setLoading = useSetAtom(loadingAtom);
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -52,10 +52,28 @@ export const QuizForm = ({
 
     let image = quizForm.imagePreview;
     if (quizForm.image && quizForm.image instanceof File) {
-      setLoading(true)
+      setLoading(true);
       const file = quizForm.image;
+
+      // 画像圧縮のオプション設定
+      const options = {
+        maxSizeMB: 1,             // 例: 1MB以下に圧縮
+        maxWidthOrHeight: 1920,     // 最大の幅または高さ
+        useWebWorker: true,         // Web Workerを使用して圧縮
+      };
+
+      let compressedFile: File;
+      try {
+        compressedFile = await imageCompression(file, options);
+      } catch (error) {
+        console.error("圧縮エラー:", error);
+        toast.error("画像の圧縮に失敗しました");
+        setLoading(false);
+        return;
+      }
+
       const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
       await new Promise<void>((resolve, reject) => {
         uploadTask.on(
@@ -73,6 +91,7 @@ export const QuizForm = ({
         );
       });
       image = await getDownloadURL(uploadTask.snapshot.ref);
+      setLoading(false);
     }
 
     onSubmit({
@@ -85,7 +104,7 @@ export const QuizForm = ({
     if (initialData) {
       setQuizForm(initialData);
     } else {
-      setQuizForm(emptyQuizForm)
+      setQuizForm(emptyQuizForm);
     }
   }, [initialData]);
 
