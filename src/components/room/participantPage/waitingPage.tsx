@@ -109,21 +109,23 @@ export function WaitingPage() {
         </p>
 
         <motion.div
-          className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mt-6"
+          className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden mt-6 relative"
           variants={itemVariants}
         >
+          {/* Moving dot instead of filling gauge */}
           <motion.div
-            className="h-full bg-gradient-to-r from-blue-400 to-indigo-500"
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
+            className="absolute h-3 w-6 bg-indigo-500 rounded-full top-1/2 transform -translate-y-1/2"
+            animate={{
+              left: ["0%", "100%", "0%"], // 24px (6rem) is the width of the dot
+            }}
             transition={{
               duration: 3.5,
               repeat: Infinity,
-              repeatType: "reverse",
               ease: "easeInOut"
             }}
           />
         </motion.div>
+
       </motion.div>
 
       <motion.div

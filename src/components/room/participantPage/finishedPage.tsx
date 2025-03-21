@@ -1,5 +1,5 @@
 import { leaveRoom } from '@/server/actions';
-import { Trophy, Medal, Target, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
@@ -62,53 +62,6 @@ export function FinishedPage() {
         />
       ))}
 
-      {/* Trophies Animation */}
-      <motion.div
-        className="absolute top-16 left-1/2 transform -translate-x-1/2 flex space-x-8 md:space-x-16"
-        variants={itemVariants}
-      >
-        <motion.div
-          animate={{
-            y: [0, -10, 0],
-            rotate: [-5, 0, 5, 0]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-        >
-          <Trophy className="w-12 h-12 md:w-16 md:h-16 text-yellow-400 drop-shadow-lg" />
-        </motion.div>
-        <motion.div
-          animate={{
-            y: [0, -8, 0],
-            rotate: [5, 0, -5, 0]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 0.5
-          }}
-        >
-          <Medal className="w-10 h-10 md:w-14 md:h-14 text-purple-400 drop-shadow-lg" />
-        </motion.div>
-        <motion.div
-          animate={{
-            y: [0, -12, 0],
-            rotate: [-3, 0, 3, 0]
-          }}
-          transition={{
-            duration: 3.5,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 1
-          }}
-        >
-          <Target className="w-10 h-10 md:w-14 md:h-14 text-blue-400 drop-shadow-lg" />
-        </motion.div>
-      </motion.div>
 
       {/* 結果ヘッダー */}
       <motion.div
@@ -118,7 +71,6 @@ export function FinishedPage() {
         <motion.h1
           className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500"
           animate={{
-            scale: [1, 1.05, 1],
             textShadow: ["0px 0px 0px rgba(104, 58, 237, 0)", "0px 0px 10px rgba(104, 58, 237, 0.3)", "0px 0px 0px rgba(104, 58, 237, 0)"]
           }}
           transition={{
@@ -127,15 +79,8 @@ export function FinishedPage() {
             repeatType: "loop"
           }}
         >
-          クイズ終了！
+          クイズ終了
         </motion.h1>
-        <motion.p
-          className="text-lg md:text-xl text-gray-600"
-          animate={{ opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          全員の回答が完了しました
-        </motion.p>
       </motion.div>
 
       {/* ホームに戻るボタン */}
