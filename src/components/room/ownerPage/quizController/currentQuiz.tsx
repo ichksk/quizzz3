@@ -1,6 +1,7 @@
 import { Send } from "lucide-react"
 import { useAtomValue } from "jotai"
 import { quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
+import { proceedQuiz } from "@/server/actions"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)
@@ -31,7 +32,7 @@ export const CurrentQuiz = () => {
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
       <div className="flex items-center justify-between">
         <h3 className="text-2xl font-semibold text-gray-800">出題中のクイズ</h3>
-        <button className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md">
+        <button className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md" onClick={proceedQuiz}>
           <Send className="w-5 h-5 mr-2" />
           次のクイズへ
         </button>
