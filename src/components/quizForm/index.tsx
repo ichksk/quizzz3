@@ -2,21 +2,25 @@
 "use client"
 
 import { FormEvent, useEffect } from 'react';
-import { useAtom } from 'jotai';
-import { emptyQuizForm, quizFormAtom } from '@/lib/atoms';
+import { useAtom, useSetAtom } from 'jotai';
+import { emptyQuizForm, loadingAtom, quizFormAtom } from '@/lib/atoms';
 import { TimeLimitField } from './timeLimitField';
 import { ImageField } from './imageField';
 import { ChoicesField } from './choicesField';
 import { BackButton } from '../backButton';
 import { QuestionField } from './questionField';
 import { SubmitButton } from './submitButton';
-import { QuizSubmitForm } from '@/types/schemas';
+import { QuizSubmit, QuizSubmitForm } from '@/types/schemas';
+import { getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot } from 'firebase/storage';
+import { storage } from '@/lib/firebase';
+import toast from 'react-hot-toast';
+import { getCookie } from '@/server/cookies';
 
 interface QuizFormProps {
   initialData?: QuizSubmitForm | null;
   showBackButton?: boolean;
   isEdit?: boolean;
-  onSubmit: (formData: QuizSubmitForm) => Promise<void>;
+  onSubmit: (quizForm: QuizSubmit) => Promise<void>;
 }
 
 export const QuizForm = ({
@@ -25,6 +29,8 @@ export const QuizForm = ({
   isEdit = false,
   onSubmit,
 }: QuizFormProps) => {
+  const setLoading = useSetAtom(loadingAtom)
+
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);
 
   useEffect(() => {
@@ -35,9 +41,57 @@ export const QuizForm = ({
     }
   }, [initialData]);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(quizForm);
+
+    const username = await getCookie("username");
+    if (!username) {
+      toast.error("ユーザー名が設定されていません");
+      return;
+    }
+
+    if (!quizForm.question) {
+      toast.error("問題文を入力してください");
+      return;
+    }
+    if (quizForm.choices.length < 2) {
+      toast.error("選択肢は最低2つ必要です");
+      return;
+    }
+
+
+    let imageUrl = quizForm.imagePreview;
+    if (quizForm.image && quizForm.image instanceof File) {
+      setLoading(true)
+      const file = quizForm.image;
+      const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      await new Promise<void>((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot: UploadTaskSnapshot) => {
+            // 必要に応じて進捗表示などの処理を追加可能
+          },
+          (error: Error) => {
+            console.error("アップロードエラー:", error);
+            reject(error);
+          },
+          () => {
+            resolve();
+          }
+        );
+      });
+      imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+    }
+
+    onSubmit({
+      question: quizForm.question,
+      timeLimit: quizForm.timeLimit,
+      image: imageUrl,
+      choices: quizForm.choices,
+      correctChoiceIndex: quizForm.correctChoiceIndex,
+    });
   };
 
   return (

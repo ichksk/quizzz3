@@ -2,7 +2,7 @@
 
 import { adminDB } from "@/lib/firebase-admin";
 import { getCookie, setCookie } from "./cookies";
-import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, Room, RoomStatus } from "@/types/schemas";
+import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, QuizSubmit, Room, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -13,7 +13,12 @@ function generateRandomCode(length = 6): string {
   return code;
 }
 
-export async function createRoom(username: string): Promise<Room> {
+export async function createRoom(): Promise<Room> {
+  const username = await getCookie("username");
+  if (!username) {
+    throw new Error("ユーザー名が設定されていません");
+  }
+
   // 重複を避けるため、存在チェックを繰り返す簡易実装
   let roomCode = generateRandomCode();
   let docRef = adminDB.collection("rooms").doc(roomCode);
@@ -58,13 +63,7 @@ export async function createQuiz({
   choices,
   correctChoiceIndex,
   timeLimit,
-}: {
-  image: string | null;
-  question: string;
-  choices: string[];
-  correctChoiceIndex: number;
-  timeLimit: number;
-}) {
+}: QuizSubmit) {
   try {
     const roomCode = await getCookie("roomCode");
     if (!roomCode) {

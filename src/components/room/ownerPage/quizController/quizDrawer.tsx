@@ -2,10 +2,8 @@
 
 import { QuizForm } from "@/components/quizForm"
 import { drawerOpenAtom, focusedQuizAtom, loadingAtom } from "@/lib/atoms"
-import { storage } from "@/lib/firebase";
 import { createQuiz, updateQuiz } from "@/server/actions";
-import { QuizSubmitForm } from "@/types/schemas";
-import { getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot } from "firebase/storage";
+import { QuizSubmit } from "@/types/schemas";
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { Trash2 } from "lucide-react"
 import toast from "react-hot-toast";
@@ -17,66 +15,38 @@ export const QuizDrawer = () => {
 
   const focusedQuiz = useAtomValue(focusedQuizAtom)
 
-  const handleSubmit = async (formData: QuizSubmitForm) => {
-    //focusedQuizがnullなら(新規作成なら)createQuizを呼び出す、
-    //focusedQuizがnullでないなら(編集なら)updateQuizを呼び出す
-
+  const handleSubmit = async (formData: QuizSubmit) => {
     setLoading(true)
-    let imageUrl = formData.imagePreview;
-    if (formData.image && formData.image instanceof File) {
-      const file = formData.image;
-      const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
 
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.on(
-          "state_changed",
-          (snapshot: UploadTaskSnapshot) => {
-            // 必要に応じて進捗表示などの処理を追加可能
-          },
-          (error: Error) => {
-            console.error("アップロードエラー:", error);
-            reject(error);
-          },
-          () => {
-            resolve();
-          }
-        );
-      });
-      imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
-    }
-
-    if (focusedQuiz === null) {
-      const result = await createQuiz({
-        question: formData.question,
-        timeLimit: formData.timeLimit,
-        image: imageUrl,
-        choices: formData.choices,
-        correctChoiceIndex: formData.correctChoiceIndex,
-      })
-      if (result.success) {
-        toast.success("作成しました")
+    try {
+      if (focusedQuiz === null) {
+        const result = await createQuiz(formData)
+        if (result.success) {
+          toast.success("作成しました")
+        } else {
+          toast.error("作成に失敗しました")
+        }
       } else {
-        toast.error("作成に失敗しました")
-      }
-    } else {
-      const result = await updateQuiz(focusedQuiz.id, {
-        question: formData.question,
-        timeLimit: formData.timeLimit,
-        image: imageUrl,
-        choices: formData.choices,
-        correctChoiceIndex: formData.correctChoiceIndex,
-      })
-      if (result.success) {
-        toast.success("更新しました")
-      } else {
-        toast.error("更新に失敗しました")
+        const result = await updateQuiz(focusedQuiz.id, formData)
+        if (result.success) {
+          toast.success("更新しました")
+        } else {
+          toast.error("更新に失敗しました")
+        }
       }
     }
-
-    setLoading(false)
-    setDrawerOpen(false)
-
+    catch (error) {
+      console.error("クイズ作成エラー:", error)
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("クイズの作成に失敗しました")
+      }
+    }
+    finally {
+      setLoading(false)
+      setDrawerOpen(false)
+    }
   };
 
   return (

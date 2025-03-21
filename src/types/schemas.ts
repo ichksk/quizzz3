@@ -43,6 +43,14 @@ export interface QuizSubmitForm {
   timeLimit: number
 }
 
+export interface QuizSubmit {
+  question: string,
+  image: string | null,
+  choices: string[],
+  correctChoiceIndex: number,
+  timeLimit: number
+}
+
 export interface QuizForParticipant {
   id: string;
   roomCode: string;
