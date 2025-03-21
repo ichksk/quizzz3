@@ -2,8 +2,11 @@ import { Loading } from '@/components/loading';
 
 import { LeaveRoomButton } from '@/components/leaveRoomButton';
 import { Room } from '@/types/schemas';
+import { useAtomValue } from 'jotai';
+import { roomAtom } from '@/lib/atoms';
 
-export function WaitingPage({ room }: { room: Room }) {
+export function WaitingPage() {
+  const room = useAtomValue(roomAtom) as Room
   return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center p-8 font-[family-name:var(--font-geist-sans)]">
       {/* メインコンテンツ */}

@@ -1,7 +1,9 @@
+import { leaveRoom } from '@/server/actions';
 import { Trophy, Medal, Target } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function FinishedPage() {
-
+  const router = useRouter();
   const getMedalColor = (index: number) => {
     switch (index) {
       case 0: return "text-yellow-400";
@@ -10,6 +12,13 @@ export function FinishedPage() {
       default: return "text-gray-600";
     }
   };
+
+  const goBackHome = async () => {
+    const res = await leaveRoom();
+    if (res.success) {
+      router.push('/');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -59,7 +68,7 @@ export function FinishedPage() {
       <div className="text-center">
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 rounded-full font-semibold transition-colors shadow-md flex items-center mx-auto"
-          onClick={() => window.location.href = '/'}
+          onClick={goBackHome}
         >
           ホームに戻る
         </button>

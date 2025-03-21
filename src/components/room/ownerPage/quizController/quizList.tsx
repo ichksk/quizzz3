@@ -3,9 +3,10 @@
 import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
 import { useAtomValue, useSetAtom } from "jotai"
-import { drawerOpenAtom, focusedQuizAtom, quizzesAtom } from "@/lib/atoms"
+import { drawerOpenAtom, focusedQuizAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 
 export const QuizList = () => {
+  const room = useAtomValue(roomAtom) as Room
   const quizzes = useAtomValue(quizzesAtom)
   const setDrawerOpen = useSetAtom(drawerOpenAtom)
   const setFocusedQuiz = useSetAtom(focusedQuizAtom)
@@ -25,7 +26,8 @@ export const QuizList = () => {
       <div className="flex items-center justify-between">
         <h3 className="font-medium">クイズリスト (全{quizzes.length}問)</h3>
         <button
-          className="inline-flex items-center px-3 py-1.5 text-[11px] sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 whitespace-nowrap"
+          className="inline-flex items-center px-3 py-1.5 text-[11px] sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+          disabled={room.status === "FINISHED"}
           onClick={addQuiz}
         >
           <Plus className="w-4 h-4 mr-1 sm:mr-2" />
@@ -45,7 +47,8 @@ export const QuizList = () => {
             <div className="flex items-center gap-2 flex-shrink-0">
               <QuizStatusBadge status={quiz.status} />
               <button
-                className="p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                className="p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                disabled={room.status === "FINISHED"}
                 onClick={() => handleClick(quiz as QuizForOwner)}
               >
                 <EllipsisVertical className="w-4 h-4" />

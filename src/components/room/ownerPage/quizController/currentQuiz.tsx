@@ -43,9 +43,9 @@ export const CurrentQuiz = () => {
               case QuizStatus.ANSWER_CLOSED:
                 return "正解を発表";
               case QuizStatus.SHOWING_ANSWER:
-                return "次の問題へ";
+                return room.currentOrder >= quizzes.length - 1 ? "クイズ終了" : "次の問題へ";
               default:
-                return "？？？";
+                return "";
             }
           })()}
         </button>
