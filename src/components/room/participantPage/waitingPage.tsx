@@ -26,47 +26,13 @@ export function WaitingPage() {
     visible: { y: 0, opacity: 1 }
   };
 
-  // Floating bubble animation for background
-  const bubbles = Array.from({ length: 15 }).map((_, i) => ({
-    id: i,
-    size: Math.random() * 60 + 20,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    duration: Math.random() * 20 + 10,
-    delay: Math.random() * 5
-  }));
-
   return (
     <motion.div
-      className="min-h-[100dvh] flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden bg-gradient-to-b from-blue-50 to-indigo-100 font-[family-name:var(--font-geist-sans)]"
+      className="min-h-full flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden font-[family-name:var(--font-geist-sans)]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      {/* Animated background bubbles */}
-      {bubbles.map(bubble => (
-        <motion.div
-          key={bubble.id}
-          className="absolute rounded-full bg-white opacity-20"
-          style={{
-            width: bubble.size,
-            height: bubble.size,
-            left: `${bubble.x}%`,
-            top: `${bubble.y}%`,
-          }}
-          animate={{
-            y: [0, -100, 0],
-            x: [0, Math.random() * 40 - 20, 0],
-          }}
-          transition={{
-            duration: bubble.duration,
-            repeat: Infinity,
-            delay: bubble.delay,
-            ease: "easeInOut"
-          }}
-        />
-      ))}
-
       {/* メインコンテンツ */}
       <motion.div
         className="bg-white bg-opacity-90 p-8 rounded-2xl shadow-xl text-center space-y-6 backdrop-blur-sm z-10 max-w-md w-full"

@@ -3,9 +3,10 @@ import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
 import { motion } from "framer-motion"
-import { Donation } from "./donation"
 import { useAtomValue } from "jotai"
 import { roomAtom } from "@/lib/atoms"
+import { Donation } from "./donation"
+
 
 export const OwnerPage = () => {
   const room = useAtomValue(roomAtom);
@@ -37,7 +38,7 @@ export const OwnerPage = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col container mx-auto py-8 px-4 space-y-6"
+      className="flex flex-col container mx-auto space-y-6 bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg"
     >
       <motion.div variants={itemVariants}>
         <Header />

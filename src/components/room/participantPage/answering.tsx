@@ -68,11 +68,6 @@ export const Answering = () => {
     }
   };
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
-  };
-
   const generateHighlightColor = (index: number) => {
     const colors = ["from-blue-400 to-cyan-300", "from-purple-400 to-pink-300", "from-amber-400 to-orange-300", "from-emerald-400 to-teal-300"];
     return colors[index % colors.length];
