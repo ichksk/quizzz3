@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai"
 import { roomAtom } from "@/lib/atoms"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import { ChatRoom } from "../chatRoom"
 
 export function ParticipantPage() {
   const room = useAtomValue(roomAtom) as Room
@@ -67,6 +68,7 @@ export function ParticipantPage() {
         className="w-full h-full"
       >
         {getPageComponent()}
+        <ChatRoom />
       </motion.div>
     </AnimatePresence>
   )
