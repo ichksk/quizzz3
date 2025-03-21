@@ -500,9 +500,11 @@ export const getQuizById = async (quizId: string): Promise<{ quiz: QuizForOwner 
 export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit): Promise<{ success: boolean; error?: string }> {
   // Get participant and room info from cookies
   const participantId = await getCookie("participantId")
+  const username = await getCookie("username")
   const roomCode = await getCookie("roomCode");
-  if (!participantId || !roomCode) {
-    return { success: false, error: "Participant ID or room code not found in cookies." };
+
+  if (!participantId || !username || !roomCode) {
+    return { success: false, error: "Participant ID, username, or room code not found in cookies." };
   }
 
   // Check if participant has already answered this quiz
@@ -524,6 +526,7 @@ export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit
 
     const answer: QuizAnswer = {
       participantId,
+      username,
       quizId: quizId,
       choiceIndex,
       isCorrect,

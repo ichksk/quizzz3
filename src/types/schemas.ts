@@ -72,6 +72,7 @@ export interface QuizAnswerSubmit {
 // firebaseに保存するデータの型
 export interface QuizAnswer {
   participantId: string;
+  username: string;
   quizId: string;
   choiceIndex: number;
   isCorrect: boolean;
