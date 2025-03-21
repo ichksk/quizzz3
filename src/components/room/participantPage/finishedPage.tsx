@@ -1,12 +1,6 @@
 import { Trophy, Medal, Target } from 'lucide-react';
 
 export function FinishedPage() {
-  // ダミーデータ
-  const results = [
-    { id: 1, name: "Player 1", score: 800, correctAnswers: 8, answeredTime: 45 },
-    { id: 2, name: "Player 2", score: 650, correctAnswers: 7, answeredTime: 52 },
-    { id: 3, name: "Player 3", score: 450, correctAnswers: 5, answeredTime: 58 },
-  ];
 
   const getMedalColor = (index: number) => {
     switch (index) {
@@ -25,83 +19,50 @@ export function FinishedPage() {
         <p className="text-gray-600">全員の回答が完了しました</p>
       </div>
 
-      {/* 上位3名の表彰台 */}
-      <div className="bg-white rounded-lg shadow-md mb-8">
-        <div className="p-6">
-          <h2 className="text-xl font-bold mb-6 flex items-center">
-            <Trophy className="w-6 h-6 mr-2 text-yellow-400" />
-            順位
-          </h2>
-          <div className="flex justify-around items-end mb-4">
-            {/* 2位 */}
-            <div className="text-center">
-              <div className="w-20 h-24 bg-gray-200 rounded-t-lg flex items-end justify-center">
-                <div className="mb-2">
-                  <Medal className={`w-8 h-8 ${getMedalColor(1)}`} />
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="font-bold">{results[1].name}</div>
-                <div className="text-sm text-gray-600">{results[1].score}pt</div>
-              </div>
-            </div>
-            {/* 1位 */}
-            <div className="text-center">
-              <div className="w-20 h-32 bg-gray-200 rounded-t-lg flex items-end justify-center">
-                <div className="mb-2">
-                  <Medal className={`w-8 h-8 ${getMedalColor(0)}`} />
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="font-bold">{results[0].name}</div>
-                <div className="text-sm text-gray-600">{results[0].score}pt</div>
-              </div>
-            </div>
-            {/* 3位 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gray-200 rounded-t-lg flex items-end justify-center">
-                <div className="mb-2">
-                  <Medal className={`w-8 h-8 ${getMedalColor(2)}`} />
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="font-bold">{results[2].name}</div>
-                <div className="text-sm text-gray-600">{results[2].score}pt</div>
-              </div>
-            </div>
-          </div>
+      {/* 結果テーブル */}
+      {/* <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-2xl font-bold mb-4 text-center">順位表</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="py-3 px-4 text-left">順位</th>
+                <th className="py-3 px-4 text-left">プレイヤー</th>
+                <th className="py-3 px-4 text-left">スコア</th>
+                <th className="py-3 px-4 text-left">正解数</th>
+                <th className="py-3 px-4 text-left">回答時間</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((player, index) => (
+                <tr key={player.id} className="border-t">
+                  <td className="py-4 px-4 flex items-center">
+                    {index < 3 ? (
+                      <span className={`mr-2 ${getMedalColor(index)}`}>
+                        {index === 0 ? <Trophy size={20} /> : index === 1 ? <Medal size={20} /> : <Target size={20} />}
+                      </span>
+                    ) : null}
+                    {index + 1}
+                  </td>
+                  <td className="py-4 px-4">{player.name}</td>
+                  <td className="py-4 px-4 font-bold">{player.score}</td>
+                  <td className="py-4 px-4">{player.correctAnswers} / 10</td>
+                  <td className="py-4 px-4">{player.answeredTime}秒</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      </div> */}
 
-      {/* 詳細な結果 */}
-      <div className="bg-white rounded-lg shadow-md mb-8">
-        <div className="p-6">
-          <h2 className="text-xl font-bold mb-6 flex items-center">
-            <Target className="w-6 h-6 mr-2 text-blue-500" />
-            詳細結果
-          </h2>
-          <div className="space-y-4">
-            {results.map((player, index) => (
-              <div
-                key={player.id}
-                className="p-4 bg-white rounded-lg shadow-sm border"
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-lg">
-                    {index + 1}位: {player.name}
-                  </span>
-                  <span className="text-xl font-bold text-blue-600">
-                    {player.score}pt
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                  <div>正答数: {player.correctAnswers}/10問</div>
-                  <div>平均回答時間: {player.answeredTime}秒</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* ホームに戻るボタン */}
+      <div className="text-center">
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 rounded-full font-semibold transition-colors shadow-md flex items-center mx-auto"
+          onClick={() => window.location.href = '/'}
+        >
+          ホームに戻る
+        </button>
       </div>
     </div>
   );
