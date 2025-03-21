@@ -33,7 +33,7 @@ export default function CreateQuizPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-[100dvh] p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

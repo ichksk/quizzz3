@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { GlobalLoading } from "@/components/loading";
@@ -14,6 +14,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '700']
+});
+
+
 export const metadata: Metadata = {
   title: "クイズ大会メーカー",
   description: "クイズ大会メーカーは、誰でも簡単にクイズ大会を作成・運営できるオンラインツールです。イベントや授業をもっと楽しく。"
@@ -27,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
-        <Toaster />
-        <GlobalLoading />
-        {children}
+        <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
+          <Toaster />
+          <GlobalLoading />
+          {children}
+        </div>
       </body>
     </html>
   );

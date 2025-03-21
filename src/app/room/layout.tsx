@@ -1,12 +1,6 @@
 "use client";
-import { Montserrat } from 'next/font/google'
 import { JSX } from 'react';
 import { motion } from 'framer-motion';
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['400', '700']
-});
 
 export default function RoomLayout({ children }: { children: JSX.Element }) {
   const patterns = Array.from({ length: 10 }).map((_, i) => ({
@@ -20,7 +14,7 @@ export default function RoomLayout({ children }: { children: JSX.Element }) {
 
 
   return (
-    <div className={`min-h-[100dvh] bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100  ${montserrat.className}`}>
+    <div className={`min-h-[100dvh]`}>
       {patterns.map(pattern => (
         <motion.div
           key={pattern.id}
