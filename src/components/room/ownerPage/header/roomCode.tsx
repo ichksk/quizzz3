@@ -1,10 +1,9 @@
 "use client";
 
 import { Share } from "lucide-react"
-
 import { Room } from "@/types/schemas"
 import toast from "react-hot-toast";
-
+import { motion } from "framer-motion";
 
 export const RoomCodeField = ({ room }: { room: Room }) => {
   const handleShare = async () => {
@@ -24,17 +23,33 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
   if (!room) return null;
 
   return (
-    <div className="flex items-center gap-2">
-      <p className="text-lg font-bold">{room.roomCode}</p>
-      <div className="flex items-center gap-1">
-        <button
+    <motion.div
+      className="flex flex-wrap items-center gap-2 sm:gap-3"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <motion.span
+        className="text-lg text-blue-500 font-bold bg-clip-text mr-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {room.roomCode}
+      </motion.span>
+      <motion.div
+        className="flex items-center ml-auto sm:ml-0"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <motion.button
           onClick={handleShare}
-          className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded"
+          className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-sm transition-colors duration-200"
           aria-label="共有URLをコピー"
+          whileTap={{ scale: 0.95 }}
         >
           <Share className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   )
 }

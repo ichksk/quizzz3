@@ -6,13 +6,11 @@ import { Rocket } from "lucide-react"
 
 export const StartButton = () => {
   const handleStart = async () => {
-    if (confirm("参加を締め切ります。よろしいですか？")) {
-      const res = await startQuiz()
-      if (res.success) {
-        console.log("クイズを開始しました")
-      } else {
-        console.error(res.error)
-      }
+    const res = await startQuiz()
+    if (res.success) {
+      console.log("クイズを開始しました")
+    } else {
+      console.error(res.error)
     }
   }
 

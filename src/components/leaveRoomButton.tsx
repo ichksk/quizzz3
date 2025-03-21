@@ -2,21 +2,23 @@
 
 import { leaveRoom } from "@/server/actions";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export const LeaveRoomButton = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <button
       onClick={() => {
         leaveRoom()
           .then(() => {
-            router.push("/")
-          })
+            router.push("/");
+          });
       }}
-      className="mt-12 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200 cursor-pointer"
+      className="mt-12 px-8 py-3 rounded-xl font-semibold text-slate-700 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 hover:from-blue-200 hover:via-indigo-200 hover:to-purple-200 border border-slate-200 shadow-md flex items-center justify-center gap-2 transition-colors duration-300"
     >
-      退出する
+      <LogOut className="w-5 h-5 text-indigo-400" />
+      <span>退出する</span>
     </button>
-  )
-}
+  );
+};

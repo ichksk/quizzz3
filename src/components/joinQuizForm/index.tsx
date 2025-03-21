@@ -63,7 +63,6 @@ export const JoinQuizForm = () => {
         <UsernameField />
         <div className="flex flex-col gap-4">
           <SubmitButton />
-          <BackButton />
         </div>
       </form>
       <Supplements />

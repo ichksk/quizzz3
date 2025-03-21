@@ -1,4 +1,3 @@
-
 import { Room } from "@/types/schemas"
 import { StartButton } from "./startButton"
 import { QuizList } from "./quizList"
@@ -6,26 +5,67 @@ import { QuizDrawer } from "./quizDrawer"
 import { CurrentQuiz } from "./currentQuiz"
 import { useAtomValue } from "jotai"
 import { roomAtom } from "@/lib/atoms"
+import { motion } from "framer-motion"
+import { Lightbulb } from "lucide-react"
 
 export const QuizController = () => {
   const room = useAtomValue(roomAtom) as Room
+
   return (
     <>
       <QuizDrawer />
-      <div className="bg-white border border-gray-300 rounded-lg shadow-sm lg:col-span-2">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
-          <h2 className="text-lg font-semibold">クイズ</h2>
-          {room.status === "WAITING" && <StartButton />}
-        </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="bg-white border border-gray-200 rounded-xl shadow-sm lg:col-span-2 overflow-hidden"
+      >
+        <motion.div
+          className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <motion.h2
+            className="text-lg font-semibold flex items-center gap-2"
+            whileHover={{ x: 3 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Lightbulb className="w-5 h-5 text-blue-500" />
+            クイズ
+          </motion.h2>
+
+          {room.status === "WAITING" && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+            >
+              <StartButton />
+            </motion.div>
+          )}
+        </motion.div>
+
         <div className="p-6">
-          <div className="space-y-6">
+          <motion.div
+            className="space-y-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             {room.status === "IN_PROGRESS" && (
-              <CurrentQuiz />
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <CurrentQuiz />
+              </motion.div>
             )}
             <QuizList />
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }
