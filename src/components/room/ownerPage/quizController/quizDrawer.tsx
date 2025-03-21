@@ -108,7 +108,7 @@ export const QuizDrawer = () => {
                   }}
                   onSubmit={handleSubmit}
                   showBackButton={false}
-                  isEdit
+                  isEdit={focusedQuiz !== null}
                 />
               </div>
             </div>

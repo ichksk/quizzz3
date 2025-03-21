@@ -1,4 +1,4 @@
-import { Send } from "lucide-react"
+import { Send, Lock, Check, ArrowRight, Flag } from "lucide-react"
 import { useAtomValue } from "jotai"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
@@ -18,20 +18,33 @@ export const CurrentQuiz = () => {
     return quizAnswers.filter(answer => answer.choiceIndex === choiceIndex).length
   }
 
+  // QuizStatusに応じて適切なアイコンを返すヘルパー関数
+  const renderIcon = () => {
+    switch (currentQuiz.status) {
+      case QuizStatus.DISPLAYING:
+        return <Lock className="w-5 h-5 mr-2" />
+      case QuizStatus.ANSWER_CLOSED:
+        return <Check className="w-5 h-5 mr-2" />
+      case QuizStatus.SHOWING_ANSWER:
+        return room.currentOrder >= quizzes.length - 1
+          ? <Flag className="w-5 h-5 mr-2" />
+          : <Send className="w-5 h-5 mr-2" />
+      default:
+        return <Send className="w-5 h-5 mr-2" />
+    }
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
-        <div>
-          <p className="text-md text-gray-600">
-            第{room.currentOrder + 1}問 / 全{quizzes.length}問
-          </p>
-        </div>
-        {/* ボタンは小画面では下に回りやすいように mt-2 を入れるなど調整 */}
+      <div className="flex flex-row items-center justify-between space-y-4">
+        <p className="text-md text-gray-600">
+          第{room.currentOrder + 1}問 / 全{quizzes.length}問
+        </p>
         <button
           className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md"
           onClick={proceedQuiz}
         >
-          <Send className="w-5 h-5 mr-2" />
+          {renderIcon()}
           {(() => {
             switch (currentQuiz.status) {
               case QuizStatus.DISPLAYING:
