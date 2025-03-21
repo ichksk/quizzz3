@@ -67,7 +67,7 @@ export const ChoicesField = () => {
 
       <div
         className={`
-          transition-all duration-500 ease-out delay-200
+          transition-all duration-500 ease-out delay-200 flex items-center justify-center px-8
           ${quizForm.choices.length < 4
             ? "opacity-100 h-10"
             : "opacity-0 h-0 overflow-hidden"
@@ -76,7 +76,7 @@ export const ChoicesField = () => {
       >
         <button
           type="button"
-          className="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
+          className="flex items-center w-full gap-2 px-4 py-2 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer"
           onClick={() => {
             setQuizForm((prev) => ({
               ...prev,
