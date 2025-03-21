@@ -51,13 +51,13 @@ export default function Home(): JSX.Element {
 
           <div className="flex flex-col gap-4 w-full max-w-md">
             <button
-              className="px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex-1 font-medium text-base cursor-pointer"
+              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex-1 font-medium text-base cursor-pointer"
               onClick={handleCreateQuiz}
             >
               クイズを作る
             </button>
             <button
-              className="px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex-1 font-medium text-base cursor-pointer"
+              className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex-1 font-medium text-base cursor-pointer"
               onClick={handleJoinQuiz}
             >
               クイズに参加する
