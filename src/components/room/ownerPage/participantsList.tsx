@@ -38,7 +38,7 @@ export function ParticipantsList() {
                 {index === 0 && participant.score !== 0 && (
                   <Crown className="w-4 h-4 text-yellow-500" />
                 )}
-                <span>{participant.username}</span>
+                <span>{participant.username} さん</span>
               </div>
               <span className="text-gray-600">{participant.score}点</span>
             </div>

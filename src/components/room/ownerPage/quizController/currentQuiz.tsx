@@ -2,32 +2,20 @@ import { Send } from "lucide-react"
 import { useAtomValue } from "jotai"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
-import { QuizStatus } from "@/types/schemas"
+import { QuizForOwner, QuizStatus } from "@/types/schemas"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)
   const quizzes = useAtomValue(quizzesAtom)
   const quizAnswers = useAtomValue(quizAnswersAtom)
   const participants = useAtomValue(participantsAtom)
-  const currentQuiz = room && quizzes[room.currentOrder]
+  const currentQuiz = room && quizzes[room.currentOrder] as QuizForOwner
 
   if (!currentQuiz) return null
 
   // 各選択肢の投票数を、回答の choiceIndex と比較して計算
   const getVoteCount = (choiceIndex: number) => {
     return quizAnswers.filter(answer => answer.choiceIndex === choiceIndex).length
-  }
-
-  // 全選択肢の中で最大の投票数を取得
-  const maxVotes = Math.max(...currentQuiz.choices.map((_, index) => getVoteCount(index)))
-
-  // 投票数に応じた幅のクラスを計算（例：全体を12分割）
-  const calculateWidthClass = (voteCount: number) => {
-    if (maxVotes === 0 || voteCount === 0) return 'w-0'
-    const percentage = (voteCount / maxVotes) * 100
-    if (percentage < 8.33) return 'w-1/12'
-    const parts = Math.ceil(percentage / 8.33)
-    return `w-${Math.min(parts, 12)}/12`
   }
 
   return (
@@ -64,13 +52,20 @@ export const CurrentQuiz = () => {
         <div className="mt-4">
           {currentQuiz.choices.map((choice, index) => {
             const voteCount = getVoteCount(index)
-            const widthClass = calculateWidthClass(voteCount)
             return (
-              <div key={index} className="mb-4">
-                <p className="text-gray-800 font-medium">{choice}</p>
-                <div className="flex items-center mt-1">
-                  <div className={`bg-blue-600 h-4 rounded transition-all duration-300 ${widthClass}`}></div>
-                  <span className="ml-3 text-sm text-gray-700">{voteCount}票</span>
+              <div key={index} className="relative p-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <p>{index + 1}. {choice}</p>
+                    <span className="text-sm text-gray-500">
+                      ({voteCount}票)
+                    </span>
+                  </div>
+                  {index === currentQuiz.correctChoiceIndex && (
+                    <span className="px-2 py-0.5 text-sm text-green-700 bg-green-100 rounded-full">
+                      正解
+                    </span>
+                  )}
                 </div>
               </div>
             )
@@ -80,7 +75,7 @@ export const CurrentQuiz = () => {
         {/* 回答一覧を表示 */}
         <div className="mt-6">
           <h4 className="text-md font-semibold text-gray-800 mb-2">
-            回答一覧（{participants.length - 1}人中{quizAnswers.length || 0}人が回答済み）
+            回答（{participants.length - 1}人中{quizAnswers.length || 0}人が回答済み）
           </h4>
           <ul className="divide-y divide-gray-200">
             {quizAnswers.map((answer, idx) => (
