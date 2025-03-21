@@ -5,6 +5,12 @@ import { useState, ChangeEvent, JSX } from 'react';
 import { UsernameField } from '@/components/usernameField';
 import { getCookie } from '@/server/cookies';
 import { motion } from 'framer-motion';
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '700']
+});
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -39,7 +45,7 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className={`min-h-[100dvh] bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-8 pb-20 sm:p-20 ${montserrat.className}`}>
       <div className="flex flex-col items-center justify-center min-h-[80dvh]">
         <motion.div
           initial={{ opacity: 0 }}
@@ -53,7 +59,6 @@ export default function Home(): JSX.Element {
                 クイズ大会メーカー
               </h1>
               <span className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none">✨</span>
-              <span className="absolute -bottom-4 -left-6 text-4xl select-none">🎮</span>
             </div>
 
             <div className="h-2 w-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-4 mb-8"></div>
