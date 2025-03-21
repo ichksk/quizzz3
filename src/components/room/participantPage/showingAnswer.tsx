@@ -26,7 +26,7 @@ export const ShowingAnswer = () => {
       {answer ? (
         <>
           <p className="text-lg">あなたの回答: <span className="font-semibold">{answer.choiceText}</span></p>
-          <p className="text-lg">正解: <span className="font-semibold">{answer.isCorrect}</span></p>
+          <p className="text-lg">正解: <span className="font-semibold">{answer.correctChoiceText}</span></p>
           <p className={`text-xl ${answer.isCorrect ? "text-green-600" : "text-red-600"} font-bold`}>
             {answer.isCorrect ? "正解！" : "不正解"}
           </p>

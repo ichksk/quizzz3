@@ -520,6 +520,7 @@ export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit
 
     const answer: QuizAnswer = {
       choiceText: quiz.choices[choiceIndex],
+      correctChoiceText: quiz.choices[quiz.correctChoiceIndex],
       participantId,
       username,
       quizId: quizId,

@@ -72,5 +72,6 @@ export interface QuizAnswer {
   choiceText: string;
   choiceIndex: number;
   isCorrect: boolean;
+  correctChoiceText: string;
   score: number;
 }
