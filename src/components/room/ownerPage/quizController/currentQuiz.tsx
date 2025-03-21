@@ -1,12 +1,13 @@
 import { Send } from "lucide-react"
 import { useAtomValue } from "jotai"
-import { quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
+import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)
   const quizzes = useAtomValue(quizzesAtom)
   const quizAnswers = useAtomValue(quizAnswersAtom)
+  const participants = useAtomValue(participantsAtom)
   const currentQuiz = room && quizzes[room.currentOrder]
 
   if (!currentQuiz) return null
@@ -66,11 +67,13 @@ export const CurrentQuiz = () => {
 
         {/* 回答一覧を表示 */}
         <div className="mt-6">
-          <h4 className="text-md font-semibold text-gray-800 mb-2">回答一覧</h4>
+          <h4 className="text-md font-semibold text-gray-800 mb-2">
+            回答一覧（{participants.length - 1}人中{quizAnswers.length || 0}人が回答済み）
+          </h4>
           <ul className="divide-y divide-gray-200">
             {quizAnswers.map((answer, idx) => (
               <li key={idx} className="py-2 text-sm text-gray-700">
-                参加者 <span className="font-medium">{answer.username}</span>: 選択 <span className="font-medium">{answer.choiceIndex + 1}</span>
+                <span className="font-medium">{answer.username} さん</span> → <span className="font-medium">{answer.choiceText}</span>
               </li>
             ))}
           </ul>

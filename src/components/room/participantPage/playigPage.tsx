@@ -1,7 +1,7 @@
 import { LeaveRoomButton } from "@/components/leaveRoomButton";
 import { quizzesAtom } from "@/lib/atoms";
 import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
-import { Room } from "@/types/schemas"
+import { QuizForParticipant, Room } from "@/types/schemas"
 import { useAtomValue } from "jotai";
 import { Loader2, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 export const PlayingPage = ({ room }: { room: Room }) => {
   const quizzes = useAtomValue(quizzesAtom)
-  const currentQuiz = quizzes[room.currentOrder]
+  const currentQuiz = quizzes.find((quiz) => quiz.order === room.currentOrder) as QuizForParticipant;
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(currentQuiz.timeLimit);

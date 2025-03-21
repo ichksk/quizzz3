@@ -519,6 +519,7 @@ export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit
     const score = isCorrect ? 100 : 0;
 
     const answer: QuizAnswer = {
+      choiceText: quiz.choices[choiceIndex],
       participantId,
       username,
       quizId: quizId,

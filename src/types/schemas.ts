@@ -74,6 +74,7 @@ export interface QuizAnswer {
   participantId: string;
   username: string;
   quizId: string;
+  choiceText: string;
   choiceIndex: number;
   isCorrect: boolean;
   score: number;
