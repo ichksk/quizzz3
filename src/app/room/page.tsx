@@ -9,15 +9,16 @@ import { onSnapshot, doc, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CustomNotFound from "./not-found";
 import { useAtom, useSetAtom } from "jotai";
-import { meAtom, participantsAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
+import { meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
 import { Loading } from "@/components/loading";
-import { Participant, QuizForOwner } from "@/types/schemas";
+import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
 
 export default function RoomPage() {
   const [loading, setLoading] = useState(true);
   const [room, setRoom] = useAtom(roomAtom);
   const [participant, setParticipant] = useAtom(meAtom);
-  const setQuizzes = useSetAtom(quizzesAtom);
+  const [quizzes, setQuizzes] = useAtom(quizzesAtom);
+  const setQuizAnswers = useSetAtom(quizAnswersAtom);
   const setParticipants = useSetAtom(participantsAtom)
 
   useEffect(() => {
@@ -57,9 +58,7 @@ export default function RoomPage() {
       }
     })()
 
-    return () => {
-      if (unsub) unsub();
-    };
+    return () => unsub?.();
   }, []);
 
   useEffect(() => {
@@ -86,9 +85,7 @@ export default function RoomPage() {
       }
     })()
 
-    return () => {
-      if (unsub) unsub();
-    };
+    return () => unsub?.();
   }, []);
 
   useEffect(() => {
@@ -101,22 +98,42 @@ export default function RoomPage() {
           roomDocRef,
           (snapshot) => {
             if (snapshot.exists() && room) {
-              setRoom({
-                ...room,
-                status: snapshot.data().status,
-                roomCode: snapshot.data().roomCode,
-                currentOrder: snapshot.data().currentOrder,
-              });
+              setRoom(snapshot.data() as Room);
             }
           }
         );
       }
     })()
 
-    return () => {
-      if (unsub) unsub();
-    };
+    return () => unsub?.();
   }, []);
+
+  useEffect(() => {
+    let unsub: () => void;
+    (async () => {
+      const { room } = await fetchRoomData();
+      if (room && quizzes && quizzes.length > 0) {
+        const currentQuiz = quizzes.find((quiz) => quiz.order === room.currentOrder);
+        if (currentQuiz) {
+          const quizAnswersColRef = collection(db, `rooms/${room.roomCode}/quizzes/${currentQuiz.id}/answers`);
+          unsub = onSnapshot(
+            quizAnswersColRef,
+            (snapshot) => {
+              const data: QuizAnswer[] = snapshot.docs.map((doc) => ({
+                participantId: doc.id,
+                ...doc.data(),
+              })) as QuizAnswer[];
+              if (room) {
+                setQuizAnswers(data);
+              }
+            },
+          );
+        }
+      }
+    })()
+
+    return () => unsub?.();
+  }, [quizzes]);
 
   if (loading) return <Loading fullScreen />;
   if (!room || !participant) return <CustomNotFound />;
