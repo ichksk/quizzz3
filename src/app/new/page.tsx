@@ -47,7 +47,6 @@ export default function CreateQuizPage() {
               クイズを作成
             </h1>
           </div>
-          <div className="h-1.5 flex-grow ml-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"></div>
         </div>
 
         <div>
