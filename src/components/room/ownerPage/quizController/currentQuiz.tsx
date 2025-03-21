@@ -1,8 +1,9 @@
-import { Send, Lock, Check, ArrowRight, Flag } from "lucide-react"
+import { Send, Lock, Check, Flag } from "lucide-react"
 import { useAtomValue } from "jotai"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
 import { QuizForOwner, QuizStatus } from "@/types/schemas"
+import { ImagePreview } from "@/components/imagePreview"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)
@@ -71,11 +72,7 @@ export const CurrentQuiz = () => {
 
         {/* 画像がある場合は余白や大きさを調整 */}
         {currentQuiz.image && (
-          <img
-            src={currentQuiz.image}
-            alt="アップロードした画像のプレビュー"
-            className="my-4 w-full h-auto max-h-64 rounded-lg object-contain mx-auto"
-          />
+          <ImagePreview image={currentQuiz.image} />
         )}
 
         {/* 選択肢リスト */}

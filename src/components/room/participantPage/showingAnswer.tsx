@@ -1,3 +1,4 @@
+import { ImagePreview } from "@/components/imagePreview"
 import { quizzesAtom, roomAtom } from "@/lib/atoms"
 import { fetchQuizAnswerForParticipant } from "@/server/actions"
 import { QuizAnswer, Room } from "@/types/schemas"
@@ -31,11 +32,7 @@ export const ShowingAnswer = () => {
       </div>
       {currentQuiz?.image && (
         <div className="mb-4">
-          <img
-            src={currentQuiz.image}
-            alt="問題の画像"
-            className="w-full h-auto rounded-md object-cover"
-          />
+          <ImagePreview image={currentQuiz.image} />
         </div>
       )}
       <div className="mt-6">

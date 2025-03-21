@@ -3,6 +3,7 @@ import { quizFormAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 import { ChangeEvent, useRef } from "react";
+import { ImagePreview } from "../imagePreview";
 
 export const ImageField = () => {
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);
@@ -11,18 +12,14 @@ export const ImageField = () => {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const previewUrl = reader.result as string;
-        setQuizForm((prev) => ({
-          ...prev,
-          imagePreview: previewUrl,
-          image: file,
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
+      setQuizForm((prev) => ({
+        ...prev,
+        imagePreview: URL.createObjectURL(file),
+        image: file,
+      }));
+    };
   };
+
 
   const handleDeleteImage = () => {
     setQuizForm((prev) => ({
@@ -82,11 +79,7 @@ export const ImageField = () => {
           >
             <X className="w-4 h-4" />
           </button>
-          <img
-            src={quizForm.imagePreview}
-            alt="アップロードした画像のプレビュー"
-            className="max-w-full h-auto max-h-64 rounded-lg mx-auto"
-          />
+          <ImagePreview image={quizForm.imagePreview} />
         </div>
       )}
     </div>

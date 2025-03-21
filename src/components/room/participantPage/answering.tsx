@@ -1,3 +1,4 @@
+import { ImagePreview } from "@/components/imagePreview";
 import { quizzesAtom, roomAtom } from "@/lib/atoms";
 import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
 import { QuizForParticipant, Room } from "@/types/schemas";
@@ -51,11 +52,7 @@ export const Answering = () => {
       </h2>
       {currentQuiz.image && (
         <div className="mb-6 flex justify-center">
-          <img
-            src={currentQuiz.image}
-            alt=""
-            className="max-w-full h-auto max-h-64 rounded-lg mx-auto"
-          />
+          <ImagePreview image={currentQuiz.image} />
         </div>
       )}
       <div className="flex flex-col gap-4">
