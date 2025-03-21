@@ -7,7 +7,7 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
   const currentQuiz = room.quizzes[room.currentOrder]
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(currentQuiz.timeLimit);
 
   const handleOptionSelect = (choiceId: number) => {
     // if(currentQuiz && participant){
@@ -78,10 +78,14 @@ export const PlayingPage = ({ room }: { room: RoomForParticipant }) => {
       </div>
 
       {/* フローティング タイマー (モバイル時のみ表示) */}
-      <div className="fixed bottom-4 right-4 bg-white rounded-full shadow-lg p-3 flex items-center space-x-2">
-        <Timer className="w-5 h-5 text-orange-500" />
-        <span className="text-lg font-bold text-orange-500">{timeLeft}</span>
-      </div>
+      {
+        timeLeft !== Infinity &&
+        <div className="fixed bottom-4 right-4 bg-white rounded-full shadow-lg p-3 flex items-center space-x-2">
+          <Timer className="w-5 h-5 text-orange-500" />
+          <span className="text-lg font-bold text-orange-500">{timeLeft}</span>
+        </div>
+
+      }
 
       <LeaveRoomButton />
     </div>
