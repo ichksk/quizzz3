@@ -6,6 +6,7 @@ import { useAtomValue } from "jotai";
 import { Loader2, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Answering = () => {
   const room = useAtomValue(roomAtom) as Room;
@@ -45,50 +46,144 @@ export const Answering = () => {
     });
   }, [room]);
 
-  return (
-    <>
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-        {currentQuiz.question}
-      </h2>
-      {currentQuiz.image && (
-        <div className="mb-6 flex justify-center">
-          <ImagePreview image={currentQuiz.image} />
-        </div>
-      )}
-      <div className="flex flex-col gap-4">
-        {currentQuiz.choices.map((choice, index) => (
-          <button
-            key={index}
-            disabled={selectedOption !== null}
-            className={`
-            p-8 text-lg font-medium rounded-xl border-2 border-gray-200
-            transition-all duration-300
-            ${selectedOption === null
-                ? 'hover:bg-blue-50 hover:border-blue-300 active:bg-blue-100'
-                : selectedOption === index
-                  ? 'bg-blue-100 border-blue-500'
-                  : 'opacity-0 min-h-0 min-w-0 overflow-hidden'
-              }
-          `}
-            onClick={() => handleOptionSelect(index)}
-          >
-            {choice}
-          </button>
-        ))}
-      </div>
-      {isSubmitted && (
-        <div className="mt-8 flex flex-col items-center space-y-3">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-          <p className="text-gray-600 text-lg animate-pulse">しばらくお待ちください...</p>
-        </div>
-      )}
+  // Animate decreasing time
+  useEffect(() => {
+    if (timeLeft === Infinity || timeLeft <= 0) return;
 
-      {timeLeft !== Infinity && (
-        <div className="fixed bottom-4 right-4 bg-white rounded-full shadow-lg p-3 flex items-center space-x-2">
-          <Timer className="w-5 h-5 text-orange-500" />
-          <span className="text-lg font-bold text-orange-500">{timeLeft}</span>
-        </div>
-      )}
-    </>
-  )
-}
+    const timer = setTimeout(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 }
+  };
+
+  const generateHighlightColor = (index: number) => {
+    const colors = ["from-blue-400 to-cyan-300", "from-purple-400 to-pink-300", "from-amber-400 to-orange-300", "from-emerald-400 to-teal-300"];
+    return colors[index % colors.length];
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="py-4"
+      >
+        <motion.h2
+          className="text-2xl md:text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-500"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {currentQuiz.question}
+        </motion.h2>
+
+        {currentQuiz.image && (
+          <motion.div
+            className="mb-6 flex justify-center"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <ImagePreview image={currentQuiz.image} />
+          </motion.div>
+        )}
+
+        <motion.div
+          className="flex flex-col gap-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {currentQuiz.choices.map((choice, index) => (
+            <motion.button
+              key={index}
+              variants={itemVariants}
+              whileHover={{ scale: selectedOption === null ? 1.02 : 1 }}
+              whileTap={{ scale: selectedOption === null ? 0.98 : 1 }}
+              disabled={selectedOption !== null}
+              className={`
+                relative p-8 text-lg font-medium rounded-xl border-2 overflow-hidden
+                transition-all duration-300
+                ${selectedOption === null
+                  ? 'hover:bg-blue-50 hover:border-blue-400 hover:shadow-md active:bg-blue-100 border-gray-200'
+                  : selectedOption === index
+                    ? 'bg-blue-100 border-blue-500 shadow-md'
+                    : 'opacity-0 h-0 min-h-0 min-w-0 p-0 m-0 border-none'
+                }
+              `}
+              onClick={() => handleOptionSelect(index)}
+            >
+              {/* Background gradient that shows on hover */}
+              <motion.div
+                className={`absolute inset-0 bg-gradient-to-r ${generateHighlightColor(index)} opacity-0 hover:opacity-10 transition-opacity`}
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 0.1 }}
+              />
+              {choice}
+            </motion.button>
+          ))}
+        </motion.div>
+
+        {isSubmitted && (
+          <motion.div
+            className="mt-8 flex flex-col items-center space-y-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            <motion.p
+              className="text-gray-600 text-lg"
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              しばらくお待ちください...
+            </motion.p>
+          </motion.div>
+        )}
+
+        {timeLeft !== Infinity && (
+          <motion.div
+            className="fixed bottom-4 right-4 bg-white rounded-full shadow-lg p-3 flex items-center space-x-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Timer className="w-5 h-5 text-orange-500" />
+            <motion.span
+              className="text-lg font-bold text-orange-500"
+              animate={{
+                scale: timeLeft <= 10 ? [1, 1.2, 1] : 1
+              }}
+              transition={{
+                duration: timeLeft <= 10 ? 0.5 : 0,
+                repeat: timeLeft <= 10 ? Infinity : 0,
+                repeatType: "loop"
+              }}
+            >
+              {timeLeft}
+            </motion.span>
+          </motion.div>
+        )}
+      </motion.div>
+    </AnimatePresence>
+  );
+};
