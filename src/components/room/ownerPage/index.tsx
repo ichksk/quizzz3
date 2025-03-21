@@ -61,7 +61,7 @@ export const OwnerPage = () => {
         <LeaveRoomButton />
       </motion.div>
 
-      {room?.status === "FINISHED" && <Donation variants={itemVariants} />}
+      {/* {room?.status === "FINISHED" && <Donation variants={itemVariants} />} */}
     </motion.div>
   )
 }
