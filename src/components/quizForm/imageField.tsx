@@ -69,7 +69,7 @@ export const ImageField = () => {
           <span className="text-sm text-gray-600 mt-2">
             クリックして画像を選択
           </span>
-          <span className="text-xs text-gray-400">PNG, JPG, GIF (最大 2MB)</span>
+          <span className="text-xs text-gray-400">PNG, JPG, GIF</span>
         </label>
       </div>
       {quizForm.imagePreview && (
