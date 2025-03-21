@@ -21,7 +21,7 @@ export const SubmitButton = ({ isEdit = false }: SubmitButtonProps) => {
     <button
       type="submit"
       className={`
-        px-6 py-2 w-full text-white rounded-lg transition-colors duration-200
+        px-6 py-2 text-white rounded-lg transition-colors duration-200
         ${disabled
           ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400'
           : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'

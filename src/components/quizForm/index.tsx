@@ -119,7 +119,7 @@ export const QuizForm = ({
       <TimeLimitField />
       <ImageField />
       <ChoicesField />
-      <div className="flex gap-4 pt-4">
+      <div className="flex gap-4 pt-4 justify-center w-full">
         {showBackButton && <BackButton />}
         <SubmitButton isEdit={isEdit} />
       </div>
