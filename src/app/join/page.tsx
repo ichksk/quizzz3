@@ -48,18 +48,6 @@ export default function JoinQuizPage() {
         >
           <JoinQuizForm />
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="w-full flex justify-center mt-8"
-        >
-          <div className="text-sm text-gray-500 flex items-center">
-            <span className="mr-2 animate-bounce">🎲</span>
-            みんなと一緒に楽しみましょう！
-          </div>
-        </motion.div>
       </motion.main>
     </div>
   );
