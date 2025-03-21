@@ -1,8 +1,11 @@
 import { Send } from "lucide-react"
-import { RoomForOwner } from "@/types/schemas"
+import { useAtomValue } from "jotai"
+import { quizzesAtom, roomAtom } from "@/lib/atoms"
 
-export const CurrentQuiz = ({ room }: { room: RoomForOwner }) => {
-  const currentQuiz = room && room.quizzes[room.currentOrder]
+export const CurrentQuiz = () => {
+  const room = useAtomValue(roomAtom)
+  const quizzes = useAtomValue(quizzesAtom)
+  const currentQuiz = room && quizzes[room.currentOrder]
 
   // 各選択肢の投票数を計算
   // const getVoteCount = (choiceId: number) => {

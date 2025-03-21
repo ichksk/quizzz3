@@ -6,18 +6,16 @@ import { collection, onSnapshot } from "firebase/firestore";
 
 // ここではアイコンコンポーネントを例としてインポート（実装に合わせて修正）
 import { Users, Crown } from "lucide-react";
-import { Participant } from "@/types/schemas";
+import { Participant, Room } from "@/types/schemas";
+import { useAtom, useAtomValue } from "jotai";
+import { meAtom, participantsAtom, roomAtom } from "@/lib/atoms";
 
-interface ParticipantsListProps {
-  roomCode: string;
-  currentUserId: string; // 自分のIDを渡しておくと、一覧から除外できます
-}
-
-export function ParticipantsList({
-  roomCode,
-  currentUserId,
-}: ParticipantsListProps) {
-  const [participants, setParticipants] = useState<Participant[]>([]);
+export function ParticipantsList() {
+  const [participants, setParticipants] = useAtom(participantsAtom);
+  const room = useAtomValue(roomAtom) as Room;
+  const me = useAtomValue(meAtom) as Participant
+  const currentUserId = me.id;
+  const roomCode = room.roomCode;
 
   useEffect(() => {
     // Firestore の room/{roomCode}/participants コレクションを監視

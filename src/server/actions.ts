@@ -2,7 +2,7 @@
 
 import { adminDB } from "@/lib/firebase-admin";
 import { getCookie, setCookie } from "./cookies";
-import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, RoomDocument, RoomForOwner, RoomForParticipant, RoomStatus } from "@/types/schemas";
+import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, Room, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -13,7 +13,7 @@ function generateRandomCode(length = 6): string {
   return code;
 }
 
-export async function createRoom(username: string): Promise<RoomDocument> {
+export async function createRoom(username: string): Promise<Room> {
   // 重複を避けるため、存在チェックを繰り返す簡易実装
   let roomCode = generateRandomCode();
   let docRef = adminDB.collection("rooms").doc(roomCode);
@@ -25,7 +25,7 @@ export async function createRoom(username: string): Promise<RoomDocument> {
     docSnap = await docRef.get();
   }
 
-  const newRoom: RoomDocument = {
+  const newRoom: Room = {
     roomCode: roomCode,
     currentOrder: 0,
     status: RoomStatus.WAITING,
@@ -168,7 +168,7 @@ export async function joinRoom(
     throw new Error("指定されたRoomは存在しません。");
   }
 
-  const room = roomSnap.data() as RoomDocument;
+  const room = roomSnap.data() as Room;
   if (room.status !== RoomStatus.WAITING) {
     throw new Error("このRoomは現在参加できる状態ではありません。");
   }
@@ -231,7 +231,7 @@ export async function leaveRoom() {
 }
 
 
-export async function getParticipant(): Promise<{
+export async function fetchParticipant(): Promise<{
   participant: Participant | null;
   error: string | null;
 }> {
@@ -284,7 +284,7 @@ export async function getParticipant(): Promise<{
 
     return { participant, error: null };
   } catch (error) {
-    console.error("getParticipant error:", error);
+    console.error("fetchParticipant error:", error);
     return {
       participant: null,
       error: "Could not get participant."
@@ -293,34 +293,19 @@ export async function getParticipant(): Promise<{
 }
 
 
-export async function getRoomData(): Promise<{
-  room?: RoomForOwner | RoomForParticipant | null;
+
+//ルーム
+export async function fetchRoomData(): Promise<{
+  room?: Room | null;
   error: string | null;
 }> {
   try {
-    // 1. Cookie から roomCode, participantId を取得
     const roomCode = await getCookie("roomCode")
-    const participantId = await getCookie("participantId")
 
-    if (!roomCode || !participantId) {
+    if (!roomCode) {
       return { error: "Room code or participant ID is missing in cookies." };
     }
 
-    // 2. 対象の参加者ドキュメントを取得
-    const participantRef = adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("participants")
-      .doc(participantId);
-
-    const participantSnap = await participantRef.get();
-    if (!participantSnap.exists) {
-      return { error: "Participant not found." };
-    }
-
-    const participantData = participantSnap.data() as Participant;
-
-    // 3. 対象の部屋ドキュメントを取得
     const roomRef = adminDB.collection("rooms").doc(roomCode);
     const roomSnap = await roomRef.get();
     if (!roomSnap.exists) {
@@ -328,101 +313,27 @@ export async function getRoomData(): Promise<{
     }
 
     const roomData = roomSnap.data();
-
     const status = (roomData?.status as RoomStatus) ?? RoomStatus.WAITING;
     const currentOrder = roomData?.currentOrder ?? 0;
 
-    // 4. クイズ一覧を取得し、オーナー向け / 参加者向けに整形
-    const quizzesSnap = await roomRef.collection("quizzes").get();
-
-    const quizzesForOwner: QuizForOwner[] = [];
-    const quizzesForParticipant: QuizForParticipant[] = [];
-
-    for (const quizDoc of quizzesSnap.docs) {
-      const quizData = quizDoc.data();
-      const quizId = quizDoc.id;
-      const question = quizData.question ?? "";
-      const image = quizData.image ?? null;
-      const order = quizData.order ?? 0;
-      const quizStatus = quizData.status ?? "";
-      const timeLimit = quizData.timeLimit ?? 0;
-      const choices = quizData.choices ?? [];
-      const correctChoiceIndex = quizData.correctChoiceIndex ?? 0;
-
-      quizzesForOwner.push({
-        id: quizId,
-        roomCode,
-        question,
-        image,
-        order,
-        status: quizStatus,
-        timeLimit,
-        choices: choices,
-        correctChoiceIndex
-      });
-
-      quizzesForParticipant.push({
-        id: quizId,
-        roomCode,
-        question,
-        image,
-        order,
-        status: quizStatus,
-        timeLimit,
-        choices: choices,
-      });
-    }
-
-    // 5. オーナーの場合は RoomForOwner を返す
-    if (participantData.isOwner) {
-      // 参加者一覧を取得
-      const participantsSnap = await roomRef.collection("participants").get();
-      const participants: Participant[] = participantsSnap.docs.map((doc) => {
-        const pData = doc.data();
-        return {
-          id: doc.id,
-          roomCode: pData.roomCode ?? "",
-          username: pData.username ?? "",
-          isOwner: pData.isOwner ?? false,
-          score: pData.score ?? 0,
-        };
-      });
-
-      const roomForOwner: RoomForOwner = {
-        roomCode,
-        status,
-        currentOrder,
-        quizzes: quizzesForOwner,
-        participants,
-      };
-
-      return {
-        room: roomForOwner,
-        error: null,
-      };
-    }
-
-    // 6. オーナーではない場合は RoomForParticipant を返す
-    const roomForParticipant: RoomForParticipant = {
+    const room: Room = {
       roomCode,
       status,
       currentOrder,
-      quizzes: quizzesForParticipant,
-    };
+    }
 
     return {
-      room: roomForParticipant,
+      room,
       error: null,
     };
   } catch (error) {
-    console.error("getRoomData error:", error);
     return { error: "Failed to get room data." };
   }
 }
 
 
 export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Promise<{ success: boolean; error?: string }> {
-  const { room } = await getRoomData()
+  const { room } = await fetchRoomData()
   if (!room) {
     return { success: false, error: "Roomが見つかりません" };
   }
@@ -447,11 +358,53 @@ export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Prom
   }
 }
 
+export async function fetchQuizzes(): Promise<{ success: boolean; error?: string, quizzes?: QuizForOwner[] | QuizForParticipant[] }> {
+  const roomCode = await getCookie("roomCode");
+  const { participant } = await fetchParticipant();
+  if (!roomCode) {
+    return { success: false, error: "Room code not found in cookies." };
+  }
+  if (!participant) {
+    return { success: false, error: "Participant not found." };
+  }
+
+  const quizzesSnapshot = await adminDB.collection("rooms").doc(roomCode).collection("quizzes").get();
+  const quizzes: QuizForOwner[] = quizzesSnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as QuizForOwner[];
+
+  if (participant.isOwner) {
+    return { success: true, quizzes };
+  }
+  else {
+    const quizzesForParticipant: QuizForParticipant[] = quizzes.map(quiz => ({
+      id: quiz.id,
+      roomCode: quiz.roomCode,
+      order: quiz.order,
+      status: quiz.status,
+      question: quiz.question,
+      image: quiz.image,
+      choices: quiz.choices,
+      timeLimit: quiz.timeLimit,
+    }))
+
+    return {
+      success: true, quizzes: quizzesForParticipant
+    };
+  }
+
+}
+
 export async function startQuiz(): Promise<{ success: boolean; error?: string }> {
   try {
-    const { room } = await getRoomData();
+    const { room } = await fetchRoomData();
+    const { quizzes } = await fetchQuizzes();
     if (!room) {
       return { success: false, error: "Room not found" };
+    }
+    if (!quizzes) {
+      return { success: false, error: "Quizzes not found" };
     }
 
     // Update room status to IN_PROGRESS
@@ -461,8 +414,8 @@ export async function startQuiz(): Promise<{ success: boolean; error?: string }>
     }
 
     // Find the first quiz
-    if ('quizzes' in room && room.quizzes.length > 0) {
-      const firstQuiz = room.quizzes.find(quiz => quiz.order === 0);
+    if ('quizzes' in room && quizzes.length > 0) {
+      const firstQuiz = quizzes.find(quiz => quiz.order === 0);
 
       if (firstQuiz) {
         // Update the first quiz status to DISPLAYING
@@ -484,9 +437,11 @@ export async function startQuiz(): Promise<{ success: boolean; error?: string }>
   }
 }
 
-export const getQuizData = async (quizId: string): Promise<{ quiz: QuizForOwner | null; error: string | null }> => {
+
+
+export const getQuizById = async (quizId: string): Promise<{ quiz: QuizForOwner | null; error: string | null }> => {
   try {
-    const { room } = await getRoomData();
+    const { room } = await fetchRoomData();
     if (!room) {
       return { quiz: null, error: "Room not found" };
     }
@@ -511,6 +466,17 @@ export const getQuizData = async (quizId: string): Promise<{ quiz: QuizForOwner 
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+//クイズアンサー
 export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit): Promise<{ success: boolean; error?: string }> {
   // Get participant and room info from cookies
   const participantId = await getCookie("participantId")
@@ -528,7 +494,7 @@ export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit
   }
 
   try {
-    const { quiz } = await getQuizData(quizId)
+    const { quiz } = await getQuizById(quizId)
     if (!quiz) {
       return { success: false, error: "Quiz not found." };
     }
@@ -555,6 +521,8 @@ export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit
     return { success: false, error: "Failed to submit quiz answer." };
   }
 }
+
+
 
 export async function getQuizAnswer(quizId: string) {
   try {

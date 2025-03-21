@@ -1,11 +1,12 @@
 "use client";
 
-import { QuizForOwner, QuizStatus, RoomForOwner } from "@/types/schemas"
+import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { drawerOpenAtom, focusedQuizAtom, quizzesAtom } from "@/lib/atoms"
 
-export const QuizList = ({ room }: { room: RoomForOwner }) => {
+export const QuizList = () => {
+  const quizzes = useAtomValue(quizzesAtom)
   const setDrawerOpen = useSetAtom(drawerOpenAtom)
   const setFocusedQuiz = useSetAtom(focusedQuizAtom)
 
@@ -22,7 +23,7 @@ export const QuizList = ({ room }: { room: RoomForOwner }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium">クイズリスト (全{room.quizzes.length}問)</h3>
+        <h3 className="font-medium">クイズリスト (全{quizzes.length}問)</h3>
         <button
           className="inline-flex items-center px-3 py-1.5 text-[11px] sm:text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 whitespace-nowrap"
           onClick={addQuiz}
@@ -32,7 +33,7 @@ export const QuizList = ({ room }: { room: RoomForOwner }) => {
         </button>
       </div>
       <div className="space-y-2">
-        {room.quizzes.sort((a, b) => (a.order - b.order)).map((quiz) => (
+        {quizzes.sort((a, b) => (a.order - b.order)).map((quiz) => (
           <div
             key={quiz.id}
             className="flex items-center gap-4 p-3 border border-gray-300 rounded-lg"
@@ -45,7 +46,7 @@ export const QuizList = ({ room }: { room: RoomForOwner }) => {
               <QuizStatusBadge status={quiz.status} />
               <button
                 className="p-1 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
-                onClick={() => handleClick(quiz)}
+                onClick={() => handleClick(quiz as QuizForOwner)}
               >
                 <EllipsisVertical className="w-4 h-4" />
               </button>

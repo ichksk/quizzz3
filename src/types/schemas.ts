@@ -27,22 +27,16 @@ export interface Participant {
   score: number;
 }
 
-export interface RoomDocument {
+export interface Room {
   roomCode: string;
   status: RoomStatus;
   currentOrder: number;
 }
 
-export interface RoomForParticipant {
+export interface Room {
   roomCode: string;
   status: RoomStatus;
   currentOrder: number;
-  quizzes: QuizForParticipant[];
-}
-
-export interface RoomForOwner extends RoomForParticipant {
-  quizzes: QuizForOwner[];
-  participants: Participant[];
 }
 
 export interface QuizSubmitForm {

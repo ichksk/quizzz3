@@ -2,10 +2,10 @@
 
 import { Share } from "lucide-react"
 
-import { RoomForOwner } from "@/types/schemas"
+import { Room } from "@/types/schemas"
 
 
-export const RoomCodeField = ({ room }: { room: RoomForOwner }) => {
+export const RoomCodeField = ({ room }: { room: Room }) => {
   const handleShare = async () => {
     const shareUrl = `${window.location.origin}/join?r=${room?.roomCode}`;
     try {

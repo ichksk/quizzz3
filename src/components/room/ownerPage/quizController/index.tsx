@@ -1,11 +1,14 @@
 
-import { RoomForOwner } from "@/types/schemas"
+import { Room } from "@/types/schemas"
 import { StartButton } from "./startButton"
 import { QuizList } from "./quizList"
 import { QuizDrawer } from "./quizDrawer"
 import { CurrentQuiz } from "./currentQuiz"
+import { useAtomValue } from "jotai"
+import { roomAtom } from "@/lib/atoms"
 
-export const QuizController = ({ room }: { room: RoomForOwner }) => {
+export const QuizController = () => {
+  const room = useAtomValue(roomAtom) as Room
   return (
     <>
       <QuizDrawer />
@@ -17,9 +20,9 @@ export const QuizController = ({ room }: { room: RoomForOwner }) => {
         <div className="p-6">
           <div className="space-y-6">
             {room.status === "IN_PROGRESS" && (
-              <CurrentQuiz room={room} />
+              <CurrentQuiz />
             )}
-            <QuizList room={room} />
+            <QuizList />
           </div>
         </div>
       </div>
