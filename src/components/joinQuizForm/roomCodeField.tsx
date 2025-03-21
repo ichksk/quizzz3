@@ -2,7 +2,6 @@ import { joinQuizFormAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useLayoutEffect } from "react";
-import { motion } from "framer-motion";
 
 export const RoomCodeField = () => {
   const [form, setForm] = useAtom(joinQuizFormAtom)
@@ -25,22 +24,13 @@ export const RoomCodeField = () => {
 
   return (
     <div className="space-y-2">
-      <motion.label
-        initial={{ opacity: 0, x: -5 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
+      <label
         htmlFor="roomCode"
         className="block font-medium text-gray-700 flex items-center"
       >
-        <span className="mr-2">🎫</span>
         ルームコード
-      </motion.label>
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        className="relative"
-      >
+      </label>
+      <div className="relative">
         <input
           type="text"
           id="roomCode"
@@ -51,7 +41,7 @@ export const RoomCodeField = () => {
                    shadow-sm hover:shadow transition-all duration-200"
           placeholder="例: QUIZ123"
         />
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -42,21 +42,12 @@ export default function Home(): JSX.Element {
     <div className="min-h-[100dvh] bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex flex-col items-center justify-center min-h-[80dvh]">
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
           className="flex flex-col gap-8 items-center max-w-md w-full bg-white/80 backdrop-blur-sm p-10 rounded-2xl shadow-lg"
         >
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{
-              duration: 0.5,
-              type: "spring",
-              stiffness: 200
-            }}
-            className="flex flex-col items-center"
-          >
+          <div className="flex flex-col items-center">
             <div className="relative">
               <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 クイズ大会メーカー
@@ -66,7 +57,7 @@ export default function Home(): JSX.Element {
             </div>
 
             <div className="h-2 w-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-4 mb-8"></div>
-          </motion.div>
+          </div>
 
           <UsernameField
             onChange={handleUsernameChange}
@@ -75,9 +66,7 @@ export default function Home(): JSX.Element {
           />
 
           <div className="flex flex-col gap-4 w-full">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+            <button
               className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 font-medium text-base cursor-pointer relative overflow-hidden group"
               onClick={handleCreateQuiz}
             >
@@ -86,11 +75,9 @@ export default function Home(): JSX.Element {
                 <span className="mr-2">✏️</span>
                 クイズを作る
               </span>
-            </motion.button>
+            </button>
 
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+            <button
               className="px-8 py-4 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 font-medium text-base cursor-pointer relative overflow-hidden group"
               onClick={handleJoinQuiz}
             >
@@ -99,7 +86,7 @@ export default function Home(): JSX.Element {
                 <span className="mr-2">🎲</span>
                 クイズに参加する
               </span>
-            </motion.button>
+            </button>
           </div>
         </motion.div>
       </div>

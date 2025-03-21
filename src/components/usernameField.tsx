@@ -1,6 +1,5 @@
 import { getCookie, setCookie } from '@/server/cookies';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 
 interface UsernameFieldProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -31,23 +30,14 @@ export const UsernameField = ({
 
   return (
     <div className="w-full max-w-md mb-4">
-      <motion.label
-        initial={{ opacity: 0, x: -5 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
+      <label
         htmlFor="username"
         className="block text-sm font-medium text-gray-700 mb-2 flex items-center"
       >
-        <span className="mr-2">👤</span>
         ユーザー名
-      </motion.label>
+      </label>
 
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        className="relative"
-      >
+      <div className="relative">
         <input
           type="text"
           id="username"
@@ -58,18 +48,13 @@ export const UsernameField = ({
                    shadow-sm hover:shadow transition-all duration-200"
           placeholder="名前を入力してね"
         />
-      </motion.div>
+      </div>
 
       {showError && (
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 200 }}
-          className="mt-2 text-sm text-red-600 font-medium flex items-center"
-        >
+        <p className="mt-2 text-sm text-red-600 font-medium flex items-center">
           {error}
-        </motion.p>
+        </p>
       )}
     </div>
   );
-};
+}
