@@ -8,12 +8,9 @@ import { meAtom, participantsAtom } from "@/lib/atoms";
 export function ParticipantsList() {
   const participants = useAtomValue(participantsAtom);
   const me = useAtomValue(meAtom) as Participant
-  const currentUserId = me.id;
 
-
-  // 自分自身を除いた参加者リスト
   const participantsExceptMe = participants.filter(
-    (p) => p.id !== currentUserId
+    (p) => p.id !== me.id
   );
 
   return (
