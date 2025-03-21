@@ -621,7 +621,6 @@ export async function proceedQuiz(): Promise<{ success: boolean; error?: string 
       return { success: true };
     }
     else if (currentQuiz.status === QuizStatus.SHOWING_ANSWER) {
-      // Proceed to next quiz (existing logic)
       await adminDB
         .collection('rooms')
         .doc(room.roomCode)
@@ -656,10 +655,7 @@ export async function proceedQuiz(): Promise<{ success: boolean; error?: string 
         await adminDB
           .collection('rooms')
           .doc(room.roomCode)
-          .update({
-            status: RoomStatus.FINISHED,
-            currentOrder: nextOrder
-          });
+          .update({ status: RoomStatus.FINISHED });
 
         return { success: true };
       }

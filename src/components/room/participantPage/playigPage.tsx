@@ -19,7 +19,7 @@ export const PlayingPage = () => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 1000);
     return () => clearTimeout(timer);
-  }, [currentQuiz.order, currentQuiz.status]);
+  }, [currentQuiz]);
 
   const getComponentForStatus = () => {
     switch (currentQuiz.status) {
