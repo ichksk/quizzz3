@@ -19,16 +19,11 @@ export const CurrentQuiz = () => {
   }
 
   return (
-    // 画面幅が狭いときに左右に余白を持たせるため、max-w-md + mx-auto を使う
-    // スマホでも余白が詰まりすぎないように p-4, sm:p-6 などを利用
-    <div className="max-w-md w-full mx-auto p-4 sm:p-6 bg-gray-50 space-y-6">
-      {/* 上段のヘッダー部分 */}
-      {/* 画面幅が狭いときは縦並び、広いときは横並びにするため flex-col sm:flex-row を使用 */}
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
         <div>
-          <h3 className="text-2xl font-semibold text-gray-800">出題中のクイズ</h3>
           <p className="text-md text-gray-600">
-            第{room.currentOrder + 1}問目 / 全{quizzes.length}問
+            第{room.currentOrder + 1}問 / 全{quizzes.length}問
           </p>
         </div>
         {/* ボタンは小画面では下に回りやすいように mt-2 を入れるなど調整 */}
