@@ -6,9 +6,8 @@ import { getParticipant, getRoomData } from "@/server/actions";
 import { Participant, QuizForOwner, RoomForOwner, RoomForParticipant } from "@/types/schemas";
 import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
-// Firestore 用の import（Firebase の設定済みインスタンス db を使用）
 import { onSnapshot, doc, collection } from "firebase/firestore";
-import { db } from "@/lib/firebase"; // db のパスはご利用環境に合わせて変更
+import { db } from "@/lib/firebase";
 import CustomNotFound from "./not-found";
 
 export default function RoomPage() {

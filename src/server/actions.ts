@@ -590,5 +590,4 @@ export async function getQuizAnswer(quizId: string) {
       data: null
     }
   }
-
 }
