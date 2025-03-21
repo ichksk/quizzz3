@@ -1,4 +1,3 @@
-// CreateQuizForm.tsx
 "use client"
 
 import { FormEvent, useEffect } from 'react';

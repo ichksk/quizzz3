@@ -1,6 +1,5 @@
 "use client";
 
-import { getCookie } from "@/server/cookies";
 import { QuizForm } from "@/components/quizForm";
 import { loadingAtom } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
