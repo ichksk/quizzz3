@@ -591,53 +591,83 @@ export async function proceedQuiz(): Promise<{ success: boolean; error?: string 
       return { success: false, error: "No quizzes found" };
     }
 
-    // Get current quiz and update its status to COMPLETED
+    // Get current quiz
     const currentQuiz = quizzes.find(quiz => quiz.order === room.currentOrder);
-    if (currentQuiz) {
+    if (!currentQuiz) {
+      return { success: false, error: "Current quiz not found" };
+    }
+
+    // Handle different quiz states
+    if (currentQuiz.status === QuizStatus.DISPLAYING) {
+      // Change from DISPLAYING to ANSWER_CLOSED
+      await adminDB
+        .collection('rooms')
+        .doc(room.roomCode)
+        .collection('quizzes')
+        .doc(currentQuiz.id)
+        .update({ status: QuizStatus.ANSWER_CLOSED });
+
+      return { success: true };
+    }
+    else if (currentQuiz.status === QuizStatus.ANSWER_CLOSED) {
+      // Change from ANSWER_CLOSED to SHOWING_ANSWER
+      await adminDB
+        .collection('rooms')
+        .doc(room.roomCode)
+        .collection('quizzes')
+        .doc(currentQuiz.id)
+        .update({ status: QuizStatus.SHOWING_ANSWER });
+
+      return { success: true };
+    }
+    else if (currentQuiz.status === QuizStatus.SHOWING_ANSWER) {
+      // Proceed to next quiz (existing logic)
       await adminDB
         .collection('rooms')
         .doc(room.roomCode)
         .collection('quizzes')
         .doc(currentQuiz.id)
         .update({ status: QuizStatus.COMPLETED });
+
+      // Calculate next order
+      const nextOrder = room.currentOrder + 1;
+
+      // Check if there's a next quiz
+      const nextQuiz = quizzes.find(quiz => quiz.order === nextOrder);
+
+      if (nextQuiz) {
+        // Update room's currentOrder
+        await adminDB
+          .collection('rooms')
+          .doc(room.roomCode)
+          .update({ currentOrder: nextOrder });
+
+        // Update next quiz status to DISPLAYING
+        await adminDB
+          .collection('rooms')
+          .doc(room.roomCode)
+          .collection('quizzes')
+          .doc(nextQuiz.id)
+          .update({ status: QuizStatus.DISPLAYING });
+
+        return { success: true };
+      } else {
+        // No more quizzes, update room status to FINISHED
+        await adminDB
+          .collection('rooms')
+          .doc(room.roomCode)
+          .update({
+            status: RoomStatus.FINISHED,
+            currentOrder: nextOrder
+          });
+
+        return { success: true };
+      }
     }
 
-    // Calculate next order
-    const nextOrder = room.currentOrder + 1;
-
-    // Check if there's a next quiz
-    const nextQuiz = quizzes.find(quiz => quiz.order === nextOrder);
-
-    if (nextQuiz) {
-      // Update room's currentOrder
-      await adminDB
-        .collection('rooms')
-        .doc(room.roomCode)
-        .update({ currentOrder: nextOrder });
-
-      // Update next quiz status to DISPLAYING
-      await adminDB
-        .collection('rooms')
-        .doc(room.roomCode)
-        .collection('quizzes')
-        .doc(nextQuiz.id)
-        .update({ status: QuizStatus.DISPLAYING });
-
-      return { success: true };
-    } else {
-      // No more quizzes, update room status to FINISHED
-      await adminDB
-        .collection('rooms')
-        .doc(room.roomCode)
-        .update({
-          status: RoomStatus.FINISHED,
-          currentOrder: nextOrder
-        });
-
-      return { success: true };
-    }
+    return { success: false, error: "Unknown quiz status" };
   } catch (error) {
     console.error("Proceed quiz error:", error);
-    return { success: false, error: "Failed to proceed to next quiz" };
+    return { success: false, error: "Failed to proceed quiz" };
   }
 }

@@ -63,24 +63,14 @@ const QuizStatusBadge = ({ status }: { status: QuizStatus }) => {
     switch (status) {
       case "DRAFT":
         return "bg-blue-100 text-blue-800";
-      case "READY":
-        return "bg-green-100 text-green-800";
-      case "WAITING":
-        return "bg-yellow-100 text-yellow-800";
       case "DISPLAYING":
         return "bg-purple-100 text-purple-800";
-      case "ANSWERING":
-        return "bg-indigo-100 text-indigo-800";
       case "ANSWER_CLOSED":
         return "bg-orange-100 text-orange-800";
       case "SHOWING_ANSWER":
         return "bg-sky-100 text-sky-800";
       case "COMPLETED":
         return "bg-emerald-100 text-emerald-800";
-      case "CANCELLED":
-        return "bg-red-100 text-red-800";
-      case "DELETED":
-        return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -90,24 +80,14 @@ const QuizStatusBadge = ({ status }: { status: QuizStatus }) => {
     switch (status) {
       case "DRAFT":
         return "下書き";
-      case "READY":
-        return "準備完了";
-      case "WAITING":
-        return "出題待ち状態";
       case "DISPLAYING":
         return "問題表示中";
-      case "ANSWERING":
-        return "回答受付中";
       case "ANSWER_CLOSED":
         return "回答締切";
       case "SHOWING_ANSWER":
         return "正解発表中";
       case "COMPLETED":
         return "出題完了";
-      case "CANCELLED":
-        return "出題キャンセル";
-      case "DELETED":
-        return "削除";
       default:
         return "不明なステータス";
     }
