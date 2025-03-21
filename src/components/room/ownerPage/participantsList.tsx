@@ -1,40 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { db } from "@/lib/firebase"; // firebaseClient のパスはプロジェクトに合わせて変更
-import { collection, onSnapshot } from "firebase/firestore";
-
-// ここではアイコンコンポーネントを例としてインポート（実装に合わせて修正）
 import { Users, Crown } from "lucide-react";
-import { Participant, Room } from "@/types/schemas";
-import { useAtom, useAtomValue } from "jotai";
-import { meAtom, participantsAtom, roomAtom } from "@/lib/atoms";
+import { Participant } from "@/types/schemas";
+import { useAtomValue } from "jotai";
+import { meAtom, participantsAtom } from "@/lib/atoms";
 
 export function ParticipantsList() {
-  const [participants, setParticipants] = useAtom(participantsAtom);
-  const room = useAtomValue(roomAtom) as Room;
+  const participants = useAtomValue(participantsAtom);
   const me = useAtomValue(meAtom) as Participant
   const currentUserId = me.id;
-  const roomCode = room.roomCode;
 
-  useEffect(() => {
-    // Firestore の room/{roomCode}/participants コレクションを監視
-    const colRef = collection(db, `rooms/${roomCode}/participants`);
-    const unsubscribe = onSnapshot(
-      colRef,
-      (snapshot) => {
-        const data: Participant[] = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Participant[];
-        setParticipants(data);
-      },
-      (error) => {
-        console.error("参加者の取得に失敗しました:", error);
-      }
-    );
-    return () => unsubscribe();
-  }, [roomCode]);
 
   // 自分自身を除いた参加者リスト
   const participantsExceptMe = participants.filter(
