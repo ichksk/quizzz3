@@ -2,6 +2,7 @@ import { Send } from "lucide-react"
 import { useAtomValue } from "jotai"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
+import { QuizStatus } from "@/types/schemas"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)
@@ -35,7 +36,18 @@ export const CurrentQuiz = () => {
         <h3 className="text-2xl font-semibold text-gray-800">出題中のクイズ</h3>
         <button className="flex items-center px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition duration-200 shadow-md" onClick={proceedQuiz}>
           <Send className="w-5 h-5 mr-2" />
-          次のクイズへ
+          {(() => {
+            switch (currentQuiz.status) {
+              case QuizStatus.DISPLAYING:
+                return "解答を締め切る";
+              case QuizStatus.ANSWER_CLOSED:
+                return "正解を発表";
+              case QuizStatus.SHOWING_ANSWER:
+                return "次の問題へ";
+              default:
+                return "？？？";
+            }
+          })()}
         </button>
       </div>
       <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
