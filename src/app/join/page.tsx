@@ -12,7 +12,7 @@ export default function JoinQuizPage() {
   };
 
   return (
-    <motion.main
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -38,6 +38,6 @@ export default function JoinQuizPage() {
       >
         <JoinQuizForm />
       </motion.div>
-    </motion.main>
+    </motion.div>
   );
 }
