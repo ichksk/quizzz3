@@ -39,7 +39,10 @@ export const JoinQuizForm = () => {
     try {
       setLoading(true);
 
-      await joinRoom(roomCode, username, false);
+      const res = await joinRoom(roomCode, username, false);
+      if (!res.success) {
+        throw new Error(res.error);
+      }
 
       toast.success("ルームに移動します");
       router.push("/room");

@@ -3,6 +3,7 @@ import { Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { leaveRoom } from '@/server/actions';
+import toast from 'react-hot-toast';
 
 export function FinishedPage() {
   const router = useRouter();
@@ -11,6 +12,8 @@ export function FinishedPage() {
     const res = await leaveRoom();
     if (res.success) {
       router.push('/');
+    } else {
+      toast.error(res.error as string);
     }
   }
 

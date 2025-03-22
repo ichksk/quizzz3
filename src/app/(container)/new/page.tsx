@@ -17,7 +17,10 @@ export default function CreateQuizPage() {
   const handleSubmit = async (formData: QuizSubmit) => {
     setLoading(true);
     try {
-      await createRoom();
+      const res = await createRoom();
+      if (!res.success) {
+        throw new Error(res.error);
+      }
       await createQuiz(formData);
       toast.success("クイズを作成しました");
       router.push("/room");

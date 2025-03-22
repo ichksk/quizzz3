@@ -1,4 +1,4 @@
-// imageField.tsx
+import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 import { ChangeEvent, useRef } from "react";
@@ -71,19 +71,30 @@ export const ImageField = () => {
           <span className="text-xs text-gray-400">PNG, JPG, GIF</span>
         </label>
       </div>
-      {quizForm.imagePreview && (
-        <div className="mt-4 relative">
-          <button
-            onClick={handleDeleteImage}
-            className="absolute top-2 right-2 p-1 bg-gray-800 rounded-full text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer"
-            type="button"
-            aria-label="画像を削除"
+      <AnimatePresence>
+        {quizForm.imagePreview && (
+          <div
+            className="mt-4 relative"
           >
-            <X className="w-4 h-4" />
-          </button>
-          <ImagePreview image={quizForm.imagePreview} />
-        </div>
-      )}
+            <button
+              onClick={handleDeleteImage}
+              className="absolute top-2 right-2 p-1 bg-gray-800 rounded-full text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 cursor-pointer"
+              type="button"
+              aria-label="画像を削除"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ImagePreview image={quizForm.imagePreview} />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
