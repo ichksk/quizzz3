@@ -138,9 +138,13 @@ export default function RoomPage() {
 
   if (!room || !participant) return null;
 
-  return participant.isOwner ? (
-    <OwnerPage />
-  ) : (
-    <ParticipantPage />
+  return (
+    <div className="min-h-[100dvh] relative">
+      {participant.isOwner ? (
+        <OwnerPage />
+      ) : (
+        <ParticipantPage />
+      )}
+    </div>
   );
 }
