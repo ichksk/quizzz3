@@ -35,29 +35,31 @@ export const OwnerPage = () => {
   };
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="relative space-y-4"
-    >
-      <motion.div variants={itemVariants}>
-        <Header />
-      </motion.div>
-
+    <div className="max-w-4xl mx-auto">
       <motion.div
-        variants={itemVariants}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="relative space-y-4"
       >
-        <ParticipantsList />
-        <QuizController />
-      </motion.div>
+        <motion.div variants={itemVariants}>
+          <Header />
+        </motion.div>
 
-      <motion.div variants={itemVariants}>
-        <LeaveRoomButton />
-      </motion.div>
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+        >
+          <ParticipantsList />
+          <QuizController />
+        </motion.div>
 
-      {/* {room?.status === "FINISHED" && <Donation variants={itemVariants} />} */}
-    </motion.div>
+        <motion.div variants={itemVariants}>
+          <LeaveRoomButton />
+        </motion.div>
+
+        {/* {room?.status === "FINISHED" && <Donation variants={itemVariants} />} */}
+      </motion.div>
+    </div>
   )
 }
