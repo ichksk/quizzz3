@@ -90,7 +90,6 @@ export const QuizDrawer = () => {
                       imagePreview: focusedQuiz?.image || null,
                     }}
                     onSubmit={handleSubmit}
-                    showBackButton={false}
                     isEdit={focusedQuiz !== null}
                   />
                 </div>

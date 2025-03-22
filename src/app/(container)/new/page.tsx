@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+import { BackButton } from "@/components/backButton";
 import { QuizForm } from "@/components/quizForm";
 import { loadingAtom } from "@/lib/atoms";
 import { createRoom, createQuiz } from "@/server/actions";
@@ -54,6 +54,7 @@ export default function CreateQuizPage() {
           <span>作成したクイズは「ルーム」でプレイできます</span>
         </div>
       </div>
+      <BackButton />
     </div>
   );
 }

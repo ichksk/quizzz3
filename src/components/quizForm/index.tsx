@@ -11,8 +11,6 @@ import { storage } from '@/lib/firebase';
 import { getCookie } from '@/server/cookies';
 import { QuizSubmit, QuizSubmitForm } from '@/types/schemas';
 
-import { BackButton } from '../backButton';
-
 import { ChoicesField } from './choicesField';
 import { ImageField } from './imageField';
 import { QuestionField } from './questionField';
@@ -22,14 +20,12 @@ import { TimeLimitField } from './timeLimitField';
 
 interface QuizFormProps {
   initialData?: QuizSubmitForm | null;
-  showBackButton?: boolean;
   isEdit?: boolean;
   onSubmit: (quizForm: QuizSubmit) => Promise<void>;
 }
 
 export const QuizForm = ({
   initialData = null,
-  showBackButton = true,
   isEdit = false,
   onSubmit,
 }: QuizFormProps) => {
@@ -126,7 +122,6 @@ export const QuizForm = ({
       <ImageField />
       <ChoicesField />
       <div className="flex gap-4 pt-4 justify-center w-full">
-        {showBackButton && <BackButton />}
         <SubmitButton isEdit={isEdit} />
       </div>
     </form>

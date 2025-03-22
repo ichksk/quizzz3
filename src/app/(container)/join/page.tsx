@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 
+import { BackButton } from '@/components/backButton';
 import { JoinQuizForm } from '@/components/joinQuizForm';
 
 export default function JoinQuizPage() {
@@ -33,6 +34,7 @@ export default function JoinQuizPage() {
       >
         <JoinQuizForm />
       </motion.div>
+      <BackButton />
     </div>
   );
 }
