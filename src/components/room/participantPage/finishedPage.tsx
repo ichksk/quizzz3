@@ -30,7 +30,6 @@ export function FinishedPage() {
     visible: { y: 0, opacity: 1 }
   };
 
-  const confettiColors = ['#FFD700', '#FF6B6B', '#4CC2FF', '#9F44D3', '#F7CAC9'];
 
   return (
     <motion.div
@@ -39,32 +38,6 @@ export function FinishedPage() {
       initial="hidden"
       animate="visible"
     >
-      {/* Floating confetti elements */}
-      {Array.from({ length: 30 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="fixed w-4 h-4 rounded-full"
-          style={{
-            backgroundColor: confettiColors[i % confettiColors.length],
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`
-          }}
-          animate={{
-            y: [0, Math.random() * 100 + 50],
-            x: [0, (Math.random() - 0.5) * 100],
-            opacity: [1, 0]
-          }}
-          transition={{
-            duration: Math.random() * 2 + 3,
-            ease: "easeOut",
-            repeat: Infinity,
-            delay: Math.random() * 2
-          }}
-        />
-      ))}
-
-
-      {/* 結果ヘッダー */}
       <motion.div
         className="text-center mb-8 mt-24"
         variants={itemVariants}
@@ -84,7 +57,6 @@ export function FinishedPage() {
         </motion.h1>
       </motion.div>
 
-      {/* ホームに戻るボタン */}
       <motion.div
         className="text-center mt-8"
         variants={itemVariants}
