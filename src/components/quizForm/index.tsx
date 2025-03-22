@@ -80,6 +80,8 @@ export const QuizForm = ({
           "state_changed",
           (snapshot: UploadTaskSnapshot) => {
             // 必要に応じて進捗表示などの処理を追加可能
+            const percentage = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log("アップロード進捗:", percentage);
           },
           (error: Error) => {
             console.error("アップロードエラー:", error);
