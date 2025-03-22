@@ -6,6 +6,7 @@ import { useState, ChangeEvent, JSX } from 'react';
 
 import { UsernameField } from '@/components/usernameField';
 import { getCookie } from '@/server/cookies';
+import { Confirm } from '@/components/confirm';
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -29,7 +30,8 @@ export default function Home(): JSX.Element {
 
   const handleCreateQuiz = async () => {
     if (await validateUsername()) {
-      router.push(`/new`);
+      router.push(`/join`);
+
     }
   };
 
