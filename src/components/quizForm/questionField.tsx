@@ -1,8 +1,9 @@
 "use client"
 
-import React, { useRef, useEffect } from "react"
-import { quizFormAtom } from "@/lib/atoms"
 import { useAtom } from "jotai"
+import React, { useRef, useEffect } from "react"
+
+import { quizFormAtom } from "@/lib/atoms"
 
 export const QuestionField = () => {
   const [{ question: value }, setValue] = useAtom(quizFormAtom)

@@ -1,9 +1,10 @@
 "use client";
 
-import { Share } from "lucide-react"
-import { Room } from "@/types/schemas"
-import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { Share } from "lucide-react"
+import toast from "react-hot-toast";
+
+import { Room } from "@/types/schemas"
 
 export const RoomCodeField = ({ room }: { room: Room }) => {
   const handleShare = async () => {
@@ -12,10 +13,13 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
       await navigator.share({
         url: shareUrl,
       });
-    } catch (err: any) {
-      // ユーザーがキャンセルした場合はエラー表示を行わない
-      if (err.name !== 'AbortError') {
-        toast.error("Chromeなどのブラウザで共有機能を利用できます。");
+    } catch (err: unknown) {
+      console.log(err);
+      if (err instanceof Error) {
+        // ユーザーがキャンセルした場合はエラー表示を行わない
+        if (err.name !== 'AbortError') {
+          toast.error("Chromeなどのブラウザで共有機能を利用できます。");
+        }
       }
     }
   };

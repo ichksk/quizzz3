@@ -1,7 +1,8 @@
 "use client";
 
-import { startQuiz } from "@/server/actions";
 import { Rocket } from "lucide-react"
+
+import { startQuiz } from "@/server/actions";
 
 
 export const StartButton = () => {

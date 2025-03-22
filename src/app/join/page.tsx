@@ -1,7 +1,8 @@
 "use client"
 
-import { JoinQuizForm } from '@/components/joinQuizForm';
 import { motion } from 'framer-motion';
+
+import { JoinQuizForm } from '@/components/joinQuizForm';
 
 export default function JoinQuizPage() {
   const subtleAnimation = {

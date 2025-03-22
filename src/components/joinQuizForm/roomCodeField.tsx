@@ -1,7 +1,8 @@
-import { joinQuizFormAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { useSearchParams } from "next/navigation";
 import { ChangeEvent, useLayoutEffect } from "react";
+
+import { joinQuizFormAtom } from "@/lib/atoms";
 
 export const RoomCodeField = () => {
   const [form, setForm] = useAtom(joinQuizFormAtom)

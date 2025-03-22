@@ -1,6 +1,6 @@
 import { atom } from "jotai";
-import { JoinQuizForm } from "@/types/JoinQuizForm";
-import { Participant, QuizAnswer, QuizForOwner, QuizForParticipant, QuizSubmitForm, Room } from "@/types/schemas";
+
+import { JoinQuizForm, Participant, QuizAnswer, QuizForOwner, QuizForParticipant, QuizSubmitForm, Room } from "@/types/schemas";
 
 export const loadingAtom = atom(false);
 

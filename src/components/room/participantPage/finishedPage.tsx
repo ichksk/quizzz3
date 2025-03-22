@@ -1,7 +1,8 @@
-import { leaveRoom } from '@/server/actions';
+import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+
+import { leaveRoom } from '@/server/actions';
 
 export function FinishedPage() {
   const router = useRouter();

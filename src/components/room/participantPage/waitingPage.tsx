@@ -1,10 +1,11 @@
-import { Loading } from '@/components/loading';
-import { LeaveRoomButton } from '@/components/leaveRoomButton';
-import { Room } from '@/types/schemas';
-import { useAtomValue } from 'jotai';
-import { roomAtom } from '@/lib/atoms';
 import { motion } from 'framer-motion';
+import { useAtomValue } from 'jotai';
 import { Users } from 'lucide-react';
+
+import { LeaveRoomButton } from '@/components/leaveRoomButton';
+import { Loading } from '@/components/loading';
+import { roomAtom } from '@/lib/atoms';
+import { Room } from '@/types/schemas';
 
 export function WaitingPage() {
   const room = useAtomValue(roomAtom) as Room;
