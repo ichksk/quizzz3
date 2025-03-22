@@ -2,10 +2,10 @@ import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
+import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
 
 import type { Metadata } from "next";
-import { ConfirmRoot } from "@/components/confirm";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
