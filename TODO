@@ -7,10 +7,11 @@ participantsの変更を検知する -> Done
 roomの変更を検知する(OwnerPageとParticipantPageの両方で) -> Done
 quizDrawerを実装する -> Done
 quizzesの変更を検知する -> Done
+問題文が長いと見切れる問題を解決する -> Done
 
 quizに既存の画像がある状態で編集し、画像をそのままにすると画像が消えるバグを修正する -> Done
 
-quizAnswerを実装する
+quizAnswerを実装する -> Done
     1. quizAnswersの型を作る
     2. quizAnswersのserver actionsを作る
     3. quizAnswersの変更を検知する
@@ -28,4 +29,3 @@ quizAnswerを実装する
 
 ボタンを2回押さないようにする
 作ったクイズを再利用できる仕組みを実装する
-問題文が長いと見切れる問題を解決する
