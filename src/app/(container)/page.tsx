@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, ChangeEvent, JSX } from 'react';
 
@@ -38,18 +39,65 @@ export default function Home(): JSX.Element {
     }
   };
 
+  const buttonVariants = {
+    initial: {
+      scale: 1,
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+    },
+    hover: {
+      scale: 1.05,
+      boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.2)"
+    },
+    tap: {
+      scale: 0.98,
+      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.15)"
+    }
+  };
+
+  const iconVariants = {
+    initial: { y: 0, rotate: 0 },
+    hover: { y: [0, -8, 0], rotate: [0, -10, 10, -10, 0], transition: { repeat: Infinity, duration: 2 } }
+  };
+
+  const glowVariants = {
+    initial: { opacity: 0 },
+    hover: { opacity: 0.7, transition: { duration: 0.3 } }
+  };
+
   return (
     <div className="max-w-md w-full">
       <div className="flex flex-col gap-8 items-center">
         <div className="flex flex-col items-center">
           <div className="relative">
-            <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap">
+            <motion.h1
+              className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            >
               クイズ大会メーカー
-            </h1>
-            <span className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none">✨</span>
+            </motion.h1>
+            <motion.span
+              className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none"
+              initial={{ rotate: 12, scale: 0 }}
+              animate={{ rotate: 12, scale: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: 0.7
+              }}
+            >
+              ✨
+            </motion.span>
           </div>
 
-          <div className="h-2 w-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-4 mb-8"></div>
+          <motion.div
+            className="h-2 w-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-4 mb-8"
+            initial={{ width: 0 }}
+            animate={{ width: "8rem" }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
         </div>
 
         <UsernameField
@@ -58,28 +106,77 @@ export default function Home(): JSX.Element {
           showError={showError}
         />
 
-        <div className="flex flex-col gap-4 w-full">
-          <button
-            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 font-medium text-base cursor-pointer relative overflow-hidden group"
+        <div className="flex flex-col gap-6 w-full">
+          <motion.button
+            className="relative px-8 py-5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white rounded-xl font-bold text-lg cursor-pointer overflow-hidden"
             onClick={handleCreateQuiz}
+            variants={buttonVariants}
+            initial="initial"
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-400 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
-            <span className="relative z-10 flex items-center justify-center">
-              <span className="mr-2">✏️</span>
-              クイズを作る
-            </span>
-          </button>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-blue-300 to-indigo-400 blur-xl"
+              variants={glowVariants}
+              initial="initial"
+              whileHover="hover"
+            />
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-300 via-pink-300 to-blue-300"
+              initial={{ scaleX: 0 }}
+              whileHover={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            <div className="relative z-10 flex items-center justify-center">
+              <motion.span
+                className="text-2xl mr-3"
+                variants={iconVariants}
+              >
+                ✏️
+              </motion.span>
+              <span>クイズを作る</span>
+            </div>
+          </motion.button>
 
-          <button
-            className="px-8 py-4 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 font-medium text-base cursor-pointer relative overflow-hidden group"
+          <motion.button
+            className="relative px-8 py-5 bg-gradient-to-r from-green-500 via-teal-500 to-emerald-600 text-white rounded-xl font-bold text-lg cursor-pointer overflow-hidden"
             onClick={handleJoinQuiz}
+            variants={buttonVariants}
+            initial="initial"
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-green-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></span>
-            <span className="relative z-10 flex items-center justify-center">
-              <span className="mr-2">🎲</span>
-              クイズに参加する
-            </span>
-          </button>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-green-300 to-emerald-400 blur-xl"
+              variants={glowVariants}
+              initial="initial"
+              whileHover="hover"
+            />
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-300 via-green-300 to-teal-300"
+              initial={{ scaleX: 0 }}
+              whileHover={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            <div className="relative z-10 flex items-center justify-center">
+              <motion.span
+                className="text-2xl mr-3"
+                animate={{
+                  rotate: [0, 0, 270, 270, 0],
+                  transition: {
+                    repeat: Infinity,
+                    duration: 3,
+                    times: [0, 0.2, 0.5, 0.8, 1]
+                  }
+                }}
+              >
+                🎲
+              </motion.span>
+              <span>クイズに参加する</span>
+            </div>
+          </motion.button>
         </div>
       </div>
     </div>
