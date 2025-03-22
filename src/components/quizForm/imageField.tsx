@@ -1,7 +1,7 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 import { ChangeEvent, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion"; // framer-motion をインポート
 
 import { quizFormAtom } from "@/lib/atoms";
 

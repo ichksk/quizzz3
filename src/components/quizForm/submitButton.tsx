@@ -1,7 +1,8 @@
 "use client"
 
-import { useAtomValue } from "jotai"
 import { motion } from "framer-motion"
+import { useAtomValue } from "jotai"
+
 import { quizFormAtom } from "@/lib/atoms"
 
 interface SubmitButtonProps {

@@ -1,6 +1,6 @@
+import { motion, AnimatePresence } from "framer-motion"
 import { useAtom } from "jotai"
 import { Trash2, Plus } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
 
 import { quizFormAtom } from "@/lib/atoms"
 
