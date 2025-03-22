@@ -7,7 +7,6 @@ import { roomAtom } from "@/lib/atoms"
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
-import { Donation } from "./donation"
 
 
 export const OwnerPage = () => {
