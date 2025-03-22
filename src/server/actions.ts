@@ -16,10 +16,10 @@ function generateRandomCode(length = 6): string {
   return code;
 }
 
-export async function createRoom(): Promise<Room> {
+export async function createRoom(): Promise<{ success: boolean; error?: string; data?: Room }> {
   const username = await getCookie("username");
   if (!username) {
-    throw new Error("ユーザー名が設定されていません");
+    return { success: false, error: "ユーザー名が設定されていません" };
   }
 
   // 重複を避けるため、存在チェックを繰り返す簡易実装
@@ -57,7 +57,7 @@ export async function createRoom(): Promise<Room> {
   await setCookie("participantId", newOwner.id);
   await setCookie("roomCode", roomCode);
   await setCookie("username", username);
-  return newRoom;
+  return { success: true, data: newRoom };
 }
 
 export async function createQuiz({
@@ -162,12 +162,12 @@ export async function joinRoom(
   roomCode: string,
   username: Participant["username"],
   isOwner = false,
-): Promise<Participant> {
+): Promise<{ success: boolean; error?: string; data?: Participant }> {
   const roomRef = adminDB.collection("rooms").doc(roomCode);
   const roomSnap = await roomRef.get();
 
   if (!roomSnap.exists) {
-    throw new Error("指定されたRoomは存在しません。");
+    return { success: false, error: "指定されたRoomは存在しません。" };
   }
 
   // 新しい participant のドキュメントリファレンスを生成
@@ -186,15 +186,15 @@ export async function joinRoom(
   await setCookie("roomCode", roomCode);
   await setCookie("username", username);
 
-  return newParticipant;
+  return { success: true, data: newParticipant };
 }
 
-export async function leaveRoom() {
+export async function leaveRoom(): Promise<{ success: boolean; error?: string }> {
   const roomCode = await getCookie("roomCode");
   const participantId = await getCookie("participantId");
 
   if (!roomCode || !participantId) {
-    throw new Error("ルーム情報が取得できませんでした");
+    return { success: false, error: "ルーム情報が取得できませんでした" };
   }
   try {
     // 1. 対象の participant ドキュメントを削除
@@ -486,8 +486,6 @@ export const getQuizById = async (quizId: string): Promise<{ quiz: QuizForOwner 
 
 
 
-
-
 //クイズアンサー
 export async function submitQuizAnswer({ quizId, choiceIndex }: QuizAnswerSubmit): Promise<{ success: boolean; error?: string }> {
   // Get participant and room info from cookies
@@ -710,23 +708,23 @@ export async function fetchQuizAnswerForParticipant(quizId: string): Promise<{ s
 }
 
 
-export async function sendChatMessage(message: string, sender: Sender) {
-  // クッキーから roomCode を取得
-  const roomCode = await getCookie("roomCode");
-  if (!roomCode) {
-    throw new Error("roomCode が見つかりません");
-  }
+// export async function sendChatMessage(message: string, sender: Sender) {
+//   // クッキーから roomCode を取得
+//   const roomCode = await getCookie("roomCode");
+//   if (!roomCode) {
+//     throw new Error("roomCode が見つかりません");
+//   }
 
-  // rooms/${roomCode}/chat コレクションの参照
-  const chatRef = adminDB.collection(`rooms/${roomCode}/chats`);
+//   // rooms/${roomCode}/chat コレクションの参照
+//   const chatRef = adminDB.collection(`rooms/${roomCode}/chats`);
 
-  // チャットメッセージのデータ作成
-  const chatData: ChatMessage = {
-    message,
-    sender,
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  };
+//   // チャットメッセージのデータ作成
+//   const chatData: ChatMessage = {
+//     message,
+//     sender,
+//     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+//   };
 
-  // Firestore にドキュメント追加
-  await chatRef.add(chatData);
-}
+//   // Firestore にドキュメント追加
+//   await chatRef.add(chatData);
+// }
