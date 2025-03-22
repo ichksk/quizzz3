@@ -1,7 +1,7 @@
 import { joinQuizFormAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { useSearchParams } from "next/navigation";
-import { ChangeEvent, useLayoutEffect } from "react";
+import { ChangeEvent, FocusEvent, useLayoutEffect } from "react";
 
 export const RoomCodeField = () => {
   const [form, setForm] = useAtom(joinQuizFormAtom)
@@ -22,6 +22,16 @@ export const RoomCodeField = () => {
     }));
   };
 
+  const handleRoomCodeBlur = (e: FocusEvent<HTMLInputElement>): void => {
+    const { value } = e.target;
+    // normalize("NFKC") で全角英数字を半角に変換し、toUpperCase() で小文字を大文字に変換
+    const normalized = value.normalize("NFKC").toUpperCase();
+    setForm(prev => ({
+      ...prev,
+      roomCode: normalized,
+    }));
+  };
+
   return (
     <div className="space-y-2">
       <label
@@ -36,6 +46,7 @@ export const RoomCodeField = () => {
           id="roomCode"
           value={form.roomCode}
           onChange={handleRoomCodeChange}
+          onBlur={handleRoomCodeBlur}
           className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg
                    focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent
                    shadow-sm hover:shadow transition-all duration-200"
