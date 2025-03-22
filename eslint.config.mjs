@@ -17,18 +17,8 @@ export default [
       "unused-imports": eslintPluginUnusedImports,
     },
     rules: {
+      "@typescript-eslint/no-unused-vars": "warn",
       "unused-imports/no-unused-imports": "error",
-      "import/no-internal-modules": [
-        "error",
-        {
-          forbid: [
-            "@/features//components/",
-            "@/features//types/",
-            "@/features//funcs/",
-            "@/features//states/"
-          ]
-        }
-      ],
       "import/no-useless-path-segments": [
         "error",
         { noUselessIndex: true }

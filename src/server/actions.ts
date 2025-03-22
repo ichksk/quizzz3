@@ -343,7 +343,7 @@ export async function fetchRoomData(): Promise<{
       room,
       error: null,
     };
-  } catch (error) {
+  } catch {
     return { error: "Failed to get room data." };
   }
 }
