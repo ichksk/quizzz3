@@ -1,9 +1,9 @@
 import { useAtomValue } from "jotai"
 import { Send, Lock, Check, Flag } from "lucide-react"
 
+import { ImagePreview } from "@/components/imagePreview"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
-import { ImagePreview } from "@/shared/imagePreview"
 import { QuizForOwner, QuizStatus } from "@/types/schemas"
 
 export const CurrentQuiz = () => {

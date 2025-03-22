@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, ChangeEvent, JSX } from 'react';
 
+import { UsernameField } from '@/components/usernameField';
 import { getCookie } from '@/server/cookies';
-import { UsernameField } from '@/shared/usernameField';
 
 export default function Home(): JSX.Element {
   const router = useRouter();

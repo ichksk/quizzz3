@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { FormEvent, Suspense } from 'react';
 import toast from 'react-hot-toast';
 
+import { UsernameField } from '@/components/usernameField';
 import { joinQuizFormAtom, loadingAtom } from '@/lib/atoms';
 import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 import { getCookie } from '@/server/cookies';
-import { UsernameField } from '@/shared/usernameField';
 
 import { RoomCodeField } from './roomCodeField';
 import { SubmitButton } from './submitButton';

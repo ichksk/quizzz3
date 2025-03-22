@@ -1,5 +1,6 @@
 import { motion } from "framer-motion"
-import { LeaveRoomButton } from "@/shared/leaveRoomButton"
+
+import { LeaveRoomButton } from "@/components/leaveRoomButton"
 
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"

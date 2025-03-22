@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-import { BackButton } from '@/shared/backButton';
+import { BackButton } from '@/components/backButton';
 
 import { JoinQuizForm } from './_components/joinQuizForm';
 
