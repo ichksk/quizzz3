@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { useAtomValue } from 'jotai';
+import { db } from '@/lib/firebase';
 import { roomAtom } from '@/lib/atoms';
 import { ChatMessageWithId } from '@/types/schemas';
 

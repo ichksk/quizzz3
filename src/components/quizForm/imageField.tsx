@@ -1,9 +1,9 @@
 // imageField.tsx
-import { quizFormAtom } from "@/lib/atoms";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 import { ChangeEvent, useRef } from "react";
 import { ImagePreview } from "../imagePreview";
+import { quizFormAtom } from "@/lib/atoms";
 
 export const ImageField = () => {
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);

@@ -1,8 +1,8 @@
 "use client";
 
-import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
 import { EllipsisVertical, Plus } from "lucide-react"
 import { useAtomValue, useSetAtom } from "jotai"
+import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
 import { drawerOpenAtom, focusedQuizAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 
 export const QuizList = () => {

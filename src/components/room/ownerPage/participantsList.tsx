@@ -1,10 +1,10 @@
 "use client";
 
 import { Users, Crown, Award } from "lucide-react";
-import { Participant } from "@/types/schemas";
 import { useAtomValue } from "jotai";
-import { meAtom, participantsAtom } from "@/lib/atoms";
 import { motion } from "framer-motion";
+import { Participant } from "@/types/schemas";
+import { meAtom, participantsAtom } from "@/lib/atoms";
 
 export function ParticipantsList() {
   const participants = useAtomValue(participantsAtom);

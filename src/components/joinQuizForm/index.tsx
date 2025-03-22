@@ -5,11 +5,11 @@ import { FormEvent, Suspense } from 'react';
 import toast from 'react-hot-toast';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import { joinQuizFormAtom, loadingAtom } from '@/lib/atoms';
+import { UsernameField } from '../usernameField';
 import { RoomCodeField } from './roomCodeField';
 import { SubmitButton } from './submitButton';
 import { Supplements } from './supplements';
-import { UsernameField } from '../usernameField';
+import { joinQuizFormAtom, loadingAtom } from '@/lib/atoms';
 import { getCookie } from '@/server/cookies';
 import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 

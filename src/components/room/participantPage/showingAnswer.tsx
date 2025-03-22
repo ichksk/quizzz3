@@ -1,11 +1,10 @@
+import { useAtomValue } from "jotai"
+import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { ImagePreview } from "@/components/imagePreview"
 import { quizzesAtom, roomAtom } from "@/lib/atoms"
 import { fetchQuizAnswerForParticipant } from "@/server/actions"
 import { QuizAnswer, Room } from "@/types/schemas"
-import { useAtomValue } from "jotai"
-import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { CheckCircle, XCircle } from "lucide-react"
 
 export const ShowingAnswer = () => {
   const room = useAtomValue(roomAtom) as Room

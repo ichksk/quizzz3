@@ -1,9 +1,9 @@
 import { useAtomValue } from "jotai"
+import { motion } from "framer-motion"
 import { RoomCodeField } from "./roomCode"
 import { RoomStatusBadge } from "./roomStatusBadge"
 import { Room } from "@/types/schemas"
 import { roomAtom } from "@/lib/atoms"
-import { motion } from "framer-motion"
 
 export const Header = () => {
   const room = useAtomValue(roomAtom) as Room

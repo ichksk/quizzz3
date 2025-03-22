@@ -1,12 +1,12 @@
-import { Room } from "@/types/schemas"
+import { useAtomValue } from "jotai"
+import { motion } from "framer-motion"
+import { Lightbulb } from "lucide-react"
 import { StartButton } from "./startButton"
 import { QuizList } from "./quizList"
 import { QuizDrawer } from "./quizDrawer"
 import { CurrentQuiz } from "./currentQuiz"
-import { useAtomValue } from "jotai"
 import { roomAtom } from "@/lib/atoms"
-import { motion } from "framer-motion"
-import { Lightbulb } from "lucide-react"
+import { Room } from "@/types/schemas"
 
 export const QuizController = () => {
   const room = useAtomValue(roomAtom) as Room

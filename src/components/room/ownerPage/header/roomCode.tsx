@@ -1,9 +1,9 @@
 "use client";
 
 import { Share } from "lucide-react"
-import { Room } from "@/types/schemas"
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { Room } from "@/types/schemas"
 
 export const RoomCodeField = ({ room }: { room: Room }) => {
   const handleShare = async () => {

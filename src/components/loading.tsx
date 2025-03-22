@@ -1,7 +1,7 @@
 "use client"
 
-import { loadingAtom } from "@/lib/atoms"
 import { useAtomValue } from "jotai"
+import { loadingAtom } from "@/lib/atoms"
 
 export const Loading = ({ fullScreen }: { fullScreen?: boolean }) => {
   return (

@@ -1,12 +1,12 @@
-import { ImagePreview } from "@/components/imagePreview";
-import { quizzesAtom, roomAtom } from "@/lib/atoms";
-import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
-import { QuizForParticipant, Room } from "@/types/schemas";
 import { useAtomValue } from "jotai";
 import { Loader2, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { QuizForParticipant, Room } from "@/types/schemas";
+import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
+import { quizzesAtom, roomAtom } from "@/lib/atoms";
+import { ImagePreview } from "@/components/imagePreview";
 
 export const Answering = () => {
   const room = useAtomValue(roomAtom) as Room;

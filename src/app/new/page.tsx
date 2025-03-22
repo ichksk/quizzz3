@@ -1,13 +1,13 @@
 "use client";
 
-import { QuizForm } from "@/components/quizForm";
-import { loadingAtom } from "@/lib/atoms";
 import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import { QuizForm } from "@/components/quizForm";
+import { loadingAtom } from "@/lib/atoms";
 import { createRoom, createQuiz } from "@/server/actions";
 import { QuizSubmit } from "@/types/schemas";
-import { motion } from "framer-motion";
 
 export default function CreateQuizPage() {
   const setLoading = useSetAtom(loadingAtom);

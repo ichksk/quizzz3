@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, ChangeEvent, JSX } from 'react';
-import { UsernameField } from '@/components/usernameField';
-import { getCookie } from '@/server/cookies';
 import { motion } from 'framer-motion';
 import { Montserrat } from 'next/font/google';
+import { UsernameField } from '@/components/usernameField';
+import { getCookie } from '@/server/cookies';
 
 const montserrat = Montserrat({
   subsets: ['latin'],

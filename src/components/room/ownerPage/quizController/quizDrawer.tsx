@@ -1,14 +1,13 @@
 "use client";
 
-import { QuizForm } from "@/components/quizForm"
-import { drawerOpenAtom, focusedQuizAtom, loadingAtom } from "@/lib/atoms"
-import { createQuiz, updateQuiz } from "@/server/actions";
-import { QuizSubmit } from "@/types/schemas";
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { Trash2, FilePlus, Edit } from "lucide-react"
 import toast from "react-hot-toast";
 import { Drawer } from "vaul"
 import { motion, AnimatePresence } from "framer-motion";
+import { QuizSubmit } from "@/types/schemas";
+import { createQuiz, updateQuiz } from "@/server/actions";
+import { drawerOpenAtom, focusedQuizAtom, loadingAtom } from "@/lib/atoms"
+import { QuizForm } from "@/components/quizForm"
 
 export const QuizDrawer = () => {
   const setLoading = useSetAtom(loadingAtom)

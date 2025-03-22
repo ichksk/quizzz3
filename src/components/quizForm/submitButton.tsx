@@ -1,7 +1,7 @@
 "use client"
 
-import { quizFormAtom } from "@/lib/atoms";
 import { useAtomValue } from "jotai";
+import { quizFormAtom } from "@/lib/atoms";
 
 
 interface SubmitButtonProps {
