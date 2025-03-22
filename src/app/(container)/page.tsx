@@ -40,13 +40,8 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="flex flex-col gap-8 items-center max-w-md w-full bg-white/80 backdrop-blur-sm p-10 rounded-2xl shadow-lg"
-      >
+    <div className="max-w-md w-full">
+      <div className="flex flex-col gap-8 items-center">
         <div className="flex flex-col items-center">
           <div className="relative">
             <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap">
@@ -87,7 +82,7 @@ export default function Home(): JSX.Element {
             </span>
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

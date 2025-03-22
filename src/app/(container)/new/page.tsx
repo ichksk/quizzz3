@@ -34,12 +34,7 @@ export default function CreateQuizPage() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-lg"
-    >
+    <div className="max-w-md w-full">
       <div className="flex items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center">
@@ -59,6 +54,6 @@ export default function CreateQuizPage() {
           <span>作成したクイズは「ルーム」でプレイできます</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

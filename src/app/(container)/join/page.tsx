@@ -12,12 +12,7 @@ export default function JoinQuizPage() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="max-w-md mx-auto bg-white/80 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-lg"
-    >
+    <div className="max-w-md w-full">
       <div className="text-center mb-8">
         <div className="relative inline-block">
           <span className="absolute -top-4 -right-6 text-3xl transform rotate-12 select-none">🎮</span>
@@ -38,6 +33,6 @@ export default function JoinQuizPage() {
       >
         <JoinQuizForm />
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
