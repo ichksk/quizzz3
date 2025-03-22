@@ -4,9 +4,8 @@ import { Toaster } from "react-hot-toast";
 
 import { GlobalLoading } from "@/components/loading";
 
-import ConfirmLayout from "./confirmLayout";
-
 import type { Metadata } from "next";
+import { ConfirmRoot } from "@/components/confirm";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,11 +40,10 @@ export default function RootLayout({
       >
         <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 ">
           <div className="min-h-[100dvh] px-4 py-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <ConfirmLayout>
-              <Toaster />
-              <GlobalLoading />
-              {children}
-            </ConfirmLayout>
+            <ConfirmRoot />
+            <Toaster />
+            <GlobalLoading />
+            {children}
           </div>
         </div>
       </body>

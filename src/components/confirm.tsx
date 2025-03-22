@@ -1,3 +1,4 @@
+"use client"
 import { motion, AnimatePresence } from 'framer-motion'
 import { createCallable } from 'react-call'
 
@@ -51,3 +52,9 @@ export const Confirm = createCallable<Props, Response>(({ call, message }) => (
     </motion.div>
   </AnimatePresence>
 ))
+
+export const ConfirmRoot = () => {
+  return (
+    <Confirm.Root />
+  )
+}
