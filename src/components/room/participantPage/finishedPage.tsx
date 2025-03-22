@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { leaveRoom } from '@/server/actions';
-import toast from 'react-hot-toast';
 
 export function FinishedPage() {
   const router = useRouter();
