@@ -1,12 +1,11 @@
 "use client"
 
-import { useAtomValue } from "jotai";
-
-import { quizFormAtom } from "@/lib/atoms";
-
+import { useAtomValue } from "jotai"
+import { motion } from "framer-motion"
+import { quizFormAtom } from "@/lib/atoms"
 
 interface SubmitButtonProps {
-  isEdit?: boolean;
+  isEdit?: boolean
 }
 
 export const SubmitButton = ({ isEdit = false }: SubmitButtonProps) => {
@@ -19,18 +18,18 @@ export const SubmitButton = ({ isEdit = false }: SubmitButtonProps) => {
   )
 
   return (
-    <button
+    <motion.button
       type="submit"
-      className={`
-        px-6 py-2 text-white rounded-lg transition-colors duration-200 w-full
-        ${disabled
-          ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400'
-          : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-        }
-      `}
       disabled={disabled}
+      animate={{
+        backgroundColor: disabled ? "#9CA3AF" : "#2563EB", // disabled: gray、enabled: blue
+        cursor: disabled ? "not-allowed" : "pointer",
+      }}
+      whileHover={!disabled ? { backgroundColor: "#1D4ED8" } : {}}
+      transition={{ duration: 0.2 }}
+      className="px-6 py-2 text-white rounded-lg w-full"
     >
       {isEdit ? "変更を保存" : "作成"}
-    </button>
+    </motion.button>
   )
 }
