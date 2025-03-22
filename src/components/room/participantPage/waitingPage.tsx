@@ -29,7 +29,7 @@ export function WaitingPage() {
 
   return (
     <motion.div
-      className="min-h-full flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden font-[family-name:var(--font-geist-sans)]"
+      className="min-h-full flex flex-col items-center justify-center relative overflow-hidden font-[family-name:var(--font-geist-sans)]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

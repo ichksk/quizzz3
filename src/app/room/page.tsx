@@ -3,21 +3,19 @@
 import { onSnapshot, doc, collection } from "firebase/firestore";
 import { useAtom, useSetAtom } from "jotai";
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
-import { Loading } from "@/components/loading";
 import { OwnerPage } from "@/components/room/ownerPage";
 import { ParticipantPage } from "@/components/room/participantPage";
-import { meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
+import { loadingAtom, meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
 import { db } from "@/lib/firebase";
 import { fetchParticipant, fetchRoomData } from "@/server/actions";
 import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
 
-import CustomNotFound from "./not-found";
 
 export default function RoomPage() {
-  const [loading, setLoading] = useState(true);
+  const setLoading = useSetAtom(loadingAtom)
   const [room, setRoom] = useAtom(roomAtom);
   const [participant, setParticipant] = useAtom(meAtom);
   const [quizzes, setQuizzes] = useAtom(quizzesAtom);
@@ -138,8 +136,7 @@ export default function RoomPage() {
     return () => unsub?.();
   }, [quizzes]);
 
-  if (loading) return <Loading fullScreen />;
-  if (!room || !participant) return <CustomNotFound />;
+  if (!room || !participant) return null;
 
   return participant.isOwner ? (
     <OwnerPage />
