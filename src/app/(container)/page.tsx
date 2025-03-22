@@ -81,11 +81,17 @@ export default function Home(): JSX.Element {
               className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none"
               initial={{ rotate: 12, scale: 0 }}
               animate={{ rotate: 12, scale: 1 }}
+              whileHover={{
+                scale: 1.5,
+                rotate: 20,
+                transition: {
+                  duration: 0.2
+                }
+              }}
               transition={{
                 type: "spring",
                 stiffness: 260,
                 damping: 20,
-                delay: 0.7
               }}
             >
               ✨
