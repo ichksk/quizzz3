@@ -2,6 +2,7 @@
 
 import { useAtomValue, useSetAtom } from "jotai"
 import { EllipsisVertical, Plus } from "lucide-react"
+import Image from "next/image";
 
 import { drawerOpenAtom, focusedQuizAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
@@ -43,8 +44,22 @@ export const QuizList = () => {
           >
             <div className="flex-1 min-w-0">
               <span className="text-sm text-gray-500">問題 {quiz.order + 1}</span>
-              <p className="truncate">{quiz.question}</p>
+              <p className="truncate text-md font-semibold text-gray-900 drop-shadow-sm">
+                {quiz.question}
+              </p>
             </div>
+
+            {/* quiz.image があるときだけ表示 */}
+            {quiz.image && (
+              <Image
+                src={quiz.image}
+                alt={`クイズ${quiz.order + 1}の画像`}
+                width={48}
+                height={48}
+                className="w-12 h-12 object-cover rounded-md"
+              />
+            )}
+
             <div className="flex items-center gap-2 flex-shrink-0">
               <QuizStatusBadge status={quiz.status} />
               <button

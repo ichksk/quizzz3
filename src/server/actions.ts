@@ -188,6 +188,7 @@ export async function joinRoom(
 
   return newParticipant;
 }
+
 export async function leaveRoom() {
   const roomCode = await getCookie("roomCode");
   const participantId = await getCookie("participantId");
