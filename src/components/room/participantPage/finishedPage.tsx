@@ -33,7 +33,7 @@ export function FinishedPage() {
 
   return (
     <motion.div
-      className="min-h-full p-4 md:p-8 flex flex-col items-center justify-center"
+      className="min-h-full p-4 md:p-8 flex flex-col items-center justify-center relative"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
