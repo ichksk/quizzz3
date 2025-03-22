@@ -1,12 +1,15 @@
-import { useAtomValue } from "jotai"
 import { AnimatePresence, motion } from "framer-motion"
+import { useAtomValue } from "jotai"
 import { useEffect, useState } from "react"
-import { ChatRoom } from "../chatRoom"
-import { FinishedPage } from "./finishedPage"
-import { WaitingPage } from "./waitingPage"
-import { PlayingPage } from "./playigPage"
+
 import { roomAtom } from "@/lib/atoms"
 import { Room } from "@/types/schemas"
+
+import { ChatRoom } from "../chatRoom"
+
+import { FinishedPage } from "./finishedPage"
+import { PlayingPage } from "./playigPage"
+import { WaitingPage } from "./waitingPage"
 
 export function ParticipantPage() {
   const room = useAtomValue(roomAtom) as Room

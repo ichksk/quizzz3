@@ -1,8 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Share } from "lucide-react"
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
+
 import { Room } from "@/types/schemas"
 
 export const RoomCodeField = ({ room }: { room: Room }) => {

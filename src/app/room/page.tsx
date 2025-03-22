@@ -1,17 +1,20 @@
 "use client";
 
-import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
 import { onSnapshot, doc, collection } from "firebase/firestore";
 import { useAtom, useSetAtom } from "jotai";
-import CustomNotFound from "./not-found";
+import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
+
+
+import { Loading } from "@/components/loading";
 import { OwnerPage } from "@/components/room/ownerPage";
 import { ParticipantPage } from "@/components/room/participantPage";
-import { fetchParticipant, fetchRoomData } from "@/server/actions";
-import { db } from "@/lib/firebase";
 import { meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
-import { Loading } from "@/components/loading";
+import { db } from "@/lib/firebase";
+import { fetchParticipant, fetchRoomData } from "@/server/actions";
 import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
+
+import CustomNotFound from "./not-found";
 
 export default function RoomPage() {
   const [loading, setLoading] = useState(true);

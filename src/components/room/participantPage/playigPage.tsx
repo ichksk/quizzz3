@@ -1,12 +1,14 @@
-import { useAtomValue } from "jotai";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import { AnswerClosed } from "./answerClosed";
-import { ShowingAnswer } from "./showingAnswer";
-import { Answering } from "./answering";
+
 import { LeaveRoomButton } from "@/components/leaveRoomButton";
 import { quizzesAtom, roomAtom } from "@/lib/atoms";
 import { QuizForParticipant, Room } from "@/types/schemas";
+
+import { AnswerClosed } from "./answerClosed";
+import { Answering } from "./answering";
+import { ShowingAnswer } from "./showingAnswer";
 
 export const PlayingPage = () => {
   const room = useAtomValue(roomAtom) as Room;

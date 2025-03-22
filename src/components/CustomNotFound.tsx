@@ -1,7 +1,7 @@
 "use client";
-import React from 'react';
 import { Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 const CustomNotFound = () => {
   const router = useRouter();

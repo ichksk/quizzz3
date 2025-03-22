@@ -1,9 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
+
 import { QuizForm } from "@/components/quizForm";
 import { loadingAtom } from "@/lib/atoms";
 import { createRoom, createQuiz } from "@/server/actions";

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+
 import { GlobalLoading } from "@/components/loading";
 
 const geistSans = Geist({

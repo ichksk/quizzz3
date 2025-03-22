@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAtomValue } from 'jotai';
-import { db } from '@/lib/firebase';
+import { useEffect, useState } from 'react';
+
 import { roomAtom } from '@/lib/atoms';
+import { db } from '@/lib/firebase';
 import { ChatMessageWithId } from '@/types/schemas';
 
 export const ChatRoom = () => {

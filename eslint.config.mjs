@@ -7,27 +7,49 @@ import eslintPluginUnusedImports from "eslint-plugin-unused-imports";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
-const eslintConfig = [
-  // 例として、Next.jsの設定を拡張する場合は下記のように記述できます
+export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-
   {
-    // プラグインの登録
     plugins: {
       import: eslintPluginImport,
       "unused-imports": eslintPluginUnusedImports,
     },
-    // 各プラグイン固有のルールをここで定義可能
     rules: {
-      // 例:
-      "import/order": "warn",
       "unused-imports/no-unused-imports": "error",
-    },
-  },
+      "import/no-internal-modules": [
+        "error",
+        {
+          forbid: [
+            "@/features//components/",
+            "@/features//types/",
+            "@/features//funcs/",
+            "@/features//states/"
+          ]
+        }
+      ],
+      "import/no-useless-path-segments": [
+        "error",
+        { noUselessIndex: true }
+      ],
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type"
+          ],
+          alphabetize: { order: "asc", caseInsensitive: true },
+          "newlines-between": "always"
+        }
+      ]
+    }
+  }
 ];
-
-export default eslintConfig;

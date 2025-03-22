@@ -1,7 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { leaveRoom } from "@/server/actions";
 
 export const LeaveRoomButton = () => {

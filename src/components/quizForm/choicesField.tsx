@@ -1,5 +1,6 @@
-import { Trash2, Plus } from "lucide-react"
 import { useAtom } from "jotai"
+import { Trash2, Plus } from "lucide-react"
+
 import { quizFormAtom } from "@/lib/atoms"
 
 export const ChoicesField = () => {

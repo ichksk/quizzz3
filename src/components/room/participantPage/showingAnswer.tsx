@@ -1,6 +1,7 @@
+import { motion, AnimatePresence } from "framer-motion"
 import { useAtomValue } from "jotai"
 import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+
 import { ImagePreview } from "@/components/imagePreview"
 import { quizzesAtom, roomAtom } from "@/lib/atoms"
 import { fetchQuizAnswerForParticipant } from "@/server/actions"

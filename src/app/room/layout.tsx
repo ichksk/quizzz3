@@ -1,6 +1,6 @@
 "use client";
-import { JSX } from 'react';
 import { motion } from 'framer-motion';
+import { JSX } from 'react';
 
 export default function RoomLayout({ children }: { children: JSX.Element }) {
   const patterns = Array.from({ length: 10 }).map((_, i) => ({
