@@ -16,9 +16,8 @@ export const BackButton = ({ to }: BackButtonProps) => {
     >
       <motion.button
         whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
         onClick={() => router.push('/')}
-        className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        className="text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
       >
         ← ホームに戻る
       </motion.button>
