@@ -4,8 +4,9 @@ import { Toaster } from "react-hot-toast";
 
 import { GlobalLoading } from "@/components/loading";
 
-import type { Metadata } from "next";
 import ConfirmLayout from "./confirmLayout";
+
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

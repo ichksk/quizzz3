@@ -1,6 +1,7 @@
 "use client";
-import { Confirm } from "@/components/confirm";
 import { ReactNode } from "react";
+
+import { Confirm } from "@/components/confirm";
 
 export default function ConfirmLayout({ children }: { children: ReactNode }) {
   return (
