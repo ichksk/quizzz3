@@ -1,16 +1,11 @@
 import { motion } from "framer-motion"
-import { useAtomValue } from "jotai"
-
-import { roomAtom } from "@/lib/atoms"
 import { LeaveRoomButton } from "@/shared/leaveRoomButton"
 
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
 
-
 export const OwnerPage = () => {
-  const room = useAtomValue(roomAtom);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -57,8 +52,6 @@ export const OwnerPage = () => {
         <motion.div variants={itemVariants}>
           <LeaveRoomButton />
         </motion.div>
-
-        {/* {room?.status === "FINISHED" && <Donation variants={itemVariants} />} */}
       </motion.div>
     </div>
   )
