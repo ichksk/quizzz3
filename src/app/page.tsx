@@ -56,7 +56,7 @@ export default function Home(): JSX.Element {
         >
           <div className="flex flex-col items-center">
             <div className="relative">
-              <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap">
                 クイズ大会メーカー
               </h1>
               <span className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none">✨</span>
