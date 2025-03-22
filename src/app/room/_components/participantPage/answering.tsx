@@ -4,7 +4,7 @@ import { Loader2, Timer } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { ImagePreview } from "@/components/imagePreview";
+import { ImagePreview } from "@/shared/imagePreview";
 import { quizzesAtom, roomAtom } from "@/lib/atoms";
 import { getQuizAnswer, submitQuizAnswer } from "@/server/actions";
 import { QuizForParticipant, Room } from "@/types/schemas";

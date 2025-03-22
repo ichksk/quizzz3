@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 
-import { BackButton } from '@/components/backButton';
-import { JoinQuizForm } from '@/components/joinQuizForm';
+import { BackButton } from '@/shared/backButton';
+import { JoinQuizForm } from './_components/joinQuizForm';
 
 export default function JoinQuizPage() {
   const subtleAnimation = {

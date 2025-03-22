@@ -5,7 +5,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import toast from "react-hot-toast";
 import { Drawer } from "vaul"
 
-import { QuizForm } from "@/components/quizForm"
+import { QuizForm } from "@/shared/quizForm"
 import { drawerOpenAtom, focusedQuizAtom, loadingAtom } from "@/lib/atoms"
 import { createQuiz, updateQuiz } from "@/server/actions";
 import { QuizSubmit } from "@/types/schemas";

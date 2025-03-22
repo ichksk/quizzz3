@@ -4,8 +4,8 @@ import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import { BackButton } from "@/components/backButton";
-import { QuizForm } from "@/components/quizForm";
+import { BackButton } from "@/shared/backButton";
+import { QuizForm } from "@/shared/quizForm";
 import { loadingAtom } from "@/lib/atoms";
 import { createRoom, createQuiz } from "@/server/actions";
 import { QuizSubmit } from "@/types/schemas";

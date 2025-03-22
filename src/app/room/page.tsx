@@ -6,12 +6,13 @@ import { notFound } from "next/navigation";
 import { useEffect } from "react";
 
 
-import { OwnerPage } from "@/components/room/ownerPage";
-import { ParticipantPage } from "@/components/room/participantPage";
 import { loadingAtom, meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
 import { db } from "@/lib/firebase";
 import { fetchParticipant, fetchRoomData } from "@/server/actions";
 import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
+
+import { OwnerPage } from "./_components/ownerPage";
+import { ParticipantPage } from "./_components/participantPage";
 
 
 export default function RoomPage() {

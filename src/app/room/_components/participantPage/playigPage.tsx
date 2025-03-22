@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
-import { LeaveRoomButton } from "@/components/leaveRoomButton";
+import { LeaveRoomButton } from "@/shared/leaveRoomButton";
 import { quizzesAtom, roomAtom } from "@/lib/atoms";
 import { QuizForParticipant, Room } from "@/types/schemas";
 
