@@ -34,33 +34,31 @@ export default function CreateQuizPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-lg"
-      >
-        <div className="flex items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center">
-              <span className="mr-3 select-none">✏️</span>
-              クイズを作成
-            </h1>
-          </div>
-        </div>
-
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-lg"
+    >
+      <div className="flex items-center mb-8">
         <div>
-          <QuizForm onSubmit={handleSubmit} />
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center">
+            <span className="mr-3 select-none">✏️</span>
+            クイズを作成
+          </h1>
         </div>
+      </div>
 
-        <div className="w-full flex justify-center mt-8">
-          <div className="text-sm text-gray-500 flex items-center">
-            <span className="mr-2">💡</span>
-            <span>作成したクイズは「ルーム」でプレイできます</span>
-          </div>
+      <div>
+        <QuizForm onSubmit={handleSubmit} />
+      </div>
+
+      <div className="w-full flex justify-center mt-8">
+        <div className="text-sm text-gray-500 flex items-center">
+          <span className="mr-2">💡</span>
+          <span>作成したクイズは「ルーム」でプレイできます</span>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }

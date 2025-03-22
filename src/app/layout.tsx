@@ -37,10 +37,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
-        <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
-          <Toaster />
-          <GlobalLoading />
-          {children}
+        <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 ">
+          <div className="min-h-[100dvh] px-4 py-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+            <Toaster />
+            <GlobalLoading />
+            {children}
+          </div>
         </div>
       </body>
     </html>

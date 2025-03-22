@@ -7,6 +7,7 @@ import { roomAtom } from "@/lib/atoms"
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
+import { Donation } from "./donation"
 
 
 export const OwnerPage = () => {
@@ -39,7 +40,7 @@ export const OwnerPage = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col container mx-auto space-y-6 bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg"
+      className="flex flex-col container mx-auto space-y-4 bg-white/80 backdrop-blur-sm p-4 sm:p-8 rounded-2xl"
     >
       <motion.div variants={itemVariants}>
         <Header />
@@ -47,7 +48,7 @@ export const OwnerPage = () => {
 
       <motion.div
         variants={itemVariants}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4"
       >
         <ParticipantsList />
         <motion.div
