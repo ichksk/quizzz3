@@ -18,6 +18,7 @@ export default [
     },
     rules: {
       "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "warn",
       "unused-imports/no-unused-imports": "error",
       "import/no-useless-path-segments": [
         "error",

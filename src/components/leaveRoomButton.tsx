@@ -2,9 +2,9 @@
 
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { leaveRoom } from "@/server/actions";
-import toast from "react-hot-toast";
 
 export const LeaveRoomButton = () => {
   const router = useRouter();
