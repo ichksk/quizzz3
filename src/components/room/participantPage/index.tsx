@@ -5,8 +5,6 @@ import { useEffect, useState } from "react"
 import { roomAtom } from "@/lib/atoms"
 import { Room } from "@/types/schemas"
 
-import { ChatRoom } from "../chatRoom"
-
 import { FinishedPage } from "./finishedPage"
 import { PlayingPage } from "./playigPage"
 import { WaitingPage } from "./waitingPage"
@@ -71,7 +69,6 @@ export function ParticipantPage() {
         className="w-full h-full"
       >
         {getPageComponent()}
-        <ChatRoom />
       </motion.div>
     </AnimatePresence>
   )
