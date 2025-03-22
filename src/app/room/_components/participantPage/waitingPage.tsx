@@ -2,9 +2,9 @@ import { motion } from 'framer-motion';
 import { useAtomValue } from 'jotai';
 import { Users } from 'lucide-react';
 
+import { roomAtom } from '@/lib/atoms';
 import { LeaveRoomButton } from '@/shared/leaveRoomButton';
 import { Loading } from '@/shared/loading';
-import { roomAtom } from '@/lib/atoms';
 import { Room } from '@/types/schemas';
 
 export function WaitingPage() {

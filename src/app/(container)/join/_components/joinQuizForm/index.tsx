@@ -8,8 +8,7 @@ import toast from 'react-hot-toast';
 import { joinQuizFormAtom, loadingAtom } from '@/lib/atoms';
 import { joinRoom } from '@/server/actions'; // サーバーアクションをインポート
 import { getCookie } from '@/server/cookies';
-
-import { UsernameField } from '../usernameField';
+import { UsernameField } from '@/shared/usernameField';
 
 import { RoomCodeField } from './roomCodeField';
 import { SubmitButton } from './submitButton';

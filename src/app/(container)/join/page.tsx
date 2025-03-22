@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 
 import { BackButton } from '@/shared/backButton';
+
 import { JoinQuizForm } from './_components/joinQuizForm';
 
 export default function JoinQuizPage() {

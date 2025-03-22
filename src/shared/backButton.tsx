@@ -1,10 +1,7 @@
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-interface BackButtonProps {
-  to?: string;
-}
 
-export const BackButton = ({ to }: BackButtonProps) => {
+export const BackButton = () => {
   const router = useRouter();
 
   return (

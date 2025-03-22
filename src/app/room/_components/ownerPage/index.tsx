@@ -1,8 +1,8 @@
 import { motion } from "framer-motion"
 import { useAtomValue } from "jotai"
 
-import { LeaveRoomButton } from "@/shared/leaveRoomButton"
 import { roomAtom } from "@/lib/atoms"
+import { LeaveRoomButton } from "@/shared/leaveRoomButton"
 
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
