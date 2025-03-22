@@ -43,23 +43,6 @@ export const PlayingPage = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.div
-        className="absolute top-4 left-4 rounded-lg bg-white bg-opacity-70 backdrop-filter backdrop-blur-sm px-4 py-2 shadow-md z-10"
-        initial={{ x: -50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <motion.h3
-          className="text-lg md:text-xl font-semibold text-blue-700"
-          animate={{
-            textShadow: ["0px 0px 0px rgba(59, 130, 246, 0)", "0px 0px 5px rgba(59, 130, 246, 0.3)", "0px 0px 0px rgba(59, 130, 246, 0)"]
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          第{room.currentOrder + 1}問目
-        </motion.h3>
-      </motion.div>
-
       {/* Main content card */}
       <motion.div
         className="bg-white rounded-2xl shadow-xl h-fit p-6 md:p-8 max-w-2xl mx-auto mt-12 relative z-10 overflow-hidden"
@@ -67,6 +50,22 @@ export const PlayingPage = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
+        <motion.div
+          className="z-10"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <motion.h3
+            className="text-lg md:text-xl font-semibold text-blue-700"
+            animate={{
+              textShadow: ["0px 0px 0px rgba(59, 130, 246, 0)", "0px 0px 5px rgba(59, 130, 246, 0.3)", "0px 0px 0px rgba(59, 130, 246, 0)"]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            第{room.currentOrder + 1}問目
+          </motion.h3>
+        </motion.div>
         {/* Background gradient overlay */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-30"
