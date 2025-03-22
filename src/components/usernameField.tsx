@@ -1,5 +1,6 @@
-import { getCookie, setCookie } from '@/server/cookies';
 import { ChangeEvent, useEffect, useState } from 'react';
+
+import { getCookie, setCookie } from '@/server/cookies';
 
 interface UsernameFieldProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;

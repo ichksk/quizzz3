@@ -1,9 +1,10 @@
-import { Send, Lock, Check, Flag } from "lucide-react"
 import { useAtomValue } from "jotai"
+import { Send, Lock, Check, Flag } from "lucide-react"
+
+import { ImagePreview } from "@/components/imagePreview"
 import { participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { proceedQuiz } from "@/server/actions"
 import { QuizForOwner, QuizStatus } from "@/types/schemas"
-import { ImagePreview } from "@/components/imagePreview"
 
 export const CurrentQuiz = () => {
   const room = useAtomValue(roomAtom)

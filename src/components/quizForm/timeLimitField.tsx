@@ -1,5 +1,6 @@
-import { quizFormAtom } from "@/lib/atoms"
 import { useAtom } from "jotai"
+
+import { quizFormAtom } from "@/lib/atoms"
 
 export const TimeLimitField = () => {
   const [form, setForm] = useAtom(quizFormAtom)

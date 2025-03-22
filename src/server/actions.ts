@@ -1,8 +1,11 @@
 "use server";
 
+import admin from "firebase-admin";
+
 import { adminDB } from "@/lib/firebase-admin";
+import { ChatMessage, Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, QuizSubmit, Room, RoomStatus, Sender } from "@/types/schemas";
+
 import { getCookie, setCookie } from "./cookies";
-import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, QuizSubmit, Room, RoomStatus } from "@/types/schemas";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -185,6 +188,7 @@ export async function joinRoom(
 
   return newParticipant;
 }
+
 export async function leaveRoom() {
   const roomCode = await getCookie("roomCode");
   const participantId = await getCookie("participantId");
@@ -340,7 +344,7 @@ export async function fetchRoomData(): Promise<{
       room,
       error: null,
     };
-  } catch (error) {
+  } catch {
     return { error: "Failed to get room data." };
   }
 }
@@ -703,4 +707,26 @@ export async function fetchQuizAnswerForParticipant(quizId: string): Promise<{ s
       data: null
     }
   }
+}
+
+
+export async function sendChatMessage(message: string, sender: Sender) {
+  // クッキーから roomCode を取得
+  const roomCode = await getCookie("roomCode");
+  if (!roomCode) {
+    throw new Error("roomCode が見つかりません");
+  }
+
+  // rooms/${roomCode}/chat コレクションの参照
+  const chatRef = adminDB.collection(`rooms/${roomCode}/chats`);
+
+  // チャットメッセージのデータ作成
+  const chatData: ChatMessage = {
+    message,
+    sender,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+
+  // Firestore にドキュメント追加
+  await chatRef.add(chatData);
 }

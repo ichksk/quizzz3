@@ -1,3 +1,5 @@
+import admin from "firebase-admin";
+
 export enum QuizStatus {
   DRAFT = 'DRAFT',
   DISPLAYING = 'DISPLAYING',
@@ -12,6 +14,12 @@ export enum RoomStatus {
   FINISHED = 'FINISHED',
   DEACTIVATED = 'DEACTIVATED'
 }
+
+
+export interface JoinQuizForm {
+  roomCode: string;
+}
+
 
 
 export interface Participant {
@@ -82,4 +90,23 @@ export interface QuizAnswer {
   isCorrect: boolean;
   correctChoiceText: string;
   score: number;
+}
+
+
+
+
+export type Sender = {
+  id: string;
+  name: string;
+};
+
+export type ChatMessage = {
+  message: string;
+  sender: Sender;
+  createdAt: admin.firestore.FieldValue;
+};
+
+
+export interface ChatMessageWithId extends ChatMessage {
+  id: string;
 }

@@ -1,11 +1,12 @@
+import { motion } from "framer-motion"
+import { useAtomValue } from "jotai"
+
 import { LeaveRoomButton } from "@/components/leaveRoomButton"
+import { roomAtom } from "@/lib/atoms"
+
 import { Header } from "./header"
 import { ParticipantsList } from "./participantsList"
 import { QuizController } from "./quizController"
-import { motion } from "framer-motion"
-import { useAtomValue } from "jotai"
-import { roomAtom } from "@/lib/atoms"
-import { Donation } from "./donation"
 
 
 export const OwnerPage = () => {
