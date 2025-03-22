@@ -45,7 +45,7 @@ export function ParticipantsList() {
   return (
     <motion.div
       className="bg-white border border-gray-200 rounded-xl shadow-sm lg:col-span-1 overflow-hidden"
-      whileHover={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+      whileHover={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", scale: 1.01 }}
       transition={{ duration: 0.3 }}
     >
       <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -54,6 +54,7 @@ export function ParticipantsList() {
             className="text-lg font-semibold flex items-center gap-2 text-gray-800"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
+            whileHover={{ x: 3 }}
             transition={{ duration: 0.3, delay: 0.1 }}
           >
             <Users className="w-5 h-5 text-blue-500" />

@@ -19,7 +19,8 @@ export const QuizController = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        whileHover={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", scale: 1.01 }}
+        transition={{ duration: 0.3 }}
         className="bg-white border border-gray-200 rounded-xl shadow-sm lg:col-span-2 overflow-hidden"
       >
         <motion.div

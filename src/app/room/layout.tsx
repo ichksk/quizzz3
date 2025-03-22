@@ -14,37 +14,41 @@ export default function RoomLayout({ children }: { children: JSX.Element }) {
   }));
 
   return (
-    <div className="min-h-[100dvh] overflow-hidden relative">
-      {patterns.map(pattern => {
-        // Adjust x and y to account for the size of the bubble to keep it fully within the container
-        const adjustedX = Math.min(Math.max(0, pattern.x), 100 - (pattern.size / window.innerWidth * 100));
-        const adjustedY = Math.min(Math.max(0, pattern.y), 100 - (pattern.size / window.innerHeight * 100));
+    <>
+      <div className='overflow-hidden'>
+        {patterns.map(pattern => {
+          // Adjust x and y to account for the size of the bubble to keep it fully within the container
+          const adjustedX = Math.min(Math.max(0, pattern.x), 100 - (pattern.size / window.innerWidth * 100));
+          const adjustedY = Math.min(Math.max(0, pattern.y), 100 - (pattern.size / window.innerHeight * 100));
 
-        return (
-          <motion.div
-            key={pattern.id}
-            className="absolute rounded-full bg-blue-500 z-0"
-            style={{
-              width: pattern.size,
-              height: pattern.size,
-              left: `${adjustedX}%`,
-              top: `${adjustedY}%`,
-              opacity: pattern.opacity
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [pattern.opacity, pattern.opacity * 1.5, pattern.opacity]
-            }}
-            transition={{
-              duration: pattern.duration,
-              repeat: Infinity,
-              repeatType: "reverse",
-              ease: "easeInOut"
-            }}
-          />
-        );
-      })}
-      {children}
-    </div>
+          return (
+            <motion.div
+              key={pattern.id}
+              className="absolute rounded-full bg-blue-500 z-0"
+              style={{
+                width: pattern.size,
+                height: pattern.size,
+                left: `${adjustedX}%`,
+                top: `${adjustedY}%`,
+                opacity: pattern.opacity
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [pattern.opacity, pattern.opacity * 1.5, pattern.opacity]
+              }}
+              transition={{
+                duration: pattern.duration,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }}
+            />
+          );
+        })}
+      </div>
+      <div className="min-h-[100dvh] relative">
+        {children}
+      </div>
+    </>
   );
 }

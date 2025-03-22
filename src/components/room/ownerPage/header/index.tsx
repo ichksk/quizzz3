@@ -16,6 +16,7 @@ export const Header = () => {
       className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
+      whileHover={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)", scale: 1.01 }}
       transition={{ duration: 0.3 }}
     >
       <RoomCodeField room={room as Room} />

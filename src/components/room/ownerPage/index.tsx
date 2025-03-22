@@ -40,7 +40,7 @@ export const OwnerPage = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col container mx-auto space-y-4 bg-white/80 backdrop-blur-sm p-4 sm:p-8 rounded-2xl"
+      className="relative space-y-4"
     >
       <motion.div variants={itemVariants}>
         <Header />
@@ -51,13 +51,7 @@ export const OwnerPage = () => {
         className="grid grid-cols-1 lg:grid-cols-3 gap-4"
       >
         <ParticipantsList />
-        <motion.div
-          className="lg:col-span-2"
-          whileHover={{ scale: 1.01 }}
-          transition={{ duration: 0.2 }}
-        >
-          <QuizController />
-        </motion.div>
+        <QuizController />
       </motion.div>
 
       <motion.div variants={itemVariants}>
