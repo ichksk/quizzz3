@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <motion.div
           layout
           transition={{ layout: { duration: 0.3 } }}
-          className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 sm:p-10 overflow-hidden"
+          className="max-w-lg w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 sm:p-10 overflow-hidden"
         >
           <ContainerTitle />
           <ContainerBadge />
