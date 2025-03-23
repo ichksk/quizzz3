@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { ContainerBadge } from "./badge";
+
 
 export const ContainerTitle = () => {
   const pathname = usePathname();

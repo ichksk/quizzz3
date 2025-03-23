@@ -3,8 +3,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
-import { ContainerTitle } from './_components/title';
 import { ContainerBadge } from './_components/badge';
+import { ContainerTitle } from './_components/title';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
