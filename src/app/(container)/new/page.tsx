@@ -38,19 +38,7 @@ export default function CreateQuizPage() {
 
   return (
     <div className="max-w-md w-full">
-      <div className="flex items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center">
-            <span className="mr-3 select-none">✏️</span>
-            クイズを作成
-          </h1>
-        </div>
-      </div>
-
-      <div>
-        <QuizForm onSubmit={handleSubmit} />
-      </div>
-
+      <QuizForm onSubmit={handleSubmit} />
       <div className="w-full flex justify-center mt-8">
         <div className="text-sm text-gray-500 flex items-center">
           <span className="mr-2">💡</span>

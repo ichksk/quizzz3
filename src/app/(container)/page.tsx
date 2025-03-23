@@ -68,44 +68,7 @@ export default function Home(): JSX.Element {
   return (
     <div className="max-w-md w-full">
       <div className="flex flex-col gap-8 items-center">
-        <div className="flex flex-col items-center">
-          <div className="relative">
-            <motion.h1
-              className="text-3xl sm:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent whitespace-nowrap"
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              クイズ大会メーカー
-            </motion.h1>
-            <motion.span
-              className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none"
-              initial={{ rotate: 12, scale: 0 }}
-              animate={{ rotate: 12, scale: 1 }}
-              whileHover={{
-                scale: 1.5,
-                rotate: 20,
-                transition: {
-                  duration: 0.2
-                }
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-              }}
-            >
-              ✨
-            </motion.span>
-          </div>
 
-          <motion.div
-            className="h-2 w-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-4 mb-8"
-            initial={{ width: 0 }}
-            animate={{ width: "8rem" }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          />
-        </div>
 
         <UsernameField
           onChange={handleUsernameChange}
