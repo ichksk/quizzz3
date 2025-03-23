@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { ContainerBadge } from "./badge";
 
 export const ContainerTitle = () => {
   const pathname = usePathname();
@@ -45,8 +46,6 @@ export const ContainerTitle = () => {
     }
   };
 
-  const text = getText();
-
   return (
     <div className="flex flex-col items-center">
       <AnimatePresence mode="wait">
@@ -58,23 +57,9 @@ export const ContainerTitle = () => {
           exit={{ x: direction === "rtl" ? 100 : -100, opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {text}
+          {getText()}
         </motion.h1>
       </AnimatePresence>
-      <motion.span
-        key={pathname}
-        className="absolute -top-6 -right-8 text-5xl transform rotate-12 select-none"
-        initial={{ rotate: 12, scale: 0 }}
-        animate={{ rotate: 12, scale: 1 }}
-        whileHover={{
-          scale: 1.5,
-          rotate: 20,
-          transition: { duration: 0.2 },
-        }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      >
-        ✨
-      </motion.span>
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}

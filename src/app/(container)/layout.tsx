@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
 import { ContainerTitle } from './_components/title';
+import { ContainerBadge } from './_components/badge';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 sm:p-10"
         >
           <ContainerTitle />
+          <ContainerBadge />
           {children}
         </motion.div>
       </AnimatePresence>
