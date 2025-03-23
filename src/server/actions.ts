@@ -59,6 +59,163 @@ export async function createRoom(): Promise<{ success: boolean; error?: string; 
   return { success: true, data: newRoom };
 }
 
+
+export async function joinRoom(
+  roomCode: string,
+  username: Participant["username"],
+  isOwner = false,
+): Promise<{ success: boolean; error?: string; data?: Participant }> {
+  const roomRef = adminDB.collection("rooms").doc(roomCode);
+  const roomSnap = await roomRef.get();
+
+  if (!roomSnap.exists) {
+    return { success: false, error: "指定されたRoomは存在しません。" };
+  }
+
+  // 新しい participant のドキュメントリファレンスを生成
+  const participantRef = roomRef.collection("participants").doc();
+  const newParticipant: Participant = {
+    id: participantRef.id,
+    username,
+    roomCode,
+    isOwner,
+    score: 0,
+  };
+
+  await participantRef.set(newParticipant);
+
+  await setCookie("participantId", newParticipant.id);
+  await setCookie("roomCode", roomCode);
+  await setCookie("username", username);
+
+  return { success: true, data: newParticipant };
+}
+
+export async function leaveRoom(): Promise<{ success: boolean; error?: string }> {
+  const roomCode = await getCookie("roomCode");
+  const participantId = await getCookie("participantId");
+
+  if (!roomCode || !participantId) {
+    return { success: false, error: "ルーム情報が取得できませんでした" };
+  }
+  try {
+    // 1. 対象の participant ドキュメントを削除
+    await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .doc(participantId)
+      .delete();
+
+    // Get all quizzes for the room
+    const quizzesSnapshot = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("quizzes")
+      .get();
+
+    // Delete all answers from this participant for each quiz
+    const deletePromises = quizzesSnapshot.docs.map(quizDoc =>
+      adminDB
+        .collection("rooms")
+        .doc(roomCode)
+        .collection("quizzes")
+        .doc(quizDoc.id)
+        .collection("answers")
+        .doc(participantId)
+        .delete()
+    );
+
+    await Promise.all(deletePromises);
+
+    await setCookie("participantId", "");
+    await setCookie("roomCode", "");
+
+    // 2. まだ参加者が残っているか確認
+    const participantsSnap = await adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .get();
+
+    // 3. 参加者が 0 人の場合、部屋を削除
+    if (participantsSnap.empty) {
+      await adminDB.collection("rooms").doc(roomCode).delete();
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("部屋の退出エラー:", error);
+    return { success: false, error: "部屋の退出に失敗しました。" };
+  }
+}
+
+
+export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Promise<{ success: boolean; error?: string }> {
+  const { room } = await fetchRoomData()
+  if (!room) {
+    return { success: false, error: "Roomが見つかりません" };
+  }
+
+  try {
+    const roomRef = adminDB.collection("rooms").doc(room.roomCode);
+    const roomSnap = await roomRef.get();
+
+
+    if (!roomSnap.exists) {
+      return { success: false, error: "指定されたRoomが存在しません" };
+    }
+
+    await roomRef.update({
+      status: newStatus,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("RoomStatus更新エラー:", error);
+    return { success: false, error: "RoomStatusの更新に失敗しました" };
+  }
+}
+
+
+//ルーム
+export async function fetchRoomData(): Promise<{
+  room?: Room | null;
+  error: string | null;
+}> {
+  try {
+    const roomCode = await getCookie("roomCode")
+
+    if (!roomCode) {
+      return { error: "Room code or participant ID is missing in cookies." };
+    }
+
+    const roomRef = adminDB.collection("rooms").doc(roomCode);
+    const roomSnap = await roomRef.get();
+    if (!roomSnap.exists) {
+      return { error: "Room not found." };
+    }
+
+    const roomData = roomSnap.data();
+    const status = (roomData?.status as RoomStatus) ?? RoomStatus.WAITING;
+    const currentOrder = roomData?.currentOrder ?? 0;
+
+    const room: Room = {
+      roomCode,
+      status,
+      currentOrder,
+    }
+
+    return {
+      room,
+      error: null,
+    };
+  } catch {
+    return { error: "Failed to get room data." };
+  }
+}
+
+
 export async function createQuiz({
   image,
   question,
@@ -157,223 +314,12 @@ export const updateQuiz = async (
   }
 };
 
-export async function joinRoom(
-  roomCode: string,
-  username: Participant["username"],
-  isOwner = false,
-): Promise<{ success: boolean; error?: string; data?: Participant }> {
-  const roomRef = adminDB.collection("rooms").doc(roomCode);
-  const roomSnap = await roomRef.get();
-
-  if (!roomSnap.exists) {
-    return { success: false, error: "指定されたRoomは存在しません。" };
-  }
-
-  // 新しい participant のドキュメントリファレンスを生成
-  const participantRef = roomRef.collection("participants").doc();
-  const newParticipant: Participant = {
-    id: participantRef.id,
-    username,
-    roomCode,
-    isOwner,
-    score: 0,
-  };
-
-  await participantRef.set(newParticipant);
-
-  await setCookie("participantId", newParticipant.id);
-  await setCookie("roomCode", roomCode);
-  await setCookie("username", username);
-
-  return { success: true, data: newParticipant };
-}
-
-export async function leaveRoom(): Promise<{ success: boolean; error?: string }> {
-  const roomCode = await getCookie("roomCode");
-  const participantId = await getCookie("participantId");
-
-  if (!roomCode || !participantId) {
-    return { success: false, error: "ルーム情報が取得できませんでした" };
-  }
-  try {
-    // 1. 対象の participant ドキュメントを削除
-    await adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("participants")
-      .doc(participantId)
-      .delete();
-
-    // Get all quizzes for the room
-    const quizzesSnapshot = await adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("quizzes")
-      .get();
-
-    // Delete all answers from this participant for each quiz
-    const deletePromises = quizzesSnapshot.docs.map(quizDoc =>
-      adminDB
-        .collection("rooms")
-        .doc(roomCode)
-        .collection("quizzes")
-        .doc(quizDoc.id)
-        .collection("answers")
-        .doc(participantId)
-        .delete()
-    );
-
-    await Promise.all(deletePromises);
-
-    await setCookie("participantId", "");
-    await setCookie("roomCode", "");
-
-    // 2. まだ参加者が残っているか確認
-    const participantsSnap = await adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("participants")
-      .get();
-
-    // 3. 参加者が 0 人の場合、部屋を削除
-    if (participantsSnap.empty) {
-      await adminDB.collection("rooms").doc(roomCode).delete();
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error("部屋の退出エラー:", error);
-    return { success: false, error: "部屋の退出に失敗しました。" };
-  }
-}
-
-
-export async function fetchParticipant(): Promise<{
-  participant: Participant | null;
-  error: string | null;
-}> {
-  const roomCode = await getCookie("roomCode");
-  const participantId = await getCookie("participantId");
-
-  if (!roomCode || !participantId) {
-    return {
-      participant: null,
-      error: "Room code or participant ID not found."
-    };
-  }
-
-  try {
-    // 1. Firestore のドキュメント参照を取得
-    const participantRef = adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("participants")
-      .doc(participantId);
-
-    // 2. ドキュメントの取得
-    const participantDoc = await participantRef.get();
-
-    // 3. ドキュメントが存在しない場合
-    if (!participantDoc.exists) {
-      return {
-        participant: null,
-        error: "Participant does not exist."
-      };
-    }
-
-    // 4. Firestore から取得した DocumentData を任意の型に変換
-    const data = participantDoc.data();
-    if (!data) {
-      return {
-        participant: null,
-        error: "No data found for the participant."
-      };
-    }
-
-    // 5. 返却用の Participant 型に整形
-    const participant: Participant = {
-      id: participantDoc.id,
-      roomCode: data.roomCode ?? "",
-      username: data.username ?? "",
-      isOwner: data.isOwner ?? false,
-      score: data.score ?? 0,
-    };
-
-    return { participant, error: null };
-  } catch (error) {
-    console.error("fetchParticipant error:", error);
-    return {
-      participant: null,
-      error: "Could not get participant."
-    };
-  }
-}
 
 
 
-//ルーム
-export async function fetchRoomData(): Promise<{
-  room?: Room | null;
-  error: string | null;
-}> {
-  try {
-    const roomCode = await getCookie("roomCode")
-
-    if (!roomCode) {
-      return { error: "Room code or participant ID is missing in cookies." };
-    }
-
-    const roomRef = adminDB.collection("rooms").doc(roomCode);
-    const roomSnap = await roomRef.get();
-    if (!roomSnap.exists) {
-      return { error: "Room not found." };
-    }
-
-    const roomData = roomSnap.data();
-    const status = (roomData?.status as RoomStatus) ?? RoomStatus.WAITING;
-    const currentOrder = roomData?.currentOrder ?? 0;
-
-    const room: Room = {
-      roomCode,
-      status,
-      currentOrder,
-    }
-
-    return {
-      room,
-      error: null,
-    };
-  } catch {
-    return { error: "Failed to get room data." };
-  }
-}
 
 
-export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Promise<{ success: boolean; error?: string }> {
-  const { room } = await fetchRoomData()
-  if (!room) {
-    return { success: false, error: "Roomが見つかりません" };
-  }
 
-  try {
-    const roomRef = adminDB.collection("rooms").doc(room.roomCode);
-    const roomSnap = await roomRef.get();
-
-
-    if (!roomSnap.exists) {
-      return { success: false, error: "指定されたRoomが存在しません" };
-    }
-
-    await roomRef.update({
-      status: newStatus,
-    });
-
-    return { success: true };
-  } catch (error) {
-    console.error("RoomStatus更新エラー:", error);
-    return { success: false, error: "RoomStatusの更新に失敗しました" };
-  }
-}
 
 export async function fetchQuizzes(): Promise<{ success: boolean; error?: string, quizzes?: QuizForOwner[] | QuizForParticipant[] }> {
   const roomCode = await getCookie("roomCode");
@@ -703,6 +649,69 @@ export async function fetchQuizAnswerForParticipant(quizId: string): Promise<{ s
       success: false,
       data: null
     }
+  }
+}
+
+
+
+export async function fetchParticipant(): Promise<{
+  participant: Participant | null;
+  error: string | null;
+}> {
+  const roomCode = await getCookie("roomCode");
+  const participantId = await getCookie("participantId");
+
+  if (!roomCode || !participantId) {
+    return {
+      participant: null,
+      error: "Room code or participant ID not found."
+    };
+  }
+
+  try {
+    // 1. Firestore のドキュメント参照を取得
+    const participantRef = adminDB
+      .collection("rooms")
+      .doc(roomCode)
+      .collection("participants")
+      .doc(participantId);
+
+    // 2. ドキュメントの取得
+    const participantDoc = await participantRef.get();
+
+    // 3. ドキュメントが存在しない場合
+    if (!participantDoc.exists) {
+      return {
+        participant: null,
+        error: "Participant does not exist."
+      };
+    }
+
+    // 4. Firestore から取得した DocumentData を任意の型に変換
+    const data = participantDoc.data();
+    if (!data) {
+      return {
+        participant: null,
+        error: "No data found for the participant."
+      };
+    }
+
+    // 5. 返却用の Participant 型に整形
+    const participant: Participant = {
+      id: participantDoc.id,
+      roomCode: data.roomCode ?? "",
+      username: data.username ?? "",
+      isOwner: data.isOwner ?? false,
+      score: data.score ?? 0,
+    };
+
+    return { participant, error: null };
+  } catch (error) {
+    console.error("fetchParticipant error:", error);
+    return {
+      participant: null,
+      error: "Could not get participant."
+    };
   }
 }
 
