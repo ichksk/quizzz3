@@ -41,7 +41,19 @@ export default function RootLayout({
         <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 ">
           <div className="min-h-[100dvh] px-4 py-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
             <ConfirmRoot />
-            <Toaster />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                success: {
+                  className: "bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold",
+                  style: { padding: '16px', borderRadius: '8px' },
+                },
+                error: {
+                  className: "bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold",
+                  style: { padding: '16px', borderRadius: '8px' },
+                },
+              }}
+            />
             <GlobalLoading />
             {children}
           </div>
