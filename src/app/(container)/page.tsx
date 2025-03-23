@@ -29,7 +29,7 @@ export default function Home(): JSX.Element {
 
   const handleCreateQuiz = async () => {
     if (await validateUsername()) {
-      router.push(`/join`);
+      router.push(`/new`);
 
     }
   };
