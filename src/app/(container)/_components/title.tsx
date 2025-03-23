@@ -52,10 +52,10 @@ export const ContainerTitle = () => {
         <motion.h1
           key={pathname}
           className={`text-3xl sm:text-4xl font-bold text-center bg-clip-text text-transparent whitespace-nowrap ${getGradientClasses()}`}
-          initial={{ x: direction === "rtl" ? 100 : -100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: direction === "rtl" ? 100 : -100, opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
         >
           {getText()}
         </motion.h1>
@@ -67,7 +67,7 @@ export const ContainerTitle = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
         />
       </AnimatePresence>
     </div>

@@ -37,7 +37,7 @@ export default function CreateQuizPage() {
   };
 
   return (
-    <div className="max-w-md w-full">
+    <>
       <QuizForm onSubmit={handleSubmit} />
       <div className="w-full flex justify-center mt-8">
         <div className="text-sm text-gray-500 flex items-center">
@@ -46,6 +46,6 @@ export default function CreateQuizPage() {
         </div>
       </div>
       <BackButton />
-    </div>
+    </>
   );
 }

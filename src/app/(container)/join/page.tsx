@@ -14,7 +14,7 @@ export default function JoinQuizPage() {
   };
 
   return (
-    <div className="max-w-md w-full">
+    <>
       <div className="text-center mb-8">
         <p className="text-gray-600">
           ルームコードを入力してゲームに参加しましょう！
@@ -27,6 +27,6 @@ export default function JoinQuizPage() {
         <JoinQuizForm />
       </motion.div>
       <BackButton />
-    </div>
+    </>
   );
 }
