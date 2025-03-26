@@ -16,7 +16,7 @@ export function ParticipantsList() {
   );
 
   // Sort participants by score (highest first)
-  const sortedParticipants = [...participantsExceptMe].sort((a, b) => b.score - a.score);
+  const sortedParticipants = [me, ...participantsExceptMe.sort((a, b) => b.score - a.score)];
 
   // Animation variants
   const containerVariants = {
@@ -69,7 +69,7 @@ export function ParticipantsList() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <span>{participantsExceptMe.length}</span>
+            <span>{participants.length}</span>
             <span>人参加中</span>
           </motion.span>
         </div>
@@ -115,7 +115,7 @@ export function ParticipantsList() {
                     <Award className="w-4 h-4 text-gray-400" />
                   ) : null}
 
-                  <span className="font-medium">{participant.username} さん</span>
+                  <span className="font-medium">{participant.username} さん{participant.id === me.id && " (自分)"}</span>
                 </div>
 
                 <motion.span

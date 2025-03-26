@@ -1,32 +1,34 @@
 import { motion } from "framer-motion";
 import { SavedRooms } from "@/types/schemas";
 import { useEffect, useState } from "react";
-import { getCookie, setCookie } from "@/server/cookies";
+import { getCookie } from "@/server/cookies";
+import { comebackRoom } from "@/server/actions";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 
 export const Saved = () => {
+  const router = useRouter();
+
   const [savedRooms, setSavedRooms] = useState<SavedRooms>([]);
 
   const handleComebackRoom = async (roomCode: string) => {
     // ルームコードを元にルーム情報を取得
-    console.log(roomCode)
+    const { success, error } = await comebackRoom({ roomCode });
+    if (!success) {
+      toast.error(error!);
+    } else {
+      router.push("/room");
+    }
   }
 
   useEffect(() => {
-
     (async () => {
-      await setCookie("savedRooms", JSON.stringify([
-        { roomCode: "3NUGO3" },
-        { roomCode: "D8QDGI" },
-      ]));
-
       const saved = await getCookie("savedRooms");
       if (saved) {
         setSavedRooms(JSON.parse(saved));
-      } else {
       }
     })()
-
   }, []);
 
   return (

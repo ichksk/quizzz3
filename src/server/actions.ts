@@ -41,21 +41,10 @@ export async function createRoom(): Promise<{ success: boolean; error?: string; 
   // Roomドキュメントを作成
   await docRef.set(newRoom);
 
-  // 作成したRoomのparticipantsサブコレクションに、
-  // 「オーナー」を示すParticipantドキュメントを追加
-  const participantRef = docRef.collection("participants").doc();
-  const newOwner: Participant = {
-    id: participantRef.id,
-    roomCode: roomCode,
-    score: 0,
-    username,
-    isOwner: true, // オーナーであることを示すフラグなどを追加
-  };
-
-  await participantRef.set(newOwner);
-  await setCookie("participantId", newOwner.id);
-  await setCookie("roomCode", roomCode);
-  await setCookie("username", username);
+  const { success } = await joinRoom(roomCode, username, true);
+  if (!success) {
+    return { success: false, error: "部屋の作成に失敗しました" };
+  }
   return { success: true, data: newRoom };
 }
 
@@ -180,13 +169,26 @@ export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Prom
 
 export async function comebackRoom({ roomCode }: { roomCode: Room["roomCode"] }): Promise<{ success: boolean; error?: string }> {
   const savedRooms = await getCookie("savedRooms");
-  if (!savedRooms) {
-    return { success: false, error: "Saved rooms not found in cookies." };
-  } else if (!savedRooms.includes(roomCode)) {
-    return { success: false, error: "Room code not found in saved rooms." };
-  } else {
-    return { success: true };
+  const username = await getCookie("username");
+
+  if (!username) {
+    return { success: false, error: "ユーザー名がクッキーに見つかりません。" };
   }
+
+  if (!savedRooms) {
+    return { success: false, error: "保存済みのルームがクッキーに見つかりません。" };
+  }
+
+  if (!savedRooms.includes(roomCode)) {
+    return { success: false, error: "ルームコードが保存済みのルームに見つかりません。" };
+  }
+
+  const { success } = await joinRoom(roomCode, username, true)
+  if (!success) {
+    return { success: false, error: "ルームの参加に失敗しました。" };
+  }
+
+  return { success: true };
 }
 
 
