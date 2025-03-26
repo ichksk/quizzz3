@@ -1,15 +1,33 @@
 import { motion } from "framer-motion";
-import { JSX } from "react";
+import { SavedRooms } from "@/types/schemas";
+import { useEffect, useState } from "react";
+import { getCookie, setCookie } from "@/server/cookies";
 
-import { Room } from "@/types/schemas";
 
+export const Saved = () => {
+  const [savedRooms, setSavedRooms] = useState<SavedRooms>([]);
 
-export const Saved = (): JSX.Element => {
-  const dummyRooms: Pick<Room, "roomCode">[] = [
-    { roomCode: "ABC123" },
-    { roomCode: "XYZ789" },
-    { roomCode: "DEF456" },
-  ];
+  const handleComebackRoom = async (roomCode: string) => {
+    // ルームコードを元にルーム情報を取得
+    console.log(roomCode)
+  }
+
+  useEffect(() => {
+
+    (async () => {
+      await setCookie("savedRooms", JSON.stringify([
+        { roomCode: "3NUGO3" },
+        { roomCode: "D8QDGI" },
+      ]));
+
+      const saved = await getCookie("savedRooms");
+      if (saved) {
+        setSavedRooms(JSON.parse(saved));
+      } else {
+      }
+    })()
+
+  }, []);
 
   return (
     <motion.div
@@ -19,17 +37,25 @@ export const Saved = (): JSX.Element => {
       transition={{ duration: 0.3 }}
     >
       <h2 className="text-2xl font-bold mb-4">作成済みのルーム</h2>
-      {dummyRooms.length > 0 ? (
+      {savedRooms.length > 0 ? (
         <ul>
-          {dummyRooms.map((room) => (
+          {savedRooms.map((room) => (
             <motion.li
               key={room.roomCode}
-              className="border-b py-2 last:border-0"
+              className="border-b py-2 last:border-0 flex justify-between items-center"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
-              {room.roomCode}
+              <span>{room.roomCode}</span>
+              <motion.button
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg text-sm transition-colors cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleComebackRoom(room.roomCode)}
+              >
+                復帰
+              </motion.button>
             </motion.li>
           ))}
         </ul>

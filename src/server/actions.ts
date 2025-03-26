@@ -178,6 +178,18 @@ export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Prom
 }
 
 
+export async function comebackRoom({ roomCode }: { roomCode: Room["roomCode"] }): Promise<{ success: boolean; error?: string }> {
+  const savedRooms = await getCookie("savedRooms");
+  if (!savedRooms) {
+    return { success: false, error: "Saved rooms not found in cookies." };
+  } else if (!savedRooms.includes(roomCode)) {
+    return { success: false, error: "Room code not found in saved rooms." };
+  } else {
+    return { success: true };
+  }
+}
+
+
 //ルーム
 export async function fetchRoomData(): Promise<{
   room?: Room | null;
