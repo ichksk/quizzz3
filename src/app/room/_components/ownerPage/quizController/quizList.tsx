@@ -2,10 +2,10 @@
 
 import { useAtomValue, useSetAtom } from "jotai"
 import { EllipsisVertical, Plus } from "lucide-react"
-import Image from "next/image";
 
 import { drawerOpenAtom, focusedQuizAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
+import ImageWithSkeleton from "@/components/imageWithSkeleton";
 
 export const QuizList = () => {
   const room = useAtomValue(roomAtom) as Room
@@ -51,7 +51,7 @@ export const QuizList = () => {
 
             {/* quiz.image があるときだけ表示 */}
             {quiz.image && (
-              <Image
+              <ImageWithSkeleton
                 src={quiz.image}
                 alt={`クイズ${quiz.order + 1}の画像`}
                 width={48}
