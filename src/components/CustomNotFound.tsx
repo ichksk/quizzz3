@@ -6,7 +6,7 @@ import React from 'react';
 const CustomNotFound = () => {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <div className="flex flex-col items-center justify-center">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="relative bg-blue-50 p-8 flex justify-center select-none">
           <div className="text-9xl">🔍</div>
