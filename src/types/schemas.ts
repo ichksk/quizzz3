@@ -33,6 +33,7 @@ export interface Room {
   roomCode: string;
   status: RoomStatus;
   currentOrder: number;
+  roomName?: string;
 }
 
 export type SavedRooms = Room["roomCode"][]
