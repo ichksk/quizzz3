@@ -6,6 +6,8 @@ import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
 
 import type { Metadata } from "next";
+import Head from "next/head";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,13 +37,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <Head>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5022166017278504"
+          crossOrigin="anonymous"></script>
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
         <div className="bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 ">
           <div className="min-h-[100dvh] px-4 py-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
             <ConfirmRoot />
-            <Toaster />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                success: {
+                  className: "bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold",
+                  style: { padding: '16px', borderRadius: '8px' },
+                },
+                error: {
+                  className: "bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold",
+                  style: { padding: '16px', borderRadius: '8px' },
+                },
+              }}
+            />
             <GlobalLoading />
             {children}
           </div>
