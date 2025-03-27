@@ -6,8 +6,6 @@ import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
 
 import type { Metadata } from "next";
-import Head from "next/head";
-import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
