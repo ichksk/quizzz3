@@ -73,7 +73,9 @@ export const CurrentQuiz = () => {
 
         {/* 画像がある場合は余白や大きさを調整 */}
         {currentQuiz.image && (
-          <ImagePreview image={currentQuiz.image} />
+          <div className="flex justify-center">
+            <ImagePreview image={currentQuiz.image} />
+          </div>
         )}
 
         {/* 選択肢リスト */}
