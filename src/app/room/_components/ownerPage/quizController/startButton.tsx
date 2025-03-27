@@ -3,15 +3,14 @@
 import { Rocket } from "lucide-react"
 
 import { startQuiz } from "@/server/actions";
+import toast from "react-hot-toast";
 
 
 export const StartButton = () => {
   const handleStart = async () => {
     const res = await startQuiz()
-    if (res.success) {
-      console.log("クイズを開始しました")
-    } else {
-      console.error(res.error)
+    if (!res.success) {
+      toast.error(res.error!)
     }
   }
 

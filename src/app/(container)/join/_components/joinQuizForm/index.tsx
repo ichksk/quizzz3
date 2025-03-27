@@ -46,8 +46,6 @@ export const JoinQuizForm = () => {
       toast.success("ルームに移動します");
       router.push("/room");
     } catch (error) {
-      console.error("ルーム参加エラー:", error);
-
       // エラーメッセージがある場合は表示する（より詳細なエラーメッセージを提供）
       if (error instanceof Error) {
         toast.error(error.message);

@@ -25,7 +25,6 @@ export default function CreateQuizPage() {
       toast.success("クイズを作成しました");
       router.push("/room");
     } catch (error) {
-      console.error("クイズ作成エラー:", error);
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
