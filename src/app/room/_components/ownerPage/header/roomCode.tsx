@@ -1,12 +1,21 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Share } from "lucide-react"
+import { Share } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { Room } from "@/types/schemas"
+import { Room } from "@/types/schemas";
 
-export const RoomCodeField = ({ room }: { room: Room }) => {
+export const RoomCodeField = ({
+  room,
+  onRoomNameChange,
+}: {
+  room: Room;
+  onRoomNameChange?: (name: string) => void;
+}) => {
+  const [roomName, setRoomName] = useState(room.roomName || "");
+
   const handleShare = async () => {
     const shareUrl = `${window.location.origin}/join?r=${room?.roomCode}`;
     try {
@@ -14,14 +23,18 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
         url: shareUrl,
       });
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof Error) {
-        // ユーザーがキャンセルした場合はエラー表示を行わない
-        if (err.name !== 'AbortError') {
+        if (err.name !== "AbortError") {
           toast.error("Chromeなどのブラウザで共有機能を利用できます。");
         }
       }
     }
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = e.target.value;
+    setRoomName(newName);
+    onRoomNameChange?.(newName);
   };
 
   if (!room) return null;
@@ -40,6 +53,18 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
       >
         {room.roomCode}
       </motion.span>
+
+      <motion.input
+        type="text"
+        value={roomName}
+        onChange={handleNameChange}
+        placeholder="ルーム名を入力"
+        className="px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+
       <motion.div
         className="flex items-center ml-auto sm:ml-0"
         whileHover={{ scale: 1.1 }}
@@ -55,5 +80,5 @@ export const RoomCodeField = ({ room }: { room: Room }) => {
         </motion.button>
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};

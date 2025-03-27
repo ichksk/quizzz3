@@ -1,6 +1,7 @@
 "use client";
 
 import { Rocket } from "lucide-react"
+import toast from "react-hot-toast";
 
 import { startQuiz } from "@/server/actions";
 
@@ -8,10 +9,8 @@ import { startQuiz } from "@/server/actions";
 export const StartButton = () => {
   const handleStart = async () => {
     const res = await startQuiz()
-    if (res.success) {
-      console.log("クイズを開始しました")
-    } else {
-      console.error(res.error)
+    if (!res.success) {
+      toast.error(res.error!)
     }
   }
 

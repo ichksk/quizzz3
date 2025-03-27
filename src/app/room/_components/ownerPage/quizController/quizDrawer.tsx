@@ -37,7 +37,6 @@ export const QuizDrawer = () => {
       }
     }
     catch (error) {
-      console.error("クイズ作成エラー:", error)
       if (error instanceof Error) {
         toast.error(error.message)
       } else {

@@ -29,5 +29,9 @@ quizAnswerを実装する -> Done
 
 ボタンを2回押さないようにする
 作ったクイズを再利用できる仕組みを実装する
+ firestoreにTTLポリシーを設定する
+ ルーム退出時にはルームを削除しないようにして、expiredAtを設定する(最終joinから2週間)
 
-FIX SOME TODO
+
+Imgをスケルトンにする
+https://qiita.com/ShortArrow/items/57375f2884d81b94e066

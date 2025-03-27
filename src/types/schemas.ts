@@ -21,7 +21,6 @@ export interface JoinQuizForm {
 }
 
 
-
 export interface Participant {
   id: string;
   roomCode: string;
@@ -34,13 +33,10 @@ export interface Room {
   roomCode: string;
   status: RoomStatus;
   currentOrder: number;
+  roomName?: string;
 }
 
-export interface Room {
-  roomCode: string;
-  status: RoomStatus;
-  currentOrder: number;
-}
+export type SavedRooms = Room["roomCode"][]
 
 export interface QuizSubmitForm {
   question: string,
