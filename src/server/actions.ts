@@ -4,7 +4,7 @@
 import { adminDB } from "@/lib/firebase-admin";
 import { Participant, QuizAnswer, QuizAnswerSubmit, QuizForOwner, QuizForParticipant, QuizStatus, QuizSubmit, Room, RoomStatus } from "@/types/schemas";
 
-import { getCookie, setCookie } from "./cookies";
+import { getCookie, removeCookie, setCookie } from "./cookies";
 
 function generateRandomCode(length = 6): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -117,20 +117,20 @@ export async function leaveRoom(): Promise<{ success: boolean; error?: string }>
 
     await Promise.all(deletePromises);
 
-    await setCookie("participantId", "");
-    await setCookie("roomCode", "");
+    await removeCookie("participantId");
+    await removeCookie("roomCode");
 
-    // 2. まだ参加者が残っているか確認
-    const participantsSnap = await adminDB
-      .collection("rooms")
-      .doc(roomCode)
-      .collection("participants")
-      .get();
+    // // 2. まだ参加者が残っているか確認
+    // const participantsSnap = await adminDB
+    //   .collection("rooms")
+    //   .doc(roomCode)
+    //   .collection("participants")
+    //   .get();
 
-    // 3. 参加者が 0 人の場合、部屋を削除
-    if (participantsSnap.empty) {
-      await adminDB.collection("rooms").doc(roomCode).delete();
-    }
+    // // 3. 参加者が 0 人の場合、部屋を削除
+    // if (participantsSnap.empty) {
+    //   await adminDB.collection("rooms").doc(roomCode).delete();
+    // }
 
     return { success: true };
   } catch (error) {
@@ -327,12 +327,6 @@ export const updateQuiz = async (
     return { success: false, error: "Failed to update quiz." };
   }
 };
-
-
-
-
-
-
 
 
 export async function fetchQuizzes(): Promise<{ success: boolean; error?: string, quizzes?: QuizForOwner[] | QuizForParticipant[] }> {

@@ -100,3 +100,11 @@ export async function setCookie(name: string, value: string, options: { path?: s
     setCookieData(cookie, cookieOptions);
   });
 }
+
+export async function removeCookie(name: string) {
+  await getCookieData().then(cookie => {
+    if (!cookie) return;
+    delete cookie[name];
+    setCookieData(cookie);
+  });
+}
