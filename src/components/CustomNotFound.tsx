@@ -6,22 +6,19 @@ import React from 'react';
 const CustomNotFound = () => {
   const router = useRouter();
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="max-w-lg w-full bg-white rounded-lg shadow-lg overflow-hidden">
-        {/* ユーモアのあるイラスト部分 */}
         <div className="relative bg-blue-50 p-8 flex justify-center select-none">
           <div className="text-9xl">🔍</div>
           <div className="absolute animate-bounce bottom-6 right-20 text-4xl">❓</div>
           <div className="absolute animate-ping bottom-24 left-24 text-4xl">❓</div>
         </div>
 
-        {/* メッセージ部分 */}
         <div className="p-6 text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-2">おや？</h2>
           <p className="text-xl text-gray-600 mb-6">参加中のクイズゲームが見つかりませんでした</p>
           <p className="text-gray-500 mb-8">もう一度参加してみてください！</p>
 
-          {/* ホームに戻るボタン */}
           <button
             onClick={() => router.push('/')}
             className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-300 cursor-pointer"
@@ -32,7 +29,6 @@ const CustomNotFound = () => {
         </div>
       </div>
 
-      {/* 足跡のアニメーション - 表示後に上下に動く */}
       <div className="mt-8 flex justify-center">
         <div className="flex space-x-6">
           {[...Array(5)].map((_, i) => (

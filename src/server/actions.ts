@@ -667,7 +667,7 @@ export async function fetchQuizAnswerForParticipant(quizId: string): Promise<{ s
 
 
 export async function fetchParticipant(): Promise<{
-  participant: Participant | null;
+  participant?: Participant | null;
   error: string | null;
 }> {
   const roomCode = await getCookie("roomCode");
@@ -675,7 +675,6 @@ export async function fetchParticipant(): Promise<{
 
   if (!roomCode || !participantId) {
     return {
-      participant: null,
       error: "Room code or participant ID not found."
     };
   }

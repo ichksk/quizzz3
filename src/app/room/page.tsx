@@ -2,10 +2,10 @@
 
 import { onSnapshot, doc, collection } from "firebase/firestore";
 import { useAtom, useSetAtom } from "jotai";
-import { notFound } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-
+import CustomNotFound from "@/components/CustomNotFound";
 import { loadingAtom, meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
 import { db } from "@/lib/firebase";
 import { fetchParticipant, fetchRoomData } from "@/server/actions";
@@ -22,18 +22,19 @@ export default function RoomPage() {
   const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const setQuizAnswers = useSetAtom(quizAnswersAtom);
   const setParticipants = useSetAtom(participantsAtom)
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     (async () => {
       const { room } = await fetchRoomData();
       const { participant } = await fetchParticipant();
-      if (!room || !participant) {
-        notFound();
+      if (room && participant) {
+        setRoom(room);
+        setParticipant(participant);
+      } else {
+        setNotFound(true);
       }
-
-      setRoom(room);
-      setParticipant(participant);
       setLoading(false);
     })();
   }, []);
@@ -81,7 +82,7 @@ export default function RoomPage() {
             }
           },
           (error) => {
-            console.error("参加者の取得に失敗しました:", error);
+            toast.error(JSON.stringify(error));
           }
         );
       }
@@ -137,6 +138,7 @@ export default function RoomPage() {
     return () => unsub?.();
   }, [quizzes]);
 
+  if (notFound) return <CustomNotFound />
   if (!room || !participant) return null;
 
   return participant.isOwner ? (

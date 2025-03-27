@@ -1,9 +1,9 @@
 "use client";
 
 import { Rocket } from "lucide-react"
+import toast from "react-hot-toast";
 
 import { startQuiz } from "@/server/actions";
-import toast from "react-hot-toast";
 
 
 export const StartButton = () => {
