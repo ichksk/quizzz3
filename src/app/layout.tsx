@@ -37,10 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <Head>
+      <head>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5022166017278504"
           crossOrigin="anonymous"></script>
-      </Head>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
