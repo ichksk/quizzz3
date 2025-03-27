@@ -5,7 +5,6 @@ import { Toaster } from "react-hot-toast";
 
 import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
-import { getCookie } from "@/server/cookies";
 
 import type { Metadata } from "next";
 
@@ -35,8 +34,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookie = await getCookie()
-  console.log(cookie)
   return (
     <html lang="ja">
       <body
