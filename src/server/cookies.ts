@@ -78,9 +78,10 @@ export async function setCookieData(
 }
 
 
-export async function getCookie(name: string): Promise<string | undefined> {
+export async function getCookie(name?: string): Promise<string | undefined> {
   const cookie = await getCookieData();
   if (!cookie) return undefined;
+  if (!name) return cookie
   return cookie[name];
 }
 

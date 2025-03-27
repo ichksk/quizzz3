@@ -45,6 +45,10 @@ export async function createRoom(): Promise<{ success: boolean; error?: string; 
   if (!success) {
     return { success: false, error: "部屋の作成に失敗しました" };
   }
+
+  const prev = await getCookie("savedRoomCodes")
+  const savedRoomCodes = prev ? [...JSON.parse(prev), roomCode] : [roomCode];
+  await setCookie("savedRoomCodes", JSON.stringify(savedRoomCodes));
   return { success: true, data: newRoom };
 }
 
@@ -168,18 +172,18 @@ export async function updateRoom({ newStatus }: { newStatus: RoomStatus }): Prom
 
 
 export async function comebackRoom({ roomCode }: { roomCode: Room["roomCode"] }): Promise<{ success: boolean; error?: string }> {
-  const savedRooms = await getCookie("savedRooms");
+  const savedRoomCodes = await getCookie("savedRoomCodes");
   const username = await getCookie("username");
 
   if (!username) {
     return { success: false, error: "ユーザー名がクッキーに見つかりません。" };
   }
 
-  if (!savedRooms) {
+  if (!savedRoomCodes) {
     return { success: false, error: "保存済みのルームがクッキーに見つかりません。" };
   }
 
-  if (!savedRooms.includes(roomCode)) {
+  if (!savedRoomCodes.includes(roomCode)) {
     return { success: false, error: "ルームコードが保存済みのルームに見つかりません。" };
   }
 

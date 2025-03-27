@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
+
 import { useLeaveRoom } from '@/hooks/useLeaveRoom';
 
 export function FinishedPage() {
@@ -56,7 +57,7 @@ export function FinishedPage() {
         whileTap={{ scale: 0.95 }}
       >
         <motion.button
-          className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 px-8 rounded-full font-semibold transition-all shadow-lg flex items-center mx-auto space-x-2"
+          className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 px-8 rounded-full font-semibold transition-all shadow-lg flex items-center mx-auto space-x-2 cursor-pointer"
           onClick={leaveRoom}
           initial={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
           whileHover={{

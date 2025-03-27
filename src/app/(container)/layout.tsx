@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { ContainerBadge } from './_components/badge';
-import { Saved } from './_components/saved';
+import { SavedRoomCodes } from './_components/savedRoomCodes';
 import { ContainerTitle } from './_components/title';
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           {children}
 
         </motion.div>
-        {pathname === '/' && <Saved />}
+        {pathname === '/' && <SavedRoomCodes />}
       </div>
     </AnimatePresence>
   );

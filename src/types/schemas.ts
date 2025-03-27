@@ -35,7 +35,7 @@ export interface Room {
   currentOrder: number;
 }
 
-export type SavedRooms = Pick<Room, "roomCode">[]
+export type SavedRooms = Room["roomCode"][]
 
 export interface QuizSubmitForm {
   question: string,

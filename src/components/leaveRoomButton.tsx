@@ -1,6 +1,7 @@
 "use client";
 
 import { LogOut } from "lucide-react";
+
 import { useLeaveRoom } from "@/hooks/useLeaveRoom";
 
 export const LeaveRoomButton = () => {

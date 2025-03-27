@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
-import { SavedRooms } from "@/types/schemas";
-import { useEffect, useState } from "react";
-import { getCookie } from "@/server/cookies";
-import { comebackRoom } from "@/server/actions";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
+import { comebackRoom } from "@/server/actions";
+import { getCookie } from "@/server/cookies";
+import { SavedRooms } from "@/types/schemas";
 
 
-export const Saved = () => {
+
+export const SavedRoomCodes = () => {
   const router = useRouter();
 
-  const [savedRooms, setSavedRooms] = useState<SavedRooms>([]);
+  const [savedRoomCodes, setRoomCodes] = useState<SavedRooms>([]);
 
   const handleComebackRoom = async (roomCode: string) => {
     // ルームコードを元にルーム情報を取得
@@ -24,9 +26,9 @@ export const Saved = () => {
 
   useEffect(() => {
     (async () => {
-      const saved = await getCookie("savedRooms");
-      if (saved) {
-        setSavedRooms(JSON.parse(saved));
+      const savedRoomCodes = await getCookie("savedRoomCodes");
+      if (savedRoomCodes) {
+        setRoomCodes(JSON.parse(savedRoomCodes));
       }
     })()
   }, []);
@@ -39,22 +41,22 @@ export const Saved = () => {
       transition={{ duration: 0.3 }}
     >
       <h2 className="text-2xl font-bold mb-4">作成済みのルーム</h2>
-      {savedRooms.length > 0 ? (
+      {savedRoomCodes.length > 0 ? (
         <ul>
-          {savedRooms.map((room) => (
+          {savedRoomCodes.map((roomCode) => (
             <motion.li
-              key={room.roomCode}
+              key={roomCode}
               className="border-b py-2 last:border-0 flex justify-between items-center"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
             >
-              <span>{room.roomCode}</span>
+              <span>{roomCode}</span>
               <motion.button
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded-lg text-sm transition-colors cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => handleComebackRoom(room.roomCode)}
+                onClick={() => handleComebackRoom(roomCode)}
               >
                 復帰
               </motion.button>

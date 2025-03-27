@@ -1,8 +1,9 @@
-import { meAtom, participantsAtom, roomAtom } from "@/lib/atoms";
-import { leaveRoom } from "@/server/actions";
 import { useSetAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
+import { meAtom, participantsAtom, roomAtom } from "@/lib/atoms";
+import { leaveRoom } from "@/server/actions";
 
 export const useLeaveRoom = () => {
   const router = useRouter();
