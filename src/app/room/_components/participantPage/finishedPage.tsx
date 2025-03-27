@@ -6,7 +6,6 @@ import { useLeaveRoom } from '@/hooks/useLeaveRoom';
 export function FinishedPage() {
   const leaveRoom = useLeaveRoom();
 
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
