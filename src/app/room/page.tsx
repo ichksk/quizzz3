@@ -2,6 +2,7 @@
 
 import { onSnapshot, doc, collection } from "firebase/firestore";
 import { useAtom, useSetAtom } from "jotai";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -12,12 +13,11 @@ import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
 
 import { OwnerPage } from "./_components/ownerPage";
 import { ParticipantPage } from "./_components/participantPage";
-import { notFound } from "next/navigation";
 
 
 export default function RoomPage() {
   const setLoading = useSetAtom(loadingAtom)
-  const [room, setRoom] = useAtom(roomAtom);
+  const setRoom = useSetAtom(roomAtom);
   const [participant, setParticipant] = useAtom(meAtom);
   const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const setQuizAnswers = useSetAtom(quizAnswersAtom);
@@ -139,7 +139,7 @@ export default function RoomPage() {
   }, [quizzes]);
 
   if (isNotFound) notFound()
-  if (!room || !participant) return null;
+  if (!participant) return null;
 
   return participant.isOwner ? (
     <OwnerPage />
