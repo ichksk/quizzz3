@@ -6,7 +6,6 @@ import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
 
 import type { Metadata } from "next";
-import Head from "next/head";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -37,9 +36,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <Head>
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5022166017278504" crossOrigin="anonymous" />
-      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
@@ -63,6 +59,7 @@ export default function RootLayout({
             {children}
           </div>
         </div>
+        <Script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ID}`} crossOrigin="anonymous" />
       </body>
     </html>
   );
