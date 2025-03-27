@@ -6,6 +6,8 @@ import { ConfirmRoot } from "@/components/confirm";
 import { GlobalLoading } from "@/components/loading";
 
 import type { Metadata } from "next";
+import Head from "next/head";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <Head>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5022166017278504"
+          crossOrigin="anonymous"></script>
+      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.className} antialiased`}
       >
