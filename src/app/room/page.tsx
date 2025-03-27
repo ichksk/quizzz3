@@ -5,7 +5,6 @@ import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import CustomNotFound from "@/components/CustomNotFound";
 import { loadingAtom, meAtom, participantsAtom, quizAnswersAtom, quizzesAtom, roomAtom } from "@/lib/atoms";
 import { db } from "@/lib/firebase";
 import { fetchParticipant, fetchRoomData } from "@/server/actions";
@@ -13,6 +12,7 @@ import { Participant, QuizAnswer, QuizForOwner, Room } from "@/types/schemas";
 
 import { OwnerPage } from "./_components/ownerPage";
 import { ParticipantPage } from "./_components/participantPage";
+import { notFound } from "next/navigation";
 
 
 export default function RoomPage() {
@@ -22,7 +22,7 @@ export default function RoomPage() {
   const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const setQuizAnswers = useSetAtom(quizAnswersAtom);
   const setParticipants = useSetAtom(participantsAtom)
-  const [notFound, setNotFound] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -33,7 +33,7 @@ export default function RoomPage() {
         setRoom(room);
         setParticipant(participant);
       } else {
-        setNotFound(true);
+        setIsNotFound(true);
       }
       setLoading(false);
     })();
@@ -138,7 +138,7 @@ export default function RoomPage() {
     return () => unsub?.();
   }, [quizzes]);
 
-  if (notFound) return <CustomNotFound />
+  if (isNotFound) notFound()
   if (!room || !participant) return null;
 
   return participant.isOwner ? (
