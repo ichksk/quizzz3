@@ -1,21 +1,10 @@
 import { motion } from 'framer-motion';
 import { Home } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-
-import { leaveRoom } from '@/server/actions';
+import { useLeaveRoom } from '@/hooks/useLeaveRoom';
 
 export function FinishedPage() {
-  const router = useRouter();
+  const leaveRoom = useLeaveRoom();
 
-  const goBackHome = async () => {
-    const res = await leaveRoom();
-    if (res.success) {
-      router.push('/');
-    } else {
-      toast.error(res.error as string);
-    }
-  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -68,7 +57,7 @@ export function FinishedPage() {
       >
         <motion.button
           className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-3 px-8 rounded-full font-semibold transition-all shadow-lg flex items-center mx-auto space-x-2"
-          onClick={goBackHome}
+          onClick={leaveRoom}
           initial={{ boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}
           whileHover={{
             boxShadow: "0px 7px 15px rgba(0, 0, 0, 0.2)",
