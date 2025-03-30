@@ -6,7 +6,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { FormEvent, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-import { emptyQuizForm, loadingAtom, quizFormAtom } from '@/lib/atoms';
+import { emptyQuizForm, loadingAtom, percentageAtom, quizFormAtom } from '@/lib/atoms';
 import { storage } from '@/lib/firebase';
 import { getCookie } from '@/server/cookies';
 import { QuizSubmit, QuizSubmitForm } from '@/types/schemas';
@@ -30,7 +30,52 @@ export const QuizForm = ({
   onSubmit,
 }: QuizFormProps) => {
   const setLoading = useSetAtom(loadingAtom);
+  const setPercentage = useSetAtom(percentageAtom);
   const [quizForm, setQuizForm] = useAtom(quizFormAtom);
+
+  const uploadImage = async () => {
+    setLoading(true);
+    const file = quizForm.image!;
+
+    // 画像圧縮のオプション設定
+    const options = {
+      maxSizeMB: 1,             // 例: 1MB以下に圧縮
+      maxWidthOrHeight: 1920,     // 最大の幅または高さ
+      useWebWorker: true,         // Web Workerを使用して圧縮
+    };
+
+    let compressedFile: File;
+    try {
+      compressedFile = await imageCompression(file, options);
+    } catch {
+      toast.error("画像の圧縮に失敗しました");
+      setLoading(false);
+      return;
+    }
+
+    const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
+    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
+
+    await new Promise<void>((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot: UploadTaskSnapshot) => {
+          // 必要に応じて進捗表示などの処理を追加可能
+          const percentage = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          setPercentage(percentage);
+        },
+        (error: Error) => {
+          reject(error);
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+    setLoading(false);
+    setPercentage(null);
+    return await getDownloadURL(uploadTask.snapshot.ref)
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,48 +97,8 @@ export const QuizForm = ({
 
     let image = quizForm.imagePreview;
     if (quizForm.image && quizForm.image instanceof File) {
-      setLoading(true);
-      const file = quizForm.image;
-
-      // 画像圧縮のオプション設定
-      const options = {
-        maxSizeMB: 1,             // 例: 1MB以下に圧縮
-        maxWidthOrHeight: 1920,     // 最大の幅または高さ
-        useWebWorker: true,         // Web Workerを使用して圧縮
-      };
-
-      let compressedFile: File;
-      try {
-        compressedFile = await imageCompression(file, options);
-      } catch (error) {
-        console.error("圧縮エラー:", error);
-        toast.error("画像の圧縮に失敗しました");
-        setLoading(false);
-        return;
-      }
-
-      const storageRef = ref(storage, `images/${crypto.randomUUID()}`);
-      const uploadTask = uploadBytesResumable(storageRef, compressedFile);
-
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.on(
-          "state_changed",
-          (snapshot: UploadTaskSnapshot) => {
-            // 必要に応じて進捗表示などの処理を追加可能
-            const percentage = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log("アップロード進捗:", percentage);
-          },
-          (error: Error) => {
-            console.error("アップロードエラー:", error);
-            reject(error);
-          },
-          () => {
-            resolve();
-          }
-        );
-      });
-      image = await getDownloadURL(uploadTask.snapshot.ref);
-      setLoading(false);
+      const retval = await uploadImage()
+      retval && (image = retval);
     }
 
     onSubmit({

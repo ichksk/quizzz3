@@ -3,6 +3,7 @@ import { atom } from "jotai";
 import { JoinQuizForm, Participant, QuizAnswer, QuizForOwner, QuizForParticipant, QuizSubmitForm, Room } from "@/types/schemas";
 
 export const loadingAtom = atom(false);
+export const percentageAtom = atom<number | null>(null);
 
 export const emptyQuizForm: QuizSubmitForm = {
   question: "",
