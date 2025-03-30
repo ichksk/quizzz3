@@ -32,8 +32,5 @@ quizAnswerを実装する -> Done
  firestoreにTTLポリシーを設定する
  ルーム退出時にはルームを削除しないようにして、expiredAtを設定する(最終joinから2週間)
 
-ルーム名を書けるようにする(RoomCodeField)
-
-
 Imgをスケルトンにする
 https://qiita.com/ShortArrow/items/57375f2884d81b94e066
