@@ -53,18 +53,6 @@ export const RoomCodeField = ({
       >
         {room.roomCode}
       </motion.span>
-
-      <motion.input
-        type="text"
-        value={roomName}
-        onChange={handleNameChange}
-        placeholder="ルーム名を入力"
-        className="px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      />
-
       <motion.div
         className="flex items-center ml-auto sm:ml-0"
         whileHover={{ scale: 1.1 }}
@@ -72,7 +60,7 @@ export const RoomCodeField = ({
       >
         <motion.button
           onClick={handleShare}
-          className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-sm transition-colors duration-200"
+          className="p-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full shadow-sm transition-colors duration-200 cursor-pointer"
           aria-label="共有URLをコピー"
           whileTap={{ scale: 0.95 }}
         >

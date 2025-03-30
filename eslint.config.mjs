@@ -13,7 +13,7 @@ export default [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     plugins: {
-      import: eslintPluginImport,
+      "import": eslintPluginImport,
       "unused-imports": eslintPluginUnusedImports,
     },
     rules: {
