@@ -98,7 +98,9 @@ export const QuizForm = ({
     let image = quizForm.imagePreview;
     if (quizForm.image && quizForm.image instanceof File) {
       const retval = await uploadImage()
-      retval && (image = retval);
+      if (retval) {
+        image = retval
+      };
     }
 
     onSubmit({

@@ -3,9 +3,9 @@
 import { useAtomValue, useSetAtom } from "jotai"
 import { EllipsisVertical, Plus } from "lucide-react"
 
+import ImageWithSkeleton from "@/components/imageWithSkeleton";
 import { drawerOpenAtom, focusedQuizAtom, quizzesAtom, roomAtom } from "@/lib/atoms"
 import { QuizForOwner, QuizStatus, Room } from "@/types/schemas"
-import ImageWithSkeleton from "@/components/imageWithSkeleton";
 
 export const QuizList = () => {
   const room = useAtomValue(roomAtom) as Room
